@@ -8,11 +8,11 @@ export function QuestionField({ question: q, value, onChange }) {
     const v = value ?? Math.round((q.min + q.max) / 2);
     return (
       <div>
-        <label htmlFor={id} className="block text-xl font-black">
+        <label htmlFor={id} className="block text-xl font-bold">
           {q.prompt}
         </label>
-        {q.help && <p className="mt-1 text-sm text-deep/80">{q.help}</p>}
-        <p className="mt-4 text-center text-5xl font-black text-rose" aria-hidden>
+        {q.help && <p className="mt-1 text-sm text-muted">{q.help}</p>}
+        <p className="mt-4 text-center text-5xl font-bold text-rose" aria-hidden>
           {value ?? '–'}
         </p>
         <input
@@ -27,7 +27,7 @@ export function QuestionField({ question: q, value, onChange }) {
           onKeyUp={(e) => onChange(Number(e.currentTarget.value))}
           className="mt-2 w-full accent-deep"
         />
-        <div className="flex justify-between text-xs font-bold text-deep/70">
+        <div className="flex justify-between text-xs font-bold text-muted">
           <span>{q.min} · none</span>
           <span>{q.max} · worst</span>
         </div>
@@ -38,10 +38,10 @@ export function QuestionField({ question: q, value, onChange }) {
   if (q.kind === 'number') {
     return (
       <div>
-        <label htmlFor={id} className="block text-xl font-black">
+        <label htmlFor={id} className="block text-xl font-bold">
           {q.prompt}
         </label>
-        {q.help && <p className="mt-1 text-sm text-deep/80">{q.help}</p>}
+        {q.help && <p className="mt-1 text-sm text-muted">{q.help}</p>}
         <input
           id={id}
           type="number"
@@ -50,7 +50,7 @@ export function QuestionField({ question: q, value, onChange }) {
           max={q.max}
           value={value ?? ''}
           onChange={(e) => onChange(e.target.value === '' ? null : Number(e.target.value))}
-          className="mt-4 w-40 rounded-2xl border-2 border-blush bg-white px-4 py-3 text-2xl font-black focus:border-deep focus:outline-none"
+          className="mt-4 w-40 rounded-2xl border-2 border-blush bg-white px-4 py-3 text-2xl font-display font-semibold text-deep-rose focus:border-deep focus:outline-none"
         />
       </div>
     );
@@ -65,8 +65,8 @@ export function QuestionField({ question: q, value, onChange }) {
 
   return (
     <fieldset>
-      <legend className="text-xl font-black">{q.prompt}</legend>
-      {q.help && <p className="mt-1 text-sm text-deep/80">{q.help}</p>}
+      <legend className="text-xl font-bold">{q.prompt}</legend>
+      {q.help && <p className="mt-1 text-sm text-muted">{q.help}</p>}
       <div className="mt-4 grid gap-2">
         {q.options.map((o) => {
           const on = multi ? selected.includes(o.value) : selected === o.value;

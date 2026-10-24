@@ -40,7 +40,7 @@ export function Quiz({ questions, onSubmit }) {
         const feedback = result?.results[qi];
         return (
           <fieldset key={q.index} className="rounded-2xl border-2 border-petal bg-white p-5" disabled={Boolean(result)}>
-            <legend className="px-1 font-black">
+            <legend className="px-1 font-bold">
               {qi + 1}. {q.prompt}
             </legend>
             <div className="mt-2 grid gap-2">
@@ -97,17 +97,17 @@ export function Quiz({ questions, onSubmit }) {
 function QuizResult({ result, onRetry }) {
   return (
     <div role="status" className={`rounded-3xl p-6 ${result.passed ? 'bg-deep text-white' : 'bg-petal'}`}>
-      <p className="text-4xl font-black">{result.score}%</p>
+      <p className="text-4xl font-bold">{result.score}%</p>
       <p className="mt-1 font-bold">
         {result.correctCount} of {result.total} correct — {result.passed ? 'lesson complete!' : 'score 70% or more to complete this lesson.'}
       </p>
       {result.saved && result.xpGained > 0 && (
-        <p className="mt-2 inline-flex items-center gap-1 font-black">
+        <p className="mt-2 inline-flex items-center gap-1 font-bold">
           <Zap aria-hidden className="size-4" /> +{result.xpGained} XP
         </p>
       )}
       {result.newAchievements?.map((a) => (
-        <p key={a.code} className="mt-2 flex items-center gap-2 font-black">
+        <p key={a.code} className="mt-2 flex items-center gap-2 font-bold">
           <Star aria-hidden className="size-4 fill-current" /> Badge unlocked: {a.title}
         </p>
       ))}

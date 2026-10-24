@@ -14,16 +14,16 @@ export function AssessmentResult({ level, guidance }) {
   return (
     <div className="space-y-4">
       <div role={level === 'urgent' ? 'alert' : 'status'} className={`rounded-3xl border-2 p-6 ${style.container}`}>
-        <span className={`inline-flex rounded-full px-3 py-1 text-xs font-black uppercase tracking-wide ${style.badge}`}>
+        <span className={`inline-flex rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wide ${style.badge}`}>
           {LEVEL_LABELS[level]}
         </span>
-        <h2 className="mt-3 flex items-center gap-2 text-2xl font-black">
+        <h2 className="mt-3 flex items-center gap-2 text-2xl font-display font-semibold text-deep-rose">
           <Icon aria-hidden className="size-7 shrink-0" /> {guidance.title}
         </h2>
         <p className="mt-2 leading-relaxed">{guidance.body}</p>
         {guidance.actions?.length > 0 && (
           <>
-            <h3 className="mt-4 font-black">What you can do</h3>
+            <h3 className="mt-4 font-display font-semibold text-deep-rose">What you can do</h3>
             <ul className="mt-1 list-inside list-disc space-y-1">
               {guidance.actions.map((a) => (
                 <li key={a}>{a}</li>
@@ -35,7 +35,7 @@ export function AssessmentResult({ level, guidance }) {
 
       {reasons.length > 0 && (
         <div className="card p-5">
-          <h3 className="font-black">Why we suggested this</h3>
+          <h3 className="font-display font-semibold text-deep-rose">Why we suggested this</h3>
           <ul className="mt-2 list-inside list-disc space-y-1">
             {reasons.map((r) => (
               <li key={r.code}>{r.text}</li>

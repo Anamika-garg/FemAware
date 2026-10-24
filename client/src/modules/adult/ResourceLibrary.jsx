@@ -163,7 +163,7 @@ const ResourceLibrary = () => {
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               className="input-field pl-10 pr-10"
-              placeholder="Search articles, topics or questionsâ€¦"
+              placeholder="Search articles, topics or questions…"
               aria-label="Search the resource library"
             />
             {query ? (
@@ -314,7 +314,7 @@ const ResourceLibrary = () => {
         <p className="text-[10px] leading-relaxed text-muted">
           FemAware articles are educational and cannot account for your full medical history. They
           are not a substitute for personalised advice from a qualified clinician. If you are worried
-          about a symptom, book an appointment â€” you do not need to wait for it to become severe.
+          about a symptom, book an appointment — you do not need to wait for it to become severe.
         </p>
       </div>
 

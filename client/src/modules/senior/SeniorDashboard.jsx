@@ -322,7 +322,7 @@ const SeniorDashboard = () => {
         </div>
       </section>
 
-      <div className="grid gap-4 xl:grid-cols-[1.5fr_1fr]">
+      <div className="grid gap-4 xl:grid-cols-[1.5fr_1fr] xl:items-start">
         {/* Recent check-ins */}
         <section className="senior-card" aria-labelledby="senior-recent-title">
           <div className="flex flex-wrap items-start justify-between gap-3">

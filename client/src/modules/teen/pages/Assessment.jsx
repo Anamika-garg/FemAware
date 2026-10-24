@@ -34,8 +34,8 @@ export default function Assessment() {
               <span className="grid size-12 place-items-center rounded-2xl bg-petal">
                 <Icon aria-hidden className="size-6" />
               </span>
-              <h2 className="mt-4 text-xl font-black">{ASSESSMENT_LABELS[t]}</h2>
-              <p className="mt-1 text-deep/80">{text}</p>
+              <h2 className="mt-4 text-xl font-display font-semibold text-deep-rose">{ASSESSMENT_LABELS[t]}</h2>
+              <p className="mt-1 text-muted">{text}</p>
             </button>
           ))}
         </div>
@@ -64,7 +64,7 @@ function EmergencyCard() {
     <aside className="flex items-start gap-3 rounded-2xl border-2 border-deep bg-white p-4">
       <Phone aria-hidden className="mt-0.5 size-5 shrink-0" />
       <div className="text-sm">
-        <p className="font-black">{data?.item.title || 'If you need help right now'}</p>
+        <p className="font-bold">{data?.item.title || 'If you need help right now'}</p>
         <p className="mt-0.5">{data?.item.body || 'If you feel very unwell, tell a trusted adult or contact your local emergency services.'}</p>
       </div>
     </aside>
@@ -86,7 +86,7 @@ function Wizard({ type, onRestart, onDone }) {
     return (
       <div>
         <AssessmentResult level={result.level} guidance={result.guidance} />
-        <p className="mt-4 text-sm text-deep/80">
+        <p className="mt-4 text-sm text-muted">
           {result.saved
             ? 'We saved only the result level — never your answers.'
             : 'Nothing was saved, because you have not started a demo session.'}
@@ -168,15 +168,15 @@ function History({ items, onChange }) {
   }
   return (
     <Card className="mt-8">
-      <h2 className="text-xl font-black">Your past checks</h2>
-      <p className="text-sm text-deep/80">Only the type, date and result level are stored.</p>
+      <h2 className="text-xl font-display font-semibold text-deep-rose">Your past checks</h2>
+      <p className="text-sm text-muted">Only the type, date and result level are stored.</p>
       <ErrorMessage error={error} />
       <ul className="mt-3 divide-y divide-petal">
         {items.map((a) => (
           <li key={a.id} className="flex items-center justify-between gap-3 py-3">
             <span>
               <span className="font-bold">{ASSESSMENT_LABELS[a.type]}</span>{' '}
-              <span className="text-sm text-deep/70">· {formatDay(a.createdAt, { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+              <span className="text-sm text-muted">· {formatDay(a.createdAt, { day: 'numeric', month: 'short', year: 'numeric' })}</span>
             </span>
             <span className="flex items-center gap-2">
               <Badge className={a.result.level === 'urgent' ? 'bg-deep text-white' : 'bg-petal text-deep'}>{LEVEL_LABELS[a.result.level]}</Badge>

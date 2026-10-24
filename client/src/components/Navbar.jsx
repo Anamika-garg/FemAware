@@ -35,7 +35,7 @@ const Navbar = () => {
   };
 
   return (
-    <header className="sticky top-0 z-30 border-b border-blush-pink/40 bg-rose-mist/85 backdrop-blur-xl">
+    <header className="sticky top-0 z-30 border-b border-blush-pink/40 bg-canvas/85 backdrop-blur-xl">
       <div className="mx-auto flex h-[70px] max-w-[1440px] items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <div className="flex min-w-0 items-center gap-3">
           <Link to="/dashboard" className="lg:hidden" aria-label="FemAware home">

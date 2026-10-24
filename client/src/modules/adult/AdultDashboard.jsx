@@ -64,7 +64,7 @@ const MetricCard = ({ icon: Icon, label, value, helper, tone = 'rose', to, badge
     <Wrapper
       {...(to ? { to } : {})}
       className={cn(
-        'group relative flex flex-col justify-between rounded-2xl border border-white/70 bg-soft-petal/55 p-5 shadow-soft transition-all',
+        'card group relative flex flex-col justify-between p-5 transition-all',
         to && 'hover:-translate-y-0.5 hover:border-pink-glow/40 hover:shadow-card'
       )}
     >
@@ -74,7 +74,7 @@ const MetricCard = ({ icon: Icon, label, value, helper, tone = 'rose', to, badge
             'grid h-10 w-10 place-items-center rounded-xl',
             tone === 'glow' && 'bg-pink-glow text-white',
             tone === 'deep' && 'bg-deep-rose text-white',
-            tone === 'rose' && 'bg-white/75 text-deep-rose',
+            tone === 'rose' && 'bg-soft-petal text-deep-rose',
             tone === 'soft' && 'bg-blush-pink/80 text-deep-rose'
           )}
         >
@@ -89,7 +89,7 @@ const MetricCard = ({ icon: Icon, label, value, helper, tone = 'rose', to, badge
         ) : null}
       </div>
       <div className="mt-5">
-        <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-deep-rose/60">{label}</p>
+        <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted">{label}</p>
         <p className="mt-1 font-display text-xl font-semibold leading-tight text-deep-rose sm:text-[1.35rem]">
           {value}
         </p>
@@ -137,10 +137,9 @@ const MonthTrack = ({ stats }) => {
   const total = Math.max(21, Math.round(stats.averageCycleLength || 28));
   const period = Math.max(1, Math.round(stats.averagePeriodLength || 5));
   const today = todayISO();
-  const currentDay = Math.min(
-    total,
-    Math.max(1, differenceInCalendarDays(parseISO(stats.lastPeriodStart || today), parseISO(today)) + 1)
-  );
+  const elapsed = stats.currentCycleDay
+    ?? differenceInCalendarDays(parseISO(today), parseISO(stats.lastPeriodStart || today)) + 1;
+  const currentDay = Math.min(total, Math.max(1, elapsed));
   const ovulationDay = Math.max(8, total - 14);
   const fertileStartDay = sexualDay(ovulationDay - 5);
   const fertileEndDay = sexualDay(ovulationDay + 1);
@@ -154,7 +153,7 @@ const MonthTrack = ({ stats }) => {
   return (
     <div>
       <div className="relative h-14">
-        <div className="absolute inset-x-0 top-3 h-8 overflow-hidden rounded-full bg-white/80 ring-1 ring-blush-pink/60">
+        <div className="absolute inset-x-0 top-3 h-8 overflow-hidden rounded-full bg-rose-mist ring-1 ring-blush-pink/60">
           <div
             className="absolute inset-y-0 left-0 bg-deep-rose/85"
             style={{ width: pct(period) }}
@@ -162,19 +161,23 @@ const MonthTrack = ({ stats }) => {
           />
           <div
             className="absolute inset-y-0 bg-pink-glow/35"
-            style={{ left: pct(fertileStartDay), width: `calc(${pct(fertileEndDay - fertileStartDay + 1)} - 0%)` }}
+            style={{ left: pct(fertileStartDay - 1), width: pct(fertileEndDay - fertileStartDay + 1) }}
             title="Estimated fertile window"
           />
-          <div className="absolute inset-y-0 right-0 bg-blush-pink/30" title="Luteal phase" />
           <div
-            className="absolute inset-y-0 w-1.5 -translate-x-1/2 rounded-full bg-white shadow ring-1 ring-deep-rose/20"
-            style={{ left: pct(ovulationDay) }}
+            className="absolute inset-y-0 right-0 bg-blush-pink/40"
+            style={{ left: pct(fertileEndDay) }}
+            title="Luteal phase"
+          />
+          <div
+            className="absolute inset-y-1 w-1.5 -translate-x-1/2 rounded-full bg-white shadow ring-1 ring-deep-rose/30"
+            style={{ left: pct(ovulationDay - 0.5) }}
             title="Predicted ovulation"
           />
         </div>
         <div
           className="absolute top-1 z-10 flex -translate-x-1/2 flex-col items-center"
-          style={{ left: pct(currentDay) }}
+          style={{ left: pct(currentDay - 0.5) }}
         >
           <span className="rounded-full bg-deep-rose px-2 py-0.5 text-[9px] font-bold text-white shadow">
             Today
@@ -313,7 +316,7 @@ const AdultDashboard = () => {
             {stats?.hasData ? (
               <>
                 <p className="mt-2 text-sm leading-relaxed text-deep-rose/80 sm:text-[15px]">
-                  <span className="font-bold">{stats.phase.label}</span> â€” Day {cycleDay} of{' '}
+                  <span className="font-bold">{stats.phase.label}</span> — Day {cycleDay} of{' '}
                   {stats.averageCycleLength}. {stats.phase.description}
                 </p>
                 <div className="mt-5 flex flex-wrap items-center gap-2.5">
@@ -350,7 +353,7 @@ const AdultDashboard = () => {
           <div className="flex items-center justify-center lg:pr-3">
             <div className="relative rounded-full bg-white/25 p-2 ring-1 ring-white/50 backdrop-blur-sm">
               <CycleRing
-                day={cycleDay || 'â€”'}
+                day={cycleDay || '—'}
                 total={stats?.averageCycleLength || 28}
                 phaseLabel={
                   stats?.hasData
@@ -381,7 +384,7 @@ const AdultDashboard = () => {
           value={stats?.hasData ? formatDate(stats.ovulationDate, 'd MMM') : 'Add a period first'}
           helper={
             stats?.hasData
-              ? `Fertile window ${formatShortDate(stats.fertileStart)} â€“ ${formatShortDate(stats.fertileEnd)}`
+              ? `Fertile window ${formatShortDate(stats.fertileStart)} – ${formatShortDate(stats.fertileEnd)}`
               : 'Your fertile window appears after your first log.'
           }
           tone="glow"
@@ -393,7 +396,7 @@ const AdultDashboard = () => {
           value={stats?.hasData ? `${stats.averageCycleLength} days` : `${user?.cycleProfile?.averageCycleLength || 28} days`}
           helper={
             stats?.hasData
-              ? `Variation Â±${stats.variation} days Â· ${stats.regularity}`
+              ? `Variation ±${stats.variation} days · ${stats.regularity}`
               : 'A starting estimate from your setup.'
           }
           tone="rose"
@@ -405,7 +408,7 @@ const AdultDashboard = () => {
           value={latestLog ? relativeDay(latestLog.date) : 'No entry yet'}
           helper={
             latestLog
-              ? `${recentSymptoms} signal${recentSymptoms === 1 ? '' : 's'} recorded${latestLog.flow !== 'none' ? ` Â· ${latestLog.flow} flow` : ''}`
+              ? `${recentSymptoms} signal${recentSymptoms === 1 ? '' : 's'} recorded${latestLog.flow !== 'none' ? ` · ${latestLog.flow} flow` : ''}`
               : 'How are you feeling today?'
           }
           tone="soft"
@@ -448,7 +451,7 @@ const AdultDashboard = () => {
       </section>
 
       {/* Main grid */}
-      <div className="grid gap-4 xl:grid-cols-[1.55fr_1fr]">
+      <div className="grid gap-4 xl:grid-cols-[1.55fr_1fr] xl:items-start">
         <div className="space-y-4">
           <section className="card p-5 sm:p-6" aria-labelledby="month-glance-title">
             <div className="flex flex-wrap items-start justify-between gap-3">
@@ -584,7 +587,7 @@ const AdultDashboard = () => {
               <div className="mt-4 rounded-2xl bg-rose-mist/70 p-5 text-center">
                 <NotebookPen className="mx-auto h-7 w-7 text-pink-glow" aria-hidden="true" />
                 <p className="mt-2 text-sm font-bold text-deep-rose">Your journal is a blank page</p>
-                <p className="mt-1 text-xs text-muted">Log how you feel â€” even â€œnothing todayâ€ is useful.</p>
+                <p className="mt-1 text-xs text-muted">Log how you feel — even “nothing today” is useful.</p>
                 <Link to="/symptoms" className="btn-secondary btn-sm mt-3">
                   Start today&apos;s entry
                 </Link>
@@ -634,7 +637,7 @@ const AdultDashboard = () => {
               Make your next appointment count.
             </h2>
             <p className="mt-1.5 text-xs leading-relaxed text-muted">
-              Turn 3â€“6 months of logs into a clear, printable summary with your questions for the
+              Turn 3–6 months of logs into a clear, printable summary with your questions for the
               clinician.
             </p>
             <QueueReportStats stats={stats} totalLogs={data?.totalLogs || 0} />
@@ -682,7 +685,7 @@ const AdultDashboard = () => {
             </div>
             <p className="mt-1.5 text-xs leading-relaxed text-muted">
               Most variation is normal. Reach out to a gynecologist or clinician if you notice any of
-              the following â€” especially if it is new or persistent.
+              the following — especially if it is new or persistent.
             </p>
             <div className="mt-3 flex flex-wrap gap-1.5">
               {[
@@ -726,7 +729,7 @@ const QueueReportStats = ({ stats, totalLogs }) => (
     {[
       { label: 'Cycles', value: stats?.cycleCount ?? 0, icon: Wind },
       { label: 'Logs', value: totalLogs ?? 0, icon: NotebookPen },
-      { label: 'Variance', value: stats ? `Â±${stats.variation}d` : 'â€”', icon: TrendingUp },
+      { label: 'Variance', value: stats ? `±${stats.variation}d` : '—', icon: TrendingUp },
     ].map((item) => {
       const Icon = item.icon;
       return (

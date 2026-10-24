@@ -50,7 +50,7 @@ export default function TeenCalendar() {
             <Button variant="ghost" size="sm" onClick={() => shiftMonth(-1)} aria-label="Previous month">
               <ChevronLeft aria-hidden />
             </Button>
-            <h2 className="text-xl font-black" aria-live="polite">
+            <h2 className="text-xl font-display font-semibold text-deep-rose" aria-live="polite">
               {monthLabel}
             </h2>
             <Button variant="ghost" size="sm" onClick={() => shiftMonth(1)} aria-label="Next month">
@@ -59,7 +59,7 @@ export default function TeenCalendar() {
           </div>
           <div role="grid" aria-label={monthLabel} className="grid grid-cols-7 gap-1 text-center">
             {WEEKDAYS.map((d) => (
-              <div key={d} role="columnheader" className="py-1 text-xs font-black uppercase text-rose">
+              <div key={d} role="columnheader" className="py-1 text-xs font-bold uppercase text-rose">
                 {d}
               </div>
             ))}
@@ -98,9 +98,9 @@ export default function TeenCalendar() {
       </div>
 
       <Card className="mt-6">
-        <h2 className="text-xl font-black">Logged periods</h2>
+        <h2 className="text-xl font-display font-semibold text-deep-rose">Logged periods</h2>
         {cycles.length === 0 ? (
-          <p className="mt-2 text-deep/80">No periods logged yet. Pick the day your last period started.</p>
+          <p className="mt-2 text-muted">No periods logged yet. Pick the day your last period started.</p>
         ) : (
           <ul className="mt-3 divide-y divide-petal">
             {cycles.map((c) => (
@@ -110,7 +110,7 @@ export default function TeenCalendar() {
                     <Droplet aria-hidden className="size-4 fill-current" />
                     {formatDay(c.startDate, { day: 'numeric', month: 'short', year: 'numeric' })} – {c.endDate ? formatDay(c.endDate) : 'ongoing'}
                   </span>
-                  <span className="text-sm text-deep/70">
+                  <span className="text-sm text-muted">
                     {c.endDate ? `${diffDays(apiDay(c.endDate), apiDay(c.startDate)) + 1} days` : ''} {c.flow ? `· ${FLOW_LABELS[c.flow]}` : ''}
                   </span>
                 </button>
@@ -156,9 +156,9 @@ function DayPanel({ day, today, cycles, entries, onChange }) {
 
   return (
     <Card>
-      <h2 className="text-xl font-black">{formatDay(day, { weekday: 'long', day: 'numeric', month: 'long' })}</h2>
+      <h2 className="text-xl font-display font-semibold text-deep-rose">{formatDay(day, { weekday: 'long', day: 'numeric', month: 'long' })}</h2>
       {isFuture && !entry ? (
-        <p className="mt-3 text-deep/80">You can only log periods for today or earlier.</p>
+        <p className="mt-3 text-muted">You can only log periods for today or earlier.</p>
       ) : (
         <>
           {openEntry && (
@@ -177,7 +177,7 @@ function DayPanel({ day, today, cycles, entries, onChange }) {
                 <input type="date" required max={today} value={form.startDate} onChange={(e) => setForm({ ...form, startDate: e.target.value })} className="mt-1 w-full rounded-xl border-2 border-blush bg-white px-3 py-2" />
               </label>
               <label className="text-sm font-bold">
-                End <span className="font-semibold text-deep/60">(optional)</span>
+                End <span className="font-semibold text-muted/80">(optional)</span>
                 <input type="date" min={form.startDate} max={today} value={form.endDate} onChange={(e) => setForm({ ...form, endDate: e.target.value })} className="mt-1 w-full rounded-xl border-2 border-blush bg-white px-3 py-2" />
               </label>
             </div>

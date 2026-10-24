@@ -35,8 +35,8 @@ export function PageHeader({ icon: Icon, title, subtitle, children }) {
           </span>
         )}
         <div>
-          <h1 className="text-3xl font-black tracking-tight sm:text-4xl">{title}</h1>
-          {subtitle && <p className="mt-1 max-w-2xl text-deep/80">{subtitle}</p>}
+          <h1 className="page-title">{title}</h1>
+          {subtitle && <p className="mt-2 max-w-2xl text-muted">{subtitle}</p>}
         </div>
       </div>
       {children && <div className="flex flex-wrap gap-2">{children}</div>}
@@ -88,7 +88,7 @@ export function EmptyState({ icon: Icon = Sparkles, title, children }) {
     <div className="flex flex-col items-center gap-2 rounded-2xl border-2 border-dashed border-blush p-8 text-center">
       <Icon aria-hidden className="size-8 text-glow" />
       <p className="font-bold">{title}</p>
-      {children && <div className="text-sm text-deep/80">{children}</div>}
+      {children && <div className="text-sm text-muted">{children}</div>}
     </div>
   );
 }
@@ -109,13 +109,13 @@ export function SourceList({ sources }) {
   if (!sources?.length) return null;
   return (
     <div>
-      <h3 className="text-sm font-black uppercase tracking-wide text-rose">Sources</h3>
+      <h3 className="text-sm font-display font-semibold text-deep-rose uppercase tracking-wide text-rose">Sources</h3>
       <ul className="mt-2 space-y-1 text-sm">
         {sources.map((s) => (
           <li key={s.url}>
             <a href={s.url} target="_blank" rel="noreferrer" className="inline-flex items-start gap-1 underline decoration-blush underline-offset-2 hover:decoration-deep">
               <span>
-                {s.title} — <span className="text-deep/70">{s.publisher}</span>
+                {s.title} — <span className="text-muted">{s.publisher}</span>
               </span>
               <ExternalLink aria-hidden className="mt-0.5 size-3.5 shrink-0" />
               <span className="sr-only">(opens in a new tab)</span>

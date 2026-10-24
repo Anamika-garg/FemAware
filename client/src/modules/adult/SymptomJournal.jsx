@@ -321,7 +321,7 @@ const SymptomJournal = () => {
       <PageHeader
         eyebrow="Daily check-in"
         title="Notice what your body is telling you."
-        description="Small, honest observations become useful patterns. Log what you notice â€” there are no wrong answers."
+        description="Small, honest observations become useful patterns. Log what you notice — there are no wrong answers."
         actions={
           <>
             <Button variant="secondary" icon={Clock} onClick={resetForm}>
@@ -613,7 +613,7 @@ const SymptomJournal = () => {
                   value={form.notes}
                   onChange={(event) => setForm((current) => ({ ...current, notes: event.target.value }))}
                   className="input-field resize-none"
-                  placeholder="A few words are enoughâ€¦"
+                  placeholder="A few words are enough…"
                 />
               </Field>
 
@@ -652,7 +652,7 @@ const SymptomJournal = () => {
               </div>
               {topSymptom ? (
                 <p className="mt-2 text-[10px] text-muted">
-                  Most logged: <span className="font-bold text-deep-rose">{topSymptom[0]}</span> ({topSymptom[1]}Ã—)
+                  Most logged: <span className="font-bold text-deep-rose">{topSymptom[0]}</span> ({topSymptom[1]}×)
                 </p>
               ) : null}
             </div>
@@ -799,7 +799,7 @@ const SymptomJournal = () => {
 
                         {log.notes ? (
                           <p className="mt-2 line-clamp-2 rounded-lg bg-rose-mist/60 px-2 py-1.5 text-[10px] italic leading-relaxed text-muted">
-                            â€œ{log.notes}â€
+                            “{log.notes}”
                           </p>
                         ) : null}
                       </li>

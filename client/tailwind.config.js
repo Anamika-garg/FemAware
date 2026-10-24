@@ -11,7 +11,8 @@ export default {
         'rose-pink': '#E0487E',
         'deep-rose': '#C2185B',
         ink: '#3B2430',
-        muted: '#7C5B6A',
+        muted: '#6E5A64',
+        canvas: '#FFF8FB',
         // Short names used by the teen module. Same palette as above.
         mist: '#FFF1F6',
         petal: '#FFD6E7',
@@ -25,7 +26,7 @@ export default {
         display: ['Fraunces', 'ui-serif', 'Georgia', 'serif'],
       },
       boxShadow: {
-        soft: '0 10px 30px -18px rgba(194, 24, 91, 0.28)',
+        soft: '0 1px 2px rgba(59, 36, 48, 0.04), 0 10px 28px -20px rgba(194, 24, 91, 0.28)',
         card: '0 18px 45px -28px rgba(194, 24, 91, 0.32)',
         glow: '0 12px 28px -12px rgba(246, 114, 167, 0.65)',
       },
