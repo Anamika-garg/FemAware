@@ -330,7 +330,7 @@ const AdultDashboard = () => {
             ) : (
               <>
                 <p className="mt-2 max-w-xl text-sm leading-relaxed text-deep-rose/80 sm:text-[15px]">
-                  Your rhythm starts with one period. Add your most recent period and CycleSense will
+                  Your rhythm starts with one period. Add your most recent period and FemAware will
                   begin mapping your phases, fertile window and symptom patterns.
                 </p>
                 <div className="mt-5 flex flex-wrap gap-2.5">
@@ -713,7 +713,7 @@ const AdultDashboard = () => {
         <div className="border-t border-blush-pink/40 bg-rose-mist/50 px-5 py-2.5 sm:px-6">
           <p className="text-[9px] leading-relaxed text-muted">
             If you have severe pain, heavy bleeding with dizziness, or any symptom that feels urgent,
-            seek same-day medical care. CycleSense does not provide emergency care.
+            seek same-day medical care. FemAware does not provide emergency care.
           </p>
         </div>
       </section>

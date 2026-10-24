@@ -53,7 +53,7 @@ const AuthLayout = ({ children }) => (
       <div className="pointer-events-none absolute -left-24 -top-24 h-80 w-80 rounded-full bg-white/30 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-36 -right-20 h-96 w-96 rounded-full bg-pink-glow/20 blur-3xl" />
 
-      <Link to="/" className="relative z-10 w-fit" aria-label="CycleSense home">
+      <Link to="/" className="relative z-10 w-fit" aria-label="FemAware home">
         <Logo />
       </Link>
 
@@ -61,16 +61,16 @@ const AuthLayout = ({ children }) => (
         <div className="max-w-xl">
           <span className="badge bg-white/60 text-deep-rose">
             <Sparkles className="h-3.5 w-3.5" />
-            Built for adult women
+            For teens, adult women and senior women
           </span>
           <h1 className="mt-5 font-display text-[2.9rem] font-semibold leading-[1.08] tracking-tight text-deep-rose xl:text-[3.4rem]">
-            Your body has a rhythm.
+            Your body, every stage.
             <br />
             Let&apos;s understand it together.
           </h1>
           <p className="mt-5 max-w-md text-[15px] leading-relaxed text-deep-rose/75">
-            A calm, private space to track your cycle, connect symptoms to patterns, and walk into
-            your next appointment better prepared.
+            A calm, private space to learn, track symptoms, see your patterns, and walk into your
+            next appointment better prepared, from your first period to life after menopause.
           </p>
         </div>
         <div className="hidden xl:block">
@@ -97,14 +97,14 @@ const AuthLayout = ({ children }) => (
       </div>
 
       <p className="relative z-10 mt-8 text-[10px] font-medium leading-relaxed text-deep-rose/60">
-        CycleSense offers educational guidance, not medical diagnosis. For urgent concerns, contact
+        FemAware offers educational guidance, not medical diagnosis. For urgent concerns, contact
         a healthcare professional or local emergency service.
       </p>
     </section>
 
     <main className="flex min-h-screen items-center justify-center bg-rose-mist px-4 py-10 sm:px-8 lg:py-14">
       <div className="w-full max-w-[27rem]">
-        <Link to="/" className="mb-8 flex justify-center lg:hidden" aria-label="CycleSense home">
+        <Link to="/" className="mb-8 flex justify-center lg:hidden" aria-label="FemAware home">
           <Logo />
         </Link>
         {children}

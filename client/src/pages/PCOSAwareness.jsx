@@ -28,7 +28,7 @@ import { useToast } from '../context/ToastContext';
 import api, { getErrorMessage } from '../lib/api';
 import { cn } from '../lib/utils';
 
-const STORAGE_KEY = 'cyclesense_pcos_reflection';
+const STORAGE_KEY = 'femaware_pcos_reflection';
 
 const SIGN_GROUPS = [
   {
@@ -175,14 +175,14 @@ const PCOSAwareness = () => {
     const lines = [
       'Notes for my clinician visit',
       '',
-      `CycleSense average cycle: ${stats?.hasData ? `${stats.averageCycleLength} days` : 'not enough data'}`,
+      `FemAware average cycle: ${stats?.hasData ? `${stats.averageCycleLength} days` : 'not enough data'}`,
       `Cycle regularity: ${stats?.regularity || 'not enough data'}`,
       `Cycle variation: ${stats?.hasData ? `±${stats.variation} days` : 'not enough data'}`,
       '',
       'Patterns I have noticed:',
       ...(selectedLabels.length ? selectedLabels.map((label) => `- ${label}`) : ['- None selected']),
       '',
-      'I would like to discuss whether these patterns need assessment. I understand CycleSense is not a diagnostic tool.',
+      'I would like to discuss whether these patterns need assessment. I understand FemAware is not a diagnostic tool.',
     ];
     try {
       await navigator.clipboard.writeText(lines.join('\n'));
@@ -223,7 +223,7 @@ const PCOSAwareness = () => {
             </span>
             <div>
               <p className="text-sm font-bold text-deep-rose">
-                CycleSense does not diagnose PCOS.
+                FemAware does not diagnose PCOS.
               </p>
               <p className="mt-0.5 text-[11px] leading-relaxed text-muted">
                 No app can. PCOS is diagnosed by a qualified clinician after a history, examination
@@ -601,7 +601,7 @@ const PCOSAwareness = () => {
       <div className="flex items-start gap-2 rounded-2xl border border-blush-pink/60 bg-white/75 p-4">
         <ShieldAlert className="mt-0.5 h-4 w-4 shrink-0 text-deep-rose" aria-hidden="true" />
         <p className="text-[10px] leading-relaxed text-muted">
-          CycleSense is an educational tracking tool and does not provide medical diagnosis or
+          FemAware is an educational tracking tool and does not provide medical diagnosis or
           treatment. If you are concerned about PCOS, irregular periods, acne, hair changes, weight or
           fertility, speak with a gynecologist, endocrinologist or primary care clinician. Seek prompt
           care for severe pain or very heavy bleeding.

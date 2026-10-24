@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const TOKEN_KEY = 'cyclesense_token';
+const TOKEN_KEY = 'femaware_token';
 
 export const getToken = () => localStorage.getItem(TOKEN_KEY);
 export const setToken = (token) => localStorage.setItem(TOKEN_KEY, token);
@@ -23,7 +23,7 @@ api.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401 && getToken()) {
       clearToken();
-      window.dispatchEvent(new Event('cyclesense:unauthorized'));
+      window.dispatchEvent(new Event('femaware:unauthorized'));
     }
     return Promise.reject(error);
   }

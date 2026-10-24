@@ -1,13 +1,14 @@
 {
-  "name": "cyclesense-platform",
+  "name": "femaware",
   "version": "1.0.0",
   "private": true,
-  "description": "CycleSense — Adult Women Track & Understand. A MERN women's health platform.",
+  "description": "FemAware — women's health and awareness for teens, adult women and senior women. A MERN platform.",
   "scripts": {
     "install:all": "npm install && npm --prefix server install && npm --prefix client install",
     "dev": "concurrently -n api,web -c magenta,cyan \"npm --prefix server run dev\" \"npm --prefix client run dev\"",
     "dev:memory": "concurrently -n api,web -c magenta,cyan \"npm --prefix server run dev:memory\" \"npm --prefix client run dev\"",
     "seed": "npm --prefix server run seed",
+    "test": "npm --prefix server test && npm --prefix client test",
     "build": "npm --prefix client run build",
     "start": "npm --prefix server start",
     "preview": "npm --prefix client run preview"

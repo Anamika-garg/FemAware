@@ -41,6 +41,52 @@ export const GOALS = [
   { value: 'Feel more in control of my body', icon: 'shield' },
 ];
 
+// The product space a user sees. Saved as `lifeStage` on the account.
+export const STAGE_OPTIONS = [
+  {
+    value: 'teen',
+    label: 'Teen space',
+    ages: 'Ages 13–19',
+    description: 'Puberty and first-period guides, period tracking, quizzes, myth-busting and body-safety lessons.',
+    icon: 'sprout',
+    ageRange: [13, 19],
+  },
+  {
+    value: 'adult',
+    label: 'Adult women',
+    ages: 'Periods to perimenopause',
+    description: 'Cycle and symptom tracking, late-period guidance, PCOS awareness, fertility and doctor-ready reports.',
+    icon: 'heart',
+    ageRange: [18, 110],
+  },
+  {
+    value: 'senior',
+    label: 'Senior care',
+    ages: 'After menopause',
+    description: 'Daily comfort check-ins, bone and heart health, intimate and urinary health, and visit preparation.',
+    icon: 'flower',
+    ageRange: [40, 110],
+  },
+];
+
+export const TEEN_GOALS = [
+  { value: 'Track my period' },
+  { value: 'Understand my symptoms' },
+  { value: 'Learn about my body' },
+  { value: 'Get ready for a doctor visit' },
+];
+
+export const SENIOR_GOALS = [
+  { value: 'Protect my bone health' },
+  { value: 'Understand heart health' },
+  { value: 'Sleep more comfortably' },
+  { value: 'Ease hot flashes and night sweats' },
+  { value: 'Look after intimate and urinary health' },
+  { value: 'Prepare for doctor visits' },
+];
+
+export const SENIOR_FOCUS_AREAS = ['postmenopause', 'bone-health', 'heart-health', 'intimate-health'];
+
 export const PHYSICAL_SYMPTOM_GROUPS = [
   {
     title: 'Pain & body',

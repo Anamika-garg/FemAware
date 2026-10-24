@@ -2,7 +2,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { LogOut, ShieldCheck, Sparkles } from 'lucide-react';
 import Logo from './Logo';
 import Avatar from './ui/Avatar';
-import { getNavSections } from '../lib/navItems';
+import { getNavSections, isTeenStage } from '../lib/navItems';
 import { useAuth } from '../context/AuthContext';
 import { cn } from '../lib/utils';
 import { LIFE_STAGES } from '../lib/constants';
@@ -15,7 +15,9 @@ const Sidebar = () => {
 
   const stage = isSenior
     ? 'Postmenopause care'
-    : LIFE_STAGES.find((item) => item.value === user?.lifeStages?.[0])?.short || 'Cycle tracking';
+    : isTeenStage(user?.lifeStage)
+      ? 'Teen space'
+      : LIFE_STAGES.find((item) => item.value === user?.lifeStages?.[0])?.short || 'Cycle tracking';
 
   const handleLogout = () => {
     logout();

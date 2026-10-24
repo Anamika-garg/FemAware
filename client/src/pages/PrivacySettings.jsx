@@ -26,8 +26,24 @@ import Button from '../components/ui/Button';
 import Badge from '../components/ui/Badge';
 import Modal from '../components/ui/Modal';
 import Field from '../components/ui/Field';
-import { GOALS, LIFE_STAGES } from '../lib/constants';
+import {
+  GOALS,
+  LIFE_STAGES,
+  SENIOR_FOCUS_AREAS,
+  SENIOR_GOALS,
+  STAGE_OPTIONS,
+  TEEN_GOALS,
+} from '../lib/constants';
+import { isTeenStage } from '../lib/navItems';
 import { cn } from '../lib/utils';
+
+const GOALS_FOR_SPACE = { teen: TEEN_GOALS, adult: GOALS, senior: SENIOR_GOALS };
+
+const spaceFor = (user) => {
+  if (isTeenStage(user?.lifeStage)) return 'teen';
+  if (user?.lifeStage === 'senior') return 'senior';
+  return 'adult';
+};
 
 const DeleteDataDialog = ({ open, mode, range, onClose, onDeleted }) => {
   const [password, setPassword] = useState('');
@@ -186,6 +202,7 @@ const PrivacySettings = () => {
   const [profile, setProfile] = useState({
     name: user?.name || '',
     age: user?.age || '',
+    space: spaceFor(user),
     lifeStages: user?.lifeStages || ['general'],
     goals: user?.goals || [],
     averageCycleLength: user?.cycleProfile?.averageCycleLength || 28,
@@ -206,6 +223,7 @@ const PrivacySettings = () => {
     setProfile({
       name: user?.name || '',
       age: user?.age || '',
+      space: spaceFor(user),
       lifeStages: user?.lifeStages || ['general'],
       goals: user?.goals || [],
       averageCycleLength: user?.cycleProfile?.averageCycleLength || 28,
@@ -237,29 +255,46 @@ const PrivacySettings = () => {
     event.preventDefault();
     setProfileError('');
     if (!profile.name.trim()) return setProfileError('Your name cannot be empty.');
-    if (profile.age && (Number(profile.age) < 13 || Number(profile.age) > 80)) {
-      return setProfileError('Please use an age between 13 and 80.');
+    if (profile.age && (Number(profile.age) < 13 || Number(profile.age) > 110)) {
+      return setProfileError('Please use an age between 13 and 110.');
     }
     if (!profile.lifeStages.length) return setProfileError('Choose at least one focus area.');
+
+    const spaceChanged = profile.space !== spaceFor(user);
+    const stageFields =
+      profile.space === 'adult'
+        ? {
+            lifeStages: profile.lifeStages,
+            focusAreas: [
+              ...profile.lifeStages,
+              ...(profile.goals.includes('Manage irregular periods') ? ['irregular-periods'] : []),
+            ],
+            cycleProfile: {
+              averageCycleLength: Number(profile.averageCycleLength),
+              averagePeriodLength: Number(profile.averagePeriodLength),
+            },
+          }
+        : profile.space === 'senior' && spaceChanged
+          ? { lifeStages: ['postmenopause'], focusAreas: SENIOR_FOCUS_AREAS }
+          : profile.space === 'teen' && spaceChanged
+            ? { lifeStages: ['general'], focusAreas: ['general'] }
+            : {};
 
     setSavingProfile(true);
     try {
       await updateProfile({
         name: profile.name.trim(),
         age: profile.age || undefined,
-        lifeStage: user?.lifeStage || 'adult',
-        lifeStages: profile.lifeStages,
-        focusAreas: [
-          ...profile.lifeStages,
-          ...(profile.goals.includes('Manage irregular periods') ? ['irregular-periods'] : []),
-        ],
+        lifeStage: profile.space,
         goals: profile.goals,
-        cycleProfile: {
-          averageCycleLength: Number(profile.averageCycleLength),
-          averagePeriodLength: Number(profile.averagePeriodLength),
-        },
+        ...stageFields,
       });
-      addToast({ title: 'Profile updated', message: 'Your preferences are saved.' });
+      addToast({
+        title: 'Profile updated',
+        message: spaceChanged
+          ? `You're now in the ${STAGE_OPTIONS.find((item) => item.value === profile.space).label.toLowerCase()}.`
+          : 'Your preferences are saved.',
+      });
     } catch (err) {
       setProfileError(getErrorMessage(err));
     } finally {
@@ -275,7 +310,7 @@ const PrivacySettings = () => {
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `cyclesense-export-${todayISO()}.json`;
+      link.download = `femaware-export-${todayISO()}.json`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -348,7 +383,7 @@ const PrivacySettings = () => {
                 Your health data is never for sale.
               </h2>
               <p className="mt-1 max-w-2xl text-xs leading-relaxed text-deep-rose/70">
-                CycleSense uses your logs to power your own dashboard, predictions and reports. We do
+                FemAware uses your logs to power your own dashboard, predictions and reports. We do
                 not use them to sell advertising or train public models.
               </p>
             </div>
@@ -501,7 +536,7 @@ const PrivacySettings = () => {
             <div className="mt-4 flex items-start gap-2 rounded-xl bg-rose-mist/70 p-3">
               <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-deep-rose" aria-hidden="true" />
               <p className="text-[10px] leading-relaxed text-muted">
-                CycleSense is not an emergency service or a medical record. If you need urgent care,
+                FemAware is not an emergency service or a medical record. If you need urgent care,
                 contact local emergency services or a clinician directly.
               </p>
             </div>
@@ -518,7 +553,7 @@ const PrivacySettings = () => {
                 <h2 id="profile-title" className="font-display text-xl font-semibold text-deep-rose">
                   Your profile
                 </h2>
-                <p className="text-[10px] text-muted">Adjust what CycleSense knows about you.</p>
+                <p className="text-[10px] text-muted">Adjust what FemAware knows about you.</p>
               </div>
             </div>
 
@@ -549,7 +584,7 @@ const PrivacySettings = () => {
                     id="profile-age"
                     type="number"
                     min="13"
-                    max="80"
+                    max="110"
                     value={profile.age}
                     onChange={(event) => setProfile((current) => ({ ...current, age: event.target.value }))}
                     className="input-field"
@@ -575,6 +610,42 @@ const PrivacySettings = () => {
                 </div>
               </Field>
 
+              <div>
+                <p className="field-label" id="profile-space-label">Your space</p>
+                <div className="grid gap-1.5 sm:grid-cols-3" role="radiogroup" aria-labelledby="profile-space-label">
+                  {STAGE_OPTIONS.map((option) => {
+                    const selected = profile.space === option.value;
+                    return (
+                      <button
+                        key={option.value}
+                        type="button"
+                        role="radio"
+                        aria-checked={selected}
+                        onClick={() =>
+                          setProfile((current) => ({
+                            ...current,
+                            space: option.value,
+                            // Goals are worded per space.
+                            goals: option.value === current.space ? current.goals : [],
+                          }))
+                        }
+                        className={cn(
+                          'rounded-lg border px-2.5 py-2 text-left transition-colors',
+                          selected
+                            ? 'border-pink-glow bg-soft-petal/70 text-deep-rose'
+                            : 'border-blush-pink/60 bg-white text-muted hover:border-pink-glow'
+                        )}
+                      >
+                        <span className="block text-[11px] font-bold">{option.label}</span>
+                        <span className="block text-[9px] font-semibold uppercase tracking-wide">{option.ages}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+                <p className="field-hint">Switching changes your dashboard and tools. Your logs are kept.</p>
+              </div>
+
+              {profile.space === 'adult' ? (
               <div>
                 <p className="field-label">Focus areas</p>
                 <div className="grid gap-1.5 sm:grid-cols-2">
@@ -608,11 +679,12 @@ const PrivacySettings = () => {
                   })}
                 </div>
               </div>
+              ) : null}
 
               <div>
                 <p className="field-label">Health priorities</p>
                 <div className="flex max-h-32 flex-wrap gap-1.5 overflow-y-auto pr-1">
-                  {GOALS.map((goal) => {
+                  {GOALS_FOR_SPACE[profile.space].map((goal) => {
                     const selected = profile.goals.includes(goal.value);
                     return (
                       <button
@@ -634,6 +706,8 @@ const PrivacySettings = () => {
                 </div>
               </div>
 
+              {profile.space === 'adult' ? (
+              <>
               <div className="grid gap-3 sm:grid-cols-2">
                 <Field label="Usual cycle length" htmlFor="profile-cycle">
                   <div className="relative">
@@ -672,6 +746,8 @@ const PrivacySettings = () => {
                 Changing these defaults shapes your predictions. Existing period logs stay exactly as
                 you recorded them.
               </p>
+              </>
+              ) : null}
 
               <Button type="submit" className="w-full" loading={savingProfile}>
                 Save profile

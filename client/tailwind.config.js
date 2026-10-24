@@ -12,6 +12,13 @@ export default {
         'deep-rose': '#C2185B',
         ink: '#3B2430',
         muted: '#7C5B6A',
+        // Short names used by the teen module. Same palette as above.
+        mist: '#FFF1F6',
+        petal: '#FFD6E7',
+        blush: '#F8BBD0',
+        glow: '#F672A7',
+        rose: '#E0487E',
+        deep: '#C2185B',
       },
       fontFamily: {
         sans: ['"Plus Jakarta Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],

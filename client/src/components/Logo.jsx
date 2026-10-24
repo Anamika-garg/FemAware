@@ -32,7 +32,7 @@ const Logo = ({ className = '', showWordmark = true, compact = false }) => (
             compact ? 'text-lg' : 'text-xl'
           )}
         >
-          CycleSense
+          FemAware
         </span>
         <span className="mt-1 block text-[9px] font-bold uppercase tracking-[0.22em] text-rose-pink">
           Track · Understand

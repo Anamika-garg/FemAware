@@ -1,11 +1,17 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { AlertCircle, ArrowRight, Eye, EyeOff, HeartPulse, Lock, Mail, Sparkles } from 'lucide-react';
+import { AlertCircle, ArrowRight, Eye, EyeOff, HeartPulse, Lock, Mail, Sparkles, Sprout } from 'lucide-react';
 import AuthLayout from '../components/AuthLayout';
 import Field from '../components/ui/Field';
 import Button from '../components/ui/Button';
 import { useAuth } from '../context/AuthContext';
 import { getErrorMessage } from '../lib/api';
+
+const DEMO_EMAILS = {
+  teen: 'teen@femaware.app',
+  adult: 'demo@femaware.app',
+  senior: 'senior@femaware.app',
+};
 
 const Login = () => {
   const [form, setForm] = useState({ email: '', password: '' });
@@ -46,15 +52,12 @@ const Login = () => {
     setError('');
     setDemoLoading(role);
     try {
-      const user = await login(
-        role === 'senior' ? 'senior@cyclesense.app' : 'demo@cyclesense.app',
-        'CycleSense123!'
-      );
+      const user = await login(DEMO_EMAILS[role], 'FemAware123!');
       goNext(user);
     } catch (err) {
       setError(
         getErrorMessage(err) +
-          ' If you are running locally, start the API with demo data enabled (USE_MEMORY_DB=true).'
+          ' If you are running locally, seed the demo accounts with `npm run seed` or start the API with USE_MEMORY_DB=true.'
       );
     } finally {
       setDemoLoading(null);
@@ -147,6 +150,12 @@ const Login = () => {
         <div className="space-y-2.5">
           {[
             {
+              role: 'teen',
+              icon: Sprout,
+              title: 'Explore the teen demo',
+              description: 'Period calendar, symptom diary, lessons and quizzes',
+            },
+            {
               role: 'adult',
               icon: Sparkles,
               title: 'Explore the adult demo',
@@ -187,14 +196,14 @@ const Login = () => {
         </div>
 
         <p className="mt-8 text-center text-sm text-muted">
-          New to CycleSense?{' '}
+          New to FemAware?{' '}
           <Link to="/register" className="font-bold text-deep-rose underline decoration-blush-pink underline-offset-4 transition-colors hover:text-rose-pink">
             Create your account
           </Link>
         </p>
 
         <p className="mt-6 text-center text-[10px] leading-relaxed text-muted/80">
-          Sessions stay private to this device. CycleSense does not sell health data.
+          Sessions stay private to this device. FemAware does not sell health data.
         </p>
       </div>
     </AuthLayout>

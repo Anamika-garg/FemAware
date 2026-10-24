@@ -104,7 +104,7 @@ const MobileNav = () => {
         onClose={() => setMoreOpen(false)}
         title={isSenior ? 'Your care sections' : 'All sections'}
         description={
-          isSenior ? 'Everything in your care space, in one place.' : 'Everything in your CycleSense space.'
+          isSenior ? 'Everything in your care space, in one place.' : 'Everything in your FemAware space.'
         }
         size="sm"
       >

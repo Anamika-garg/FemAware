@@ -300,7 +300,7 @@ const PeriodTracker = () => {
       <PageHeader
         eyebrow="Periods & predictions"
         title="Your cycle, clearly mapped."
-        description="Log each period in seconds. CycleSense learns your averages and gently updates your fertile window and next expected period."
+        description="Log each period in seconds. FemAware learns your averages and gently updates your fertile window and next expected period."
         actions={
           <>
             <Button variant="secondary" icon={CalendarDays} onClick={() => setMonth(startOfMonth(new Date()))}>

@@ -19,7 +19,7 @@ import { CATEGORY_STYLES } from '../../lib/constants';
 import { RESOURCES, RESOURCE_CATEGORIES } from '../../data/resources';
 import { cn } from '../../lib/utils';
 
-const BOOKMARK_KEY = 'cyclesense_saved_resources';
+const BOOKMARK_KEY = 'femaware_saved_resources';
 
 const categoryIcons = {
   Contraception: ShieldCheck,
@@ -312,7 +312,7 @@ const ResourceLibrary = () => {
       <div className="flex items-start gap-2 rounded-2xl border border-blush-pink/60 bg-white/70 p-4">
         <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-pink-glow" aria-hidden="true" />
         <p className="text-[10px] leading-relaxed text-muted">
-          CycleSense articles are educational and cannot account for your full medical history. They
+          FemAware articles are educational and cannot account for your full medical history. They
           are not a substitute for personalised advice from a qualified clinician. If you are worried
           about a symptom, book an appointment â€” you do not need to wait for it to become severe.
         </p>

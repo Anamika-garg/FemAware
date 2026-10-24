@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Accessibility, Check } from 'lucide-react';
 import { cn } from '../../lib/utils';
 
-const STORAGE_KEY = 'cyclesense_senior_font_scale';
+const STORAGE_KEY = 'femaware_senior_font_scale';
 
 const TEXT_SIZES = [
   { value: 'standard', label: 'Standard', short: 'A' },
@@ -24,7 +24,7 @@ const SeniorAccessibilityToolbar = () => {
 
   useEffect(() => {
     document.documentElement.setAttribute('data-senior-font-scale', scale);
-    window.dispatchEvent(new CustomEvent('cyclesense:font-scale', { detail: scale }));
+    window.dispatchEvent(new CustomEvent('femaware:font-scale', { detail: scale }));
     try {
       localStorage.setItem(STORAGE_KEY, scale);
     } catch {

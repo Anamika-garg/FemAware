@@ -6,9 +6,13 @@ import { SymptomLog } from '../models/SymptomLog.js';
 import { HealthReport } from '../models/HealthReport.js';
 import { addDays, todayISO } from '../utils/dates.js';
 import { buildReportSnapshot } from '../utils/reportBuilder.js';
+import { deleteTeenData } from '../teen/index.js';
+import { TeenCycleEntry, TeenSymptomLog } from '../teen/models/index.js';
+import { generateDemoData } from '../teen/services/demoData.js';
 
-const DEMO_EMAIL = 'demo@cyclesense.app';
-const SENIOR_EMAIL = 'senior@cyclesense.app';
+const DEMO_EMAIL = 'demo@femaware.app';
+const SENIOR_EMAIL = 'senior@femaware.app';
+const TEEN_EMAIL = 'teen@femaware.app';
 
 const cycleBlueprint = [
   { offset: 0, startOffset: -218, duration: 5, flow: 'medium' },
@@ -52,12 +56,13 @@ export const seedDatabase = async ({ silent = false } = {}) => {
   };
 
   const today = todayISO();
-  const existingUsers = await User.find({ email: { $in: [DEMO_EMAIL, SENIOR_EMAIL] } });
+  const existingUsers = await User.find({ email: { $in: [DEMO_EMAIL, SENIOR_EMAIL, TEEN_EMAIL] } });
   for (const existing of existingUsers) {
     await Promise.all([
       CycleLog.deleteMany({ user: existing._id }),
       SymptomLog.deleteMany({ user: existing._id }),
       HealthReport.deleteMany({ user: existing._id }),
+      deleteTeenData(existing._id),
       User.deleteOne({ _id: existing._id }),
     ]);
   }
@@ -65,7 +70,7 @@ export const seedDatabase = async ({ silent = false } = {}) => {
   const user = await User.create({
     name: 'Aanya Sharma',
     email: DEMO_EMAIL,
-    password: 'CycleSense123!',
+    password: 'FemAware123!',
     age: 29,
     lifeStage: 'adult',
     lifeStages: ['general', 'pcos'],
@@ -208,7 +213,7 @@ export const seedDatabase = async ({ silent = false } = {}) => {
     snapshot,
   });
 
-  log(`🌱 Seeded demo account: ${DEMO_EMAIL} / CycleSense123!`);
+  log(`🌱 Seeded demo account: ${DEMO_EMAIL} / FemAware123!`);
   log(`   ${cycles.length} periods · ${symptomMap.size} journal entries · 1 saved report`);
 
   // -------------------------------------------------------------------------
@@ -218,7 +223,7 @@ export const seedDatabase = async ({ silent = false } = {}) => {
   const seniorUser = await User.create({
     name: 'Meera Iyer',
     email: SENIOR_EMAIL,
-    password: 'CycleSense123!',
+    password: 'FemAware123!',
     age: 58,
     lifeStage: 'senior',
     lifeStages: ['postmenopause'],
@@ -415,10 +420,35 @@ export const seedDatabase = async ({ silent = false } = {}) => {
     snapshot: seniorSnapshot,
   });
 
-  log(`🌱 Seeded senior demo account: ${SENIOR_EMAIL} / CycleSense123!`);
+  log(`🌱 Seeded senior demo account: ${SENIOR_EMAIL} / FemAware123!`);
   log(`   ${seniorMap.size} senior check-ins · 1 saved appointment summary`);
+
+  // -------------------------------------------------------------------------
+  // Teen demo account
+  // -------------------------------------------------------------------------
+
+  const teenUser = await User.create({
+    name: 'Riya Kapoor',
+    email: TEEN_EMAIL,
+    password: 'FemAware123!',
+    age: 15,
+    lifeStage: 'teen',
+    lifeStages: ['general'],
+    focusAreas: ['general'],
+    goals: ['Track my period', 'Learn about my body'],
+    onboardingComplete: true,
+  });
+
+  const teenSample = generateDemoData();
+  await Promise.all([
+    TeenCycleEntry.insertMany(teenSample.cycles.map((item) => ({ ...item, owner: teenUser._id }))),
+    TeenSymptomLog.insertMany(teenSample.symptoms.map((item) => ({ ...item, owner: teenUser._id }))),
+  ]);
+
+  log(`🌱 Seeded teen demo account: ${TEEN_EMAIL} / FemAware123!`);
+  log(`   ${teenSample.cycles.length} periods · ${teenSample.symptoms.length} symptom logs`);
 
   return user;
 };
 
-export { DEMO_EMAIL, SENIOR_EMAIL };
+export { DEMO_EMAIL, SENIOR_EMAIL, TEEN_EMAIL };

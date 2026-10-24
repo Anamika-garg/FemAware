@@ -18,9 +18,17 @@ import Button from '../components/ui/Button';
 import Field from '../components/ui/Field';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import { LIFE_STAGES, GOALS } from '../lib/constants';
+import {
+  GOALS,
+  LIFE_STAGES,
+  SENIOR_FOCUS_AREAS,
+  SENIOR_GOALS,
+  STAGE_OPTIONS,
+  TEEN_GOALS,
+} from '../lib/constants';
 import { getErrorMessage } from '../lib/api';
 import { addDays, formatDate, parseISO, todayISO } from '../lib/dates';
+import { isTeenStage } from '../lib/navItems';
 import { cn } from '../lib/utils';
 
 const stageIcons = {
@@ -28,20 +36,54 @@ const stageIcons = {
   activity: Activity,
   flower: Flower2,
   heart: Heart,
+  sprout: Sprout,
 };
 
-const steps = [
-  { title: 'Your focus', caption: 'What would you like support with?' },
-  { title: 'Your goals', caption: 'What matters most right now?' },
-  { title: 'Your rhythm', caption: 'A starting point for predictions.' },
-];
+const STEP_DETAILS = {
+  space: {
+    title: 'Your space',
+    heading: 'Which FemAware space fits you?',
+    caption: 'Each life stage gets its own dashboard, tools and lessons. You can switch later.',
+  },
+  focus: {
+    title: 'Your focus',
+    heading: 'What brings you to FemAware?',
+    caption: 'Choose one or more. Your dashboard and education will adapt to what you select.',
+  },
+  goals: {
+    title: 'Your goals',
+    heading: 'What would you like to get from FemAware?',
+    caption: 'We use these to prioritise the insights and prompts you see.',
+  },
+  rhythm: {
+    title: 'Your rhythm',
+    heading: 'How would you describe your usual cycle?',
+    caption: 'Estimates are enough. Your averages update automatically as you log.',
+  },
+};
+
+// Teen and senior spaces skip the adult cycle-focus and prediction steps.
+const STEPS_FOR_STAGE = {
+  teen: ['space', 'goals'],
+  adult: ['space', 'focus', 'goals', 'rhythm'],
+  senior: ['space', 'goals'],
+};
+
+const GOALS_FOR_STAGE = { teen: TEEN_GOALS, adult: GOALS, senior: SENIOR_GOALS };
+
+const initialStage = (user) => {
+  if (isTeenStage(user?.lifeStage)) return 'teen';
+  if (user?.lifeStage === 'senior') return 'senior';
+  return 'adult';
+};
 
 const Onboarding = () => {
   const { user, completeOnboarding } = useAuth();
   const { addToast } = useToast();
   const navigate = useNavigate();
 
-  const [step, setStep] = useState(0);
+  const [stepIndex, setStepIndex] = useState(0);
+  const [space, setSpace] = useState(() => initialStage(user));
   const [stages, setStages] = useState(
     user?.lifeStages?.length ? user.lifeStages : ['general']
   );
@@ -60,6 +102,16 @@ const Onboarding = () => {
 
   const iconForStage = (icon) => stageIcons[icon] || Sparkles;
   const selectedStageDetails = LIFE_STAGES.filter((item) => stages.includes(item.value));
+  const steps = STEPS_FOR_STAGE[space].map((key) => ({ key, ...STEP_DETAILS[key] }));
+  const step = steps[stepIndex].key;
+  const goalOptions = GOALS_FOR_STAGE[space];
+  const spaceDetails = STAGE_OPTIONS.find((item) => item.value === space);
+
+  const chooseSpace = (value) => {
+    setSpace(value);
+    // Goals are worded per space, so a new space starts with a fresh list.
+    if (value !== space) setGoals([]);
+  };
 
   const preview = useMemo(() => {
     if (notSure || !lastPeriod) return null;
@@ -89,12 +141,15 @@ const Onboarding = () => {
   };
 
   const validateStep = () => {
-    if (step === 0 && !stages.length) return 'Choose at least one focus to continue.';
-    if (step === 1 && !goals.length) return 'Choose at least one goal — it helps us shape your space.';
-    if (step === 1 && age && (Number(age) < 13 || Number(age) > 80)) {
-      return 'Please enter an age between 13 and 80, or leave it blank.';
+    if (step === 'focus' && !stages.length) return 'Choose at least one focus to continue.';
+    if (step === 'goals' && !goals.length) return 'Choose at least one goal — it helps us shape your space.';
+    if (step === 'goals' && age) {
+      const [min, max] = spaceDetails.ageRange;
+      if (Number(age) < min || Number(age) > max) {
+        return `The ${spaceDetails.label.toLowerCase()} is for ages ${min}–${max}. Adjust your age or go back and pick another space.`;
+      }
     }
-    if (step === 2) {
+    if (step === 'rhythm') {
       if (!Number(cycleLength) || Number(cycleLength) < 15 || Number(cycleLength) > 90) {
         return 'Cycle length should be between 15 and 90 days.';
       }
@@ -115,13 +170,33 @@ const Onboarding = () => {
       return;
     }
     setError('');
-    setStep((current) => Math.min(current + 1, steps.length - 1));
+    setStepIndex((current) => Math.min(current + 1, steps.length - 1));
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const back = () => {
     setError('');
-    setStep((current) => Math.max(current - 1, 0));
+    setStepIndex((current) => Math.max(current - 1, 0));
+  };
+
+  const stagePayload = () => {
+    if (space === 'teen') return { lifeStage: 'teen', lifeStages: ['general'], focusAreas: ['general'] };
+    if (space === 'senior') {
+      return { lifeStage: 'senior', lifeStages: ['postmenopause'], focusAreas: SENIOR_FOCUS_AREAS };
+    }
+    return {
+      lifeStage: 'adult',
+      lifeStages: stages,
+      focusAreas: [
+        ...stages,
+        ...(goals.includes('Manage irregular periods') ? ['irregular-periods'] : []),
+      ],
+      cycleProfile: {
+        averageCycleLength: Number(cycleLength),
+        averagePeriodLength: Number(periodLength),
+        lastPeriodStart: notSure || !lastPeriod ? null : lastPeriod,
+      },
+    };
   };
 
   const finish = async () => {
@@ -133,24 +208,13 @@ const Onboarding = () => {
     setError('');
     setSaving(true);
     try {
-      await completeOnboarding({
-        lifeStage: 'adult',
-        lifeStages: stages,
-        focusAreas: [
-          ...stages,
-          ...(goals.includes('Manage irregular periods') ? ['irregular-periods'] : []),
-        ],
-        goals,
-        age: age || undefined,
-        cycleProfile: {
-          averageCycleLength: Number(cycleLength),
-          averagePeriodLength: Number(periodLength),
-          lastPeriodStart: notSure || !lastPeriod ? null : lastPeriod,
-        },
-      });
+      await completeOnboarding({ ...stagePayload(), goals, age: age || undefined });
       addToast({
         title: 'Your space is ready',
-        message: 'Predictions and insights will sharpen with every log.',
+        message:
+          space === 'adult'
+            ? 'Predictions and insights will sharpen with every log.'
+            : `Welcome to your ${spaceDetails.label.toLowerCase()}.`,
       });
       navigate('/dashboard', { replace: true });
     } catch (err) {
@@ -186,8 +250,8 @@ const Onboarding = () => {
 
         <ol className="mx-auto mb-7 flex max-w-2xl items-start justify-between" aria-label="Onboarding progress">
           {steps.map((item, index) => {
-            const active = index === step;
-            const complete = index < step;
+            const active = index === stepIndex;
+            const complete = index < stepIndex;
             return (
               <li key={item.title} className="flex flex-1 flex-col items-center text-center">
                 <div className="flex w-full items-center">
@@ -221,22 +285,12 @@ const Onboarding = () => {
         <div className="mx-auto max-w-3xl overflow-hidden rounded-3xl border border-white/80 bg-white/95 shadow-card">
           <div className="bg-gradient-to-r from-rose-mist via-soft-petal/60 to-rose-mist px-5 py-5 sm:px-8 sm:py-6">
             <p className="eyebrow">
-              Step {step + 1} of {steps.length}
+              Step {stepIndex + 1} of {steps.length}
             </p>
             <h2 className="mt-1 font-display text-2xl font-semibold text-deep-rose">
-              {step === 0
-                ? 'What brings you to CycleSense?'
-                : step === 1
-                  ? 'What would you like to get from tracking?'
-                  : 'How would you describe your usual cycle?'}
+              {steps[stepIndex].heading}
             </h2>
-            <p className="mt-1.5 text-sm leading-relaxed text-muted">
-              {step === 0
-                ? 'Choose one or more. Your dashboard and education will adapt to what you select.'
-                : step === 1
-                  ? 'We use these to prioritise the insights and prompts you see.'
-                  : 'Estimates are enough. Your averages update automatically as you log.'}
-            </p>
+            <p className="mt-1.5 text-sm leading-relaxed text-muted">{steps[stepIndex].caption}</p>
           </div>
 
           <div className="px-5 py-6 sm:px-8 sm:py-8">
@@ -250,7 +304,45 @@ const Onboarding = () => {
               </div>
             ) : null}
 
-            {step === 0 ? (
+            {step === 'space' ? (
+              <div className="grid gap-3 sm:grid-cols-3" role="radiogroup" aria-label="FemAware space">
+                {STAGE_OPTIONS.map((option) => {
+                  const Icon = iconForStage(option.icon);
+                  const selected = space === option.value;
+                  return (
+                    <button
+                      key={option.value}
+                      type="button"
+                      role="radio"
+                      aria-checked={selected}
+                      onClick={() => chooseSpace(option.value)}
+                      className={cn(
+                        'relative flex flex-col items-start rounded-2xl border p-4 text-left transition-all sm:p-5',
+                        selected
+                          ? 'border-pink-glow bg-soft-petal/70 shadow-soft'
+                          : 'border-blush-pink/70 bg-white hover:border-pink-glow/60 hover:bg-rose-mist/60'
+                      )}
+                    >
+                      <span
+                        className={cn(
+                          'grid h-10 w-10 place-items-center rounded-xl transition-colors',
+                          selected ? 'bg-pink-glow text-white' : 'bg-soft-petal text-deep-rose'
+                        )}
+                      >
+                        <Icon className="h-5 w-5" aria-hidden="true" />
+                      </span>
+                      <span className="mt-3 text-sm font-bold text-deep-rose">{option.label}</span>
+                      <span className="text-[11px] font-semibold uppercase tracking-wide text-rose-pink">
+                        {option.ages}
+                      </span>
+                      <span className="mt-1.5 text-xs leading-relaxed text-muted">{option.description}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            ) : null}
+
+            {step === 'focus' ? (
               <div className="grid gap-3 sm:grid-cols-2">
                 {LIFE_STAGES.map((stage) => {
                   const Icon = iconForStage(stage.icon);
@@ -297,10 +389,10 @@ const Onboarding = () => {
               </div>
             ) : null}
 
-            {step === 1 ? (
+            {step === 'goals' ? (
               <div>
                 <div className="flex flex-wrap gap-2.5">
-                  {GOALS.map((goal) => {
+                  {goalOptions.map((goal) => {
                     const selected = goals.includes(goal.value);
                     return (
                       <button
@@ -323,28 +415,29 @@ const Onboarding = () => {
                       Why we ask
                     </p>
                     <p className="mt-1.5 text-xs leading-relaxed text-muted">
-                      Your goals shape the prompts you receive — from preparing for a gynecology
-                      visit to understanding perimenopause changes. You can update them any time.
+                      {space === 'teen'
+                        ? 'Your goals decide which lessons and tools we show first. You can change them any time.'
+                        : 'Your goals shape the prompts you receive — from preparing for a gynecology visit to understanding later-life changes. You can update them any time.'}
                     </p>
                   </div>
                   <Field label="Your age" htmlFor="age" optional>
                     <input
                       id="age"
                       type="number"
-                      min="13"
-                      max="80"
+                      min={spaceDetails.ageRange[0]}
+                      max={spaceDetails.ageRange[1]}
                       inputMode="numeric"
                       value={age}
                       onChange={(event) => setAge(event.target.value)}
                       className="input-field"
-                      placeholder="e.g. 29"
+                      placeholder={space === 'teen' ? 'e.g. 15' : space === 'senior' ? 'e.g. 62' : 'e.g. 29'}
                     />
                   </Field>
                 </div>
               </div>
             ) : null}
 
-            {step === 2 ? (
+            {step === 'rhythm' ? (
               <div className="space-y-6">
                 <div className="grid gap-5 sm:grid-cols-2">
                   <Field
@@ -448,7 +541,7 @@ const Onboarding = () => {
 
                 {selectedStageDetails.some((item) => item.value === 'pcos') ? (
                   <p className="rounded-xl bg-white p-3 text-[11px] leading-relaxed text-muted ring-1 ring-blush-pink/60">
-                    You selected PCOS awareness. CycleSense can help you collect patterns for a
+                    You selected PCOS awareness. FemAware can help you collect patterns for a
                     clinician, but it does not diagnose PCOS.
                   </p>
                 ) : null}
@@ -460,13 +553,13 @@ const Onboarding = () => {
             <Button
               variant="ghost"
               onClick={back}
-              disabled={step === 0 || saving}
+              disabled={stepIndex === 0 || saving}
               icon={ArrowLeft}
               className="justify-center sm:justify-start"
             >
               Back
             </Button>
-            {step < steps.length - 1 ? (
+            {stepIndex < steps.length - 1 ? (
               <Button onClick={next} iconRight={ArrowRight}>
                 Continue
               </Button>

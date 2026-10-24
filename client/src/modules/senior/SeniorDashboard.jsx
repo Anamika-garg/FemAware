@@ -544,7 +544,7 @@ const SeniorDashboard = () => {
         <div className="border-t-2 border-blush-pink/50 bg-rose-mist/60 px-5 py-3 sm:px-6">
           <p className="text-xs leading-relaxed text-muted">
             If you have chest pain, severe shortness of breath, heavy bleeding with dizziness, or
-            any symptom that feels urgent, seek same-day medical care. CycleSense does not provide
+            any symptom that feels urgent, seek same-day medical care. FemAware does not provide
             emergency care.
           </p>
         </div>

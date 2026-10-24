@@ -34,8 +34,8 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     refreshUser();
     const handleUnauthorized = () => setUser(null);
-    window.addEventListener('cyclesense:unauthorized', handleUnauthorized);
-    return () => window.removeEventListener('cyclesense:unauthorized', handleUnauthorized);
+    window.addEventListener('femaware:unauthorized', handleUnauthorized);
+    return () => window.removeEventListener('femaware:unauthorized', handleUnauthorized);
   }, [refreshUser]);
 
   const login = useCallback(async (email, password) => {

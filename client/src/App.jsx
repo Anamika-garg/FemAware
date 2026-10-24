@@ -4,6 +4,7 @@ import AppLayout from './components/AppLayout';
 import Logo from './components/Logo';
 import Spinner from './components/ui/Spinner';
 import { useAuth } from './context/AuthContext';
+import { isTeenStage } from './lib/navItems';
 
 // Route-level code splitting keeps the first load small. Charts, the report
 // generator and the resource library only download when they are opened.
@@ -32,9 +33,17 @@ const SeniorHealthInsights = lazy(() => import('./modules/senior/SeniorHealthIns
 const SeniorDoctorReport = lazy(() => import('./modules/senior/SeniorDoctorReport'));
 const SeniorResourceLibrary = lazy(() => import('./modules/senior/SeniorResourceLibrary'));
 
-// A minimal teen module keeps the life-stage router explicit. It can grow into
-// a full experience without changing the route table again.
-const TeenDashboard = lazy(() => import('./modules/teen/TeenDashboard'));
+// The teen module adds lessons, a guided symptom check and body-safety help,
+// and swaps in teen-friendly versions of the shared tracking pages.
+const TeenDashboard = lazy(() => import('./modules/teen/pages/Dashboard'));
+const TeenCalendar = lazy(() => import('./modules/teen/pages/CalendarPage'));
+const TeenSymptoms = lazy(() => import('./modules/teen/pages/Symptoms'));
+const TeenInsights = lazy(() => import('./modules/teen/pages/Insights'));
+const TeenLearn = lazy(() => import('./modules/teen/pages/Learn'));
+const TeenLesson = lazy(() => import('./modules/teen/pages/Lesson'));
+const TeenAssessment = lazy(() => import('./modules/teen/pages/Assessment'));
+const TeenSafety = lazy(() => import('./modules/teen/pages/Safety'));
+const Disclaimer = lazy(() => import('./modules/teen/pages/Disclaimer'));
 
 // Map a user's life stage to the dashboard module they should see. The adult
 // module also covers the perimenopause experience for now; new life stages can
@@ -47,16 +56,25 @@ const DASHBOARDS = {
   senior: SeniorDashboard,
 };
 
+// Teen pages are written against the short pink tokens and inherit their
+// text colour, so they render inside this wrapper.
+const TeenPage = ({ page: Page }) => (
+  <div className="text-deep">
+    <Page />
+  </div>
+);
+
 const DashboardRoute = () => {
   const { user } = useAuth();
   const Dashboard = DASHBOARDS[user?.lifeStage] || AdultDashboard;
-  return <Dashboard />;
+  return isTeenStage(user?.lifeStage) ? <TeenPage page={Dashboard} /> : <Dashboard />;
 };
 
 // Renders the stage-appropriate page for a shared route. Adult pages remain the
 // default so accounts without a recognised stage keep the current experience.
-const StagePage = ({ adult: AdultPage, senior: SeniorPage }) => {
+const StagePage = ({ adult: AdultPage, senior: SeniorPage = AdultPage, teen: TeenStagePage }) => {
   const { user } = useAuth();
+  if (TeenStagePage && isTeenStage(user?.lifeStage)) return <TeenPage page={TeenStagePage} />;
   const Page = user?.lifeStage === 'senior' ? SeniorPage : AdultPage;
   return <Page />;
 };
@@ -128,15 +146,24 @@ const App = () => (
         <Route element={<RequireOnboarded />}>
           <Route element={<AppLayout />}>
             <Route path="/dashboard" element={<DashboardRoute />} />
-            <Route path="/cycle" element={<PeriodTracker />} />
+            <Route path="/cycle" element={<StagePage adult={PeriodTracker} teen={TeenCalendar} />} />
             <Route
               path="/symptoms"
-              element={<StagePage adult={SymptomJournal} senior={SeniorSymptomJournal} />}
+              element={
+                <StagePage adult={SymptomJournal} senior={SeniorSymptomJournal} teen={TeenSymptoms} />
+              }
             />
             <Route
               path="/insights"
-              element={<StagePage adult={HealthInsights} senior={SeniorHealthInsights} />}
+              element={
+                <StagePage adult={HealthInsights} senior={SeniorHealthInsights} teen={TeenInsights} />
+              }
             />
+            <Route path="/learn" element={<TeenPage page={TeenLearn} />} />
+            <Route path="/learn/:slug" element={<TeenPage page={TeenLesson} />} />
+            <Route path="/check" element={<TeenPage page={TeenAssessment} />} />
+            <Route path="/safety" element={<TeenPage page={TeenSafety} />} />
+            <Route path="/disclaimer" element={<TeenPage page={Disclaimer} />} />
             <Route
               path="/doctor-report"
               element={<StagePage adult={DoctorReport} senior={SeniorDoctorReport} />}

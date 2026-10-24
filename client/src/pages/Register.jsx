@@ -44,7 +44,7 @@ const Register = () => {
     if (form.password.length < 8) return setError('Your password needs at least 8 characters.');
     if (form.password !== form.confirmPassword) return setError('Those passwords do not match yet.');
     if (!form.consent) {
-      return setError('Please confirm that you understand CycleSense is educational guidance.');
+      return setError('Please confirm that you understand FemAware is educational guidance.');
     }
 
     setLoading(true);
@@ -199,7 +199,7 @@ const Register = () => {
               className="mt-0.5 h-4 w-4 rounded border-blush-pink accent-pink-glow"
             />
             <span className="text-[11px] leading-relaxed text-muted">
-              I understand CycleSense offers educational information and self-tracking tools, not a
+              I understand FemAware offers educational information and self-tracking tools, not a
               medical diagnosis. I will speak with a qualified clinician about medical concerns.
             </span>
           </label>

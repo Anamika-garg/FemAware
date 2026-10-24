@@ -80,7 +80,7 @@ const ARTICLES = [
       {
         heading: 'What to bring to an appointment',
         paragraphs: [
-          'A short list is enough: your main symptoms, how often they happen, what helps, your medicines, and the questions you most want answered. The CycleSense visit planner can help you put this together.',
+          'A short list is enough: your main symptoms, how often they happen, what helps, your medicines, and the questions you most want answered. The FemAware visit planner can help you put this together.',
         ],
       },
     ],
@@ -655,7 +655,7 @@ const SeniorResourceLibrary = () => {
             ) : null}
 
             <p className="rounded-2xl bg-rose-mist/80 px-4 py-3 text-sm leading-relaxed text-muted">
-              Reviewed by the CycleSense clinical content team. Last reviewed this year. This guide
+              Reviewed by the FemAware clinical content team. Last reviewed this year. This guide
               is general education, not personalised medical advice.
             </p>
           </div>

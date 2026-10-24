@@ -117,7 +117,7 @@ export const completeOnboarding = asyncHandler(async (req, res) => {
 
   if (age !== undefined && age !== null && age !== '') {
     const numericAge = Number(age);
-    if (!Number.isFinite(numericAge) || numericAge < 13 || numericAge > 80) {
+    if (!Number.isFinite(numericAge) || numericAge < 13 || numericAge > 110) {
       throw new ApiError(422, 'Please enter an age between 13 and 110.');
     }
     req.user.age = numericAge;
@@ -184,7 +184,7 @@ export const updateProfile = asyncHandler(async (req, res) => {
 
   if (age !== undefined) {
     const numericAge = Number(age);
-    if (!Number.isFinite(numericAge) || numericAge < 13 || numericAge > 80) {
+    if (!Number.isFinite(numericAge) || numericAge < 13 || numericAge > 110) {
       throw new ApiError(422, 'Please enter an age between 13 and 110.');
     }
     req.user.age = numericAge;

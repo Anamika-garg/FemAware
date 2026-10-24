@@ -3,15 +3,16 @@ import mongoose from 'mongoose';
 /**
  * Connect to MongoDB. In development, set USE_MEMORY_DB=true to run an
  * ephemeral MongoDB instance that is automatically seeded with demo data.
- * Production deployments must provide a persistent MONGODB_URI.
+ * Production deployments must provide a persistent MONGODB_URI (e.g. Atlas).
  */
 export const connectDB = async () => {
   let uri = process.env.MONGODB_URI;
 
   if (process.env.USE_MEMORY_DB === 'true') {
     const { MongoMemoryServer } = await import('mongodb-memory-server');
-    const memoryServer = await MongoMemoryServer.create();
-    uri = memoryServer.getUri('cyclesense');
+    // Cold starts on Windows can exceed the 10s default.
+    const memoryServer = await MongoMemoryServer.create({ instance: { launchTimeout: 60000 } });
+    uri = memoryServer.getUri('femaware');
     process.env.MEMORY_MONGO_URI = uri;
     console.log('🧪 Using in-memory MongoDB for development');
   }
@@ -27,16 +28,23 @@ export const connectDB = async () => {
     serverSelectionTimeoutMS: 10000,
   });
 
-  console.log(`✅ MongoDB connected: ${conn.connection.host}`);
+  console.log(`✅ MongoDB connected: ${conn.connection.host}/${conn.connection.name}`);
+
+  // Teen lessons and guided-check guidance are shared content. Seeding is
+  // idempotent and keeps existing clinician sign-offs for unchanged text.
+  const { seedContent } = await import('../teen/seedContent.js');
+  const content = await seedContent();
+  if (content.created || content.updated) {
+    console.log(`📚 Teen content: ${content.created} created, ${content.updated} updated`);
+  }
 
   if (process.env.USE_MEMORY_DB === 'true') {
+    const { seedDatabase, DEMO_EMAIL, SENIOR_EMAIL, TEEN_EMAIL } = await import('../seed/seedData.js');
     const { User } = await import('../models/User.js');
-    const [existingDemo, existingSenior] = await Promise.all([
-      User.findOne({ email: 'demo@cyclesense.app' }),
-      User.findOne({ email: 'senior@cyclesense.app' }),
-    ]);
-    if (!existingDemo || !existingSenior) {
-      const { seedDatabase } = await import('../seed/seedData.js');
+    const demoCount = await User.countDocuments({
+      email: { $in: [DEMO_EMAIL, SENIOR_EMAIL, TEEN_EMAIL] },
+    });
+    if (demoCount < 3) {
       await seedDatabase({ silent: true });
       console.log('🌱 Demo data seeded for the in-memory database');
     }
