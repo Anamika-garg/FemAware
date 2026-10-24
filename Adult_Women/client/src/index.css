@@ -1,0 +1,240 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-rose-mist font-sans text-ink antialiased;
+    background-image:
+      radial-gradient(circle at 12% 2%, rgba(248, 187, 208, 0.34), transparent 34%),
+      radial-gradient(circle at 88% 0%, rgba(246, 114, 167, 0.1), transparent 30%);
+    background-attachment: fixed;
+    min-height: 100vh;
+  }
+
+  ::selection {
+    @apply bg-blush-pink text-deep-rose;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-pink-glow ring-offset-2 ring-offset-rose-mist;
+  }
+
+  input[type='date']::-webkit-calendar-picker-indicator {
+    opacity: 0.55;
+    cursor: pointer;
+  }
+
+  /* Restrained, warm scrollbars */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #f8bbd0 transparent;
+  }
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  *::-webkit-scrollbar-thumb {
+    background: #f8bbd0;
+    border-radius: 999px;
+  }
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-2xl border border-white/80 bg-white/95 shadow-soft;
+  }
+
+  .petal-card {
+    @apply rounded-2xl border border-white/70 bg-soft-petal/75 shadow-soft;
+  }
+
+  .eyebrow {
+    @apply text-[11px] font-bold uppercase tracking-[0.16em] text-rose-pink;
+  }
+
+  .page-title {
+    @apply font-display text-3xl font-semibold leading-tight text-deep-rose sm:text-[2.6rem];
+  }
+
+  .section-title {
+    @apply font-display text-xl font-semibold text-deep-rose sm:text-2xl;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold
+      transition-all duration-200 focus-visible:outline-none focus-visible:ring-2
+      focus-visible:ring-pink-glow focus-visible:ring-offset-2 disabled:cursor-not-allowed
+      disabled:opacity-50;
+  }
+
+  .btn-primary {
+    @apply btn bg-pink-glow text-white shadow-glow hover:-translate-y-0.5 hover:bg-rose-pink active:translate-y-0;
+  }
+
+  .btn-secondary {
+    @apply btn border border-blush-pink bg-white text-deep-rose hover:border-pink-glow hover:bg-soft-petal/60;
+  }
+
+  .btn-ghost {
+    @apply btn text-deep-rose hover:bg-blush-pink/50;
+  }
+
+  .btn-danger {
+    @apply btn bg-deep-rose text-white hover:bg-[#9c124a];
+  }
+
+  .btn-sm {
+    @apply rounded-lg px-3 py-2 text-xs;
+  }
+
+  .btn-lg {
+    @apply rounded-2xl px-6 py-3.5 text-base;
+  }
+
+  .input-field {
+    @apply w-full rounded-xl border border-blush-pink/80 bg-white px-4 py-3 text-sm text-ink
+      placeholder:text-muted/60 transition-colors focus:border-pink-glow focus:outline-none
+      focus:ring-2 focus:ring-pink-glow/20 disabled:bg-rose-mist;
+  }
+
+  .field-label {
+    @apply mb-1.5 block text-xs font-bold uppercase tracking-wide text-deep-rose;
+  }
+
+  .field-hint {
+    @apply mt-1.5 text-xs text-muted;
+  }
+
+  .badge {
+    @apply inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-bold;
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-2 rounded-full border border-blush-pink/80 bg-white/80
+      px-3.5 py-2 text-sm font-medium text-ink transition-all hover:border-pink-glow
+      hover:bg-soft-petal/50;
+  }
+
+  .chip-active {
+    @apply border-pink-glow bg-pink-glow text-white shadow-glow hover:bg-rose-pink hover:text-white;
+  }
+
+  .nav-item {
+    @apply flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-ink/75
+      transition-all duration-200 hover:bg-white hover:text-deep-rose;
+  }
+
+  .nav-item-active {
+    @apply bg-pink-glow text-white shadow-glow hover:bg-rose-pink hover:text-white;
+  }
+
+  .divider {
+    @apply border-t border-blush-pink/50;
+  }
+
+  .skeleton {
+    @apply relative overflow-hidden rounded-xl bg-blush-pink/40;
+  }
+
+  .skeleton::after {
+    content: '';
+    @apply absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-white/60 to-transparent;
+  }
+
+  .print-only {
+    display: none;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Doctor report print layout — only the medical summary is printed. */
+@media print {
+  @page {
+    margin: 14mm 13mm;
+    size: A4;
+  }
+
+  body {
+    background: #ffffff !important;
+    background-image: none !important;
+    color: #24151d !important;
+  }
+
+  body * {
+    visibility: hidden;
+  }
+
+  .print-report,
+  .print-report * {
+    visibility: visible;
+  }
+
+  .print-report {
+    position: absolute !important;
+    inset: 0 auto auto 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    background: #fff !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  .print-report .print-avoid-break {
+    break-inside: avoid;
+  }
+
+  .print-report h1,
+  .print-report h2,
+  .print-report h3 {
+    color: #c2185b !important;
+  }
+}
