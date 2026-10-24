@@ -13,6 +13,9 @@ export const MOOD_OPTIONS = [
   'Overwhelmed',
 ];
 
+// Senior check-ins use a gentler, broader scale that includes "none".
+export const SENIOR_LEVELS = ['none', 'mild', 'moderate', 'severe'];
+
 const physicalSymptomSchema = new mongoose.Schema(
   {
     name: { type: String, required: true, trim: true, maxlength: 60 },
@@ -21,6 +24,27 @@ const physicalSymptomSchema = new mongoose.Schema(
       enum: SEVERITIES,
       default: 'mild',
     },
+  },
+  { _id: false }
+);
+
+const seniorDetailsSchema = new mongoose.Schema(
+  {
+    sleepQuality: { type: Number, min: 1, max: 5, default: null },
+    nightSweats: { type: String, enum: SENIOR_LEVELS, default: 'none' },
+    daytimeExhaustion: { type: String, enum: SENIOR_LEVELS, default: 'none' },
+    hotFlashCount: { type: Number, min: 0, max: 30, default: 0 },
+    hotFlashSeverity: { type: String, enum: SENIOR_LEVELS, default: 'none' },
+    vaginalDryness: { type: String, enum: SENIOR_LEVELS, default: 'none' },
+    bladderUrgency: { type: String, enum: SENIOR_LEVELS, default: 'none' },
+    pelvicComfort: { type: String, enum: SENIOR_LEVELS, default: 'none' },
+    jointStiffness: { type: String, enum: SENIOR_LEVELS, default: 'none' },
+    boneDiscomfort: { type: String, enum: SENIOR_LEVELS, default: 'none' },
+    memoryClarity: { type: Number, min: 1, max: 5, default: null },
+    emotionalWellbeing: { type: Number, min: 1, max: 5, default: null },
+    postmenopausalBleeding: { type: Boolean, default: false },
+    mobilityNotes: { type: String, trim: true, maxlength: 500, default: '' },
+    memoryNotes: { type: String, trim: true, maxlength: 500, default: '' },
   },
   { _id: false }
 );
@@ -55,6 +79,8 @@ const symptomLogSchema = new mongoose.Schema(
     energyLevel: { type: Number, min: 1, max: 5, default: 3 },
     sleepHours: { type: Number, min: 0, max: 24, default: null },
     notes: { type: String, trim: true, maxlength: 1200, default: '' },
+    // Only present on senior care check-ins. Optional so adult logs stay lean.
+    senior: { type: seniorDetailsSchema, default: undefined },
   },
   { timestamps: true }
 );

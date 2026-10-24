@@ -1,8 +1,69 @@
-import { SymptomLog, MOOD_OPTIONS, SEVERITIES } from '../models/SymptomLog.js';
+import { SymptomLog, MOOD_OPTIONS, SEVERITIES, SENIOR_LEVELS } from '../models/SymptomLog.js';
 import { FLOW_LEVELS } from '../models/CycleLog.js';
 import { asyncHandler } from '../middleware/asyncHandler.js';
 import { ApiError } from '../middleware/error.js';
 import { addDays, isValidISODate, todayISO } from '../utils/dates.js';
+
+const LEVEL_FIELDS = [
+  'nightSweats',
+  'daytimeExhaustion',
+  'hotFlashSeverity',
+  'vaginalDryness',
+  'bladderUrgency',
+  'pelvicComfort',
+  'jointStiffness',
+  'boneDiscomfort',
+];
+
+const RATING_FIELDS = ['sleepQuality', 'memoryClarity', 'emotionalWellbeing'];
+
+const normalizeSeniorDetails = (input) => {
+  if (input === undefined) return undefined;
+  if (!input || typeof input !== 'object' || Array.isArray(input)) {
+    throw new ApiError(422, 'Senior check-in details must be an object.');
+  }
+
+  const details = {};
+
+  LEVEL_FIELDS.forEach((field) => {
+    if (!(field in input)) return;
+    if (!SENIOR_LEVELS.includes(input[field])) {
+      throw new ApiError(422, `Choose a valid ${field.replace(/([A-Z])/g, ' $1').toLowerCase()} level.`);
+    }
+    details[field] = input[field];
+  });
+
+  RATING_FIELDS.forEach((field) => {
+    if (!(field in input)) return;
+    if (input[field] === null || input[field] === '') {
+      details[field] = null;
+      return;
+    }
+    const rating = Number(input[field]);
+    if (!Number.isInteger(rating) || rating < 1 || rating > 5) {
+      throw new ApiError(422, `${field.replace(/([A-Z])/g, ' $1')} must be between 1 and 5.`);
+    }
+    details[field] = rating;
+  });
+
+  if ('hotFlashCount' in input) {
+    const count = Number(input.hotFlashCount);
+    if (!Number.isInteger(count) || count < 0 || count > 30) {
+      throw new ApiError(422, 'Hot flashes must be a whole number between 0 and 30.');
+    }
+    details.hotFlashCount = count;
+  }
+
+  if ('postmenopausalBleeding' in input) {
+    details.postmenopausalBleeding = Boolean(input.postmenopausalBleeding);
+  }
+
+  ['mobilityNotes', 'memoryNotes'].forEach((field) => {
+    if (field in input) details[field] = String(input[field] || '').trim().slice(0, 500);
+  });
+
+  return details;
+};
 
 const normalizeSymptoms = (physical) => {
   if (physical === undefined) return undefined;
@@ -79,6 +140,10 @@ const validateSymptomPayload = (body, { partial = false } = {}) => {
     }
   }
 
+  if (body.senior !== undefined) {
+    data.senior = normalizeSeniorDetails(body.senior);
+  }
+
   if (body.notes !== undefined) {
     data.notes = String(body.notes).trim().slice(0, 1200);
   }
@@ -147,6 +212,11 @@ export const updateSymptom = asyncHandler(async (req, res) => {
     }
   }
 
+  // A partial senior update should not wipe fields the client did not send.
+  if (data.senior && log.senior) {
+    data.senior = { ...log.senior.toObject(), ...data.senior };
+  }
+
   Object.assign(log, data);
   await log.save();
 
@@ -188,6 +258,39 @@ export const getSymptomSummary = asyncHandler(async (req, res) => {
     }
   });
 
+  const seniorLogs = logs.filter((log) => log.senior);
+  const average = (values) =>
+    values.length ? Math.round((values.reduce((sum, value) => sum + value, 0) / values.length) * 10) / 10 : null;
+  const levelDays = (field) =>
+    seniorLogs.filter((log) => log.senior?.[field] && log.senior[field] !== 'none').length;
+
+  const seniorSummary = seniorLogs.length
+    ? {
+        checkIns: seniorLogs.length,
+        hotFlashDays: seniorLogs.filter(
+          (log) => log.senior.hotFlashCount > 0 || log.senior.hotFlashSeverity !== 'none'
+        ).length,
+        totalHotFlashes: seniorLogs.reduce((sum, log) => sum + (log.senior.hotFlashCount || 0), 0),
+        nightSweatDays: levelDays('nightSweats'),
+        daytimeExhaustionDays: levelDays('daytimeExhaustion'),
+        vaginalDrynessDays: levelDays('vaginalDryness'),
+        bladderUrgencyDays: levelDays('bladderUrgency'),
+        pelvicDiscomfortDays: levelDays('pelvicComfort'),
+        jointStiffnessDays: levelDays('jointStiffness'),
+        boneDiscomfortDays: levelDays('boneDiscomfort'),
+        bleedingReports: seniorLogs.filter((log) => log.senior.postmenopausalBleeding).length,
+        averageSleepQuality: average(
+          seniorLogs.map((log) => log.senior.sleepQuality).filter((value) => Number.isFinite(value))
+        ),
+        averageMemoryClarity: average(
+          seniorLogs.map((log) => log.senior.memoryClarity).filter((value) => Number.isFinite(value))
+        ),
+        averageWellbeing: average(
+          seniorLogs.map((log) => log.senior.emotionalWellbeing).filter((value) => Number.isFinite(value))
+        ),
+      }
+    : null;
+
   res.json({
     success: true,
     totalLogs: logs.length,
@@ -200,6 +303,7 @@ export const getSymptomSummary = asyncHandler(async (req, res) => {
       .sort((a, b) => b.count - a.count)
       .slice(0, 6),
     flowDistribution: [...flow.entries()].map(([name, count]) => ({ name, count })),
+    seniorSummary,
     daily: logs.map((log) => ({
       date: log.date,
       physical: log.physical.length,

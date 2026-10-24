@@ -2,7 +2,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { LogOut, ShieldCheck, Sparkles } from 'lucide-react';
 import Logo from './Logo';
 import Avatar from './ui/Avatar';
-import { navSections } from '../lib/navItems';
+import { getNavSections } from '../lib/navItems';
 import { useAuth } from '../context/AuthContext';
 import { cn } from '../lib/utils';
 import { LIFE_STAGES } from '../lib/constants';
@@ -10,9 +10,12 @@ import { LIFE_STAGES } from '../lib/constants';
 const Sidebar = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const isSenior = user?.lifeStage === 'senior';
+  const sections = getNavSections(user?.lifeStage);
 
-  const stage =
-    LIFE_STAGES.find((item) => item.value === user?.lifeStages?.[0])?.short || 'Cycle tracking';
+  const stage = isSenior
+    ? 'Postmenopause care'
+    : LIFE_STAGES.find((item) => item.value === user?.lifeStages?.[0])?.short || 'Cycle tracking';
 
   const handleLogout = () => {
     logout();
@@ -26,7 +29,7 @@ const Sidebar = () => {
       </div>
 
       <nav className="flex-1 overflow-y-auto px-4 pb-4" aria-label="Main navigation">
-        {navSections.map((section) => (
+        {sections.map((section) => (
           <div key={section.label} className="mb-6">
             <p className="mb-2 px-3.5 text-[10px] font-bold uppercase tracking-[0.18em] text-muted/60">
               {section.label}
@@ -40,7 +43,11 @@ const Sidebar = () => {
                     to={item.to}
                     end={item.end}
                     className={({ isActive }) =>
-                      cn('nav-item group', isActive && 'nav-item-active')
+                      cn(
+                        'nav-item group',
+                        isSenior && 'min-h-[48px] text-base',
+                        isActive && 'nav-item-active'
+                      )
                     }
                   >
                     <Icon className="h-[18px] w-[18px] shrink-0" aria-hidden="true" />
@@ -56,10 +63,12 @@ const Sidebar = () => {
       <div className="mx-4 mb-4 rounded-2xl bg-gradient-to-br from-soft-petal via-blush-pink/70 to-soft-petal p-4">
         <div className="flex items-center gap-2 text-deep-rose">
           <Sparkles className="h-4 w-4" aria-hidden="true" />
-          <p className="text-xs font-bold">A note for today</p>
+          <p className="text-xs font-bold">{isSenior ? 'A note for today' : 'A note for today'}</p>
         </div>
         <p className="mt-1.5 text-xs leading-relaxed text-deep-rose/80">
-          There is no perfect cycle. Patterns — not single days — tell the most useful story.
+          {isSenior
+            ? 'Your notes are a record, not a rule. Bring them to your clinician and ask what matters for you.'
+            : 'There is no perfect cycle. Patterns — not single days — tell the most useful story.'}
         </p>
       </div>
 

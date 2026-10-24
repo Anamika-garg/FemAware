@@ -28,14 +28,14 @@ import {
   Sun,
   TrendingUp,
 } from 'lucide-react';
-import { useAuth } from '../context/AuthContext';
-import api, { getErrorMessage } from '../lib/api';
-import { formatDate, toISODate, todayISO } from '../lib/dates';
-import PageHeader from '../components/ui/PageHeader';
-import Badge from '../components/ui/Badge';
-import Button from '../components/ui/Button';
-import { CardSkeleton, EmptyState, ErrorState } from '../components/ui/States';
-import { cn } from '../lib/utils';
+import { useAuth } from '../../context/AuthContext';
+import api, { getErrorMessage } from '../../lib/api';
+import { formatDate, toISODate, todayISO } from '../../lib/dates';
+import PageHeader from '../../components/ui/PageHeader';
+import Badge from '../../components/ui/Badge';
+import Button from '../../components/ui/Button';
+import { CardSkeleton, EmptyState, ErrorState } from '../../components/ui/States';
+import { cn } from '../../lib/utils';
 
 const RANGES = [
   { value: '6', label: '6 months' },
@@ -223,7 +223,7 @@ const HealthInsights = () => {
       <PageHeader
         eyebrow="Patterns over time"
         title="See the bigger picture."
-        description="Charts make trends easier to spot — and easier to explain. Compare your cycle lengths, symptom frequency and flow across time."
+        description="Charts make trends easier to spot â€” and easier to explain. Compare your cycle lengths, symptom frequency and flow across time."
         actions={
           <>
             <div className="flex rounded-xl border border-blush-pink/70 bg-white p-1">
@@ -256,13 +256,13 @@ const HealthInsights = () => {
         {[
           {
             label: 'Average cycle',
-            value: stats?.hasData ? `${stats.averageCycleLength} days` : '—',
+            value: stats?.hasData ? `${stats.averageCycleLength} days` : 'â€”',
             helper: stats?.hasData ? `Across ${stats.cycleCount} logged cycles` : 'Log periods to calculate',
             icon: CalendarDays,
           },
           {
             label: 'Cycle variation',
-            value: stats?.hasData ? `±${stats.variation} days` : '—',
+            value: stats?.hasData ? `Â±${stats.variation} days` : 'â€”',
             helper: stats?.regularity || 'Awaiting more data',
             icon: Activity,
           },
@@ -274,7 +274,7 @@ const HealthInsights = () => {
           },
           {
             label: 'Average energy',
-            value: avgEnergy ? `${avgEnergy}/5` : '—',
+            value: avgEnergy ? `${avgEnergy}/5` : 'â€”',
             helper: `${summary?.totalLogs || 0} check-ins in range`,
             icon: Sun,
           },
@@ -306,7 +306,7 @@ const HealthInsights = () => {
                 Your cycle length, month by month
               </h2>
               <p className="mt-1 text-[11px] text-muted">
-                A healthy cycle is often 21–35 days, but your personal pattern matters most.
+                A healthy cycle is often 21â€“35 days, but your personal pattern matters most.
               </p>
             </div>
             {stats?.hasData ? (
@@ -373,7 +373,7 @@ const HealthInsights = () => {
                   <span className="h-2.5 w-2.5 rounded-sm bg-blush-pink" /> Close to average
                 </span>
                 <span className="flex items-center gap-1.5 text-[10px] font-medium text-muted">
-                  <span className="h-2.5 w-2.5 rounded-sm bg-pink-glow" /> 3–4 days different
+                  <span className="h-2.5 w-2.5 rounded-sm bg-pink-glow" /> 3â€“4 days different
                 </span>
                 <span className="flex items-center gap-1.5 text-[10px] font-medium text-muted">
                   <span className="h-2.5 w-2.5 rounded-sm bg-deep-rose" /> 5+ days different
@@ -511,7 +511,7 @@ const HealthInsights = () => {
             <div className="space-y-3">
               <InsightCard icon={Sparkles} title="What this can tell you" tone="deep">
                 {topSymptom
-                  ? `${topSymptom.name} appeared in ${topSymptom.count} of your ${summary.totalLogs} check-ins. Look at where it falls in your cycle — symptoms clustered around the luteal phase often follow a different pattern than all-month symptoms.`
+                  ? `${topSymptom.name} appeared in ${topSymptom.count} of your ${summary.totalLogs} check-ins. Look at where it falls in your cycle â€” symptoms clustered around the luteal phase often follow a different pattern than all-month symptoms.`
                   : 'Keep logging to reveal your most frequent symptoms.'}
               </InsightCard>
               <div className="rounded-2xl bg-rose-mist/70 p-4">
@@ -523,7 +523,7 @@ const HealthInsights = () => {
                         key={mood.name}
                         className="rounded-full border border-blush-pink/70 bg-white px-2 py-1 text-[10px] font-semibold text-deep-rose"
                       >
-                        {mood.name} · {mood.count}
+                        {mood.name} Â· {mood.count}
                       </span>
                     ))
                   ) : (
@@ -590,8 +590,8 @@ const HealthInsights = () => {
         <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-deep-rose" aria-hidden="true" />
         <p className="text-[10px] leading-relaxed text-muted">
           These insights are generated from self-reported logs and are educational only. They cannot
-          diagnose a condition. If a pattern worries you — especially very heavy bleeding, severe
-          pain, cycles under 21 or over 35 days, or bleeding after menopause — please speak with a
+          diagnose a condition. If a pattern worries you â€” especially very heavy bleeding, severe
+          pain, cycles under 21 or over 35 days, or bleeding after menopause â€” please speak with a
           qualified clinician.
         </p>
       </div>

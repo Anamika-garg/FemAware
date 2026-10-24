@@ -27,19 +27,19 @@ import {
   Sparkles,
   Trash2,
 } from 'lucide-react';
-import { useAuth } from '../context/AuthContext';
-import { useToast } from '../context/ToastContext';
-import api, { getErrorMessage } from '../lib/api';
-import { toISODate, formatDate, formatMonthYear, todayISO, addDays as addDaysFn } from '../lib/dates';
-import PageHeader from '../components/ui/PageHeader';
-import Button from '../components/ui/Button';
-import Badge from '../components/ui/Badge';
-import Modal from '../components/ui/Modal';
-import Field from '../components/ui/Field';
-import ConfirmDialog from '../components/ui/ConfirmDialog';
-import { CardSkeleton, EmptyState, ErrorState } from '../components/ui/States';
-import { FLOW_OPTIONS } from '../lib/constants';
-import { cn } from '../lib/utils';
+import { useAuth } from '../../context/AuthContext';
+import { useToast } from '../../context/ToastContext';
+import api, { getErrorMessage } from '../../lib/api';
+import { toISODate, formatDate, formatMonthYear, todayISO, addDays as addDaysFn } from '../../lib/dates';
+import PageHeader from '../../components/ui/PageHeader';
+import Button from '../../components/ui/Button';
+import Badge from '../../components/ui/Badge';
+import Modal from '../../components/ui/Modal';
+import Field from '../../components/ui/Field';
+import ConfirmDialog from '../../components/ui/ConfirmDialog';
+import { CardSkeleton, EmptyState, ErrorState } from '../../components/ui/States';
+import { FLOW_OPTIONS } from '../../lib/constants';
+import { cn } from '../../lib/utils';
 
 const WEEKDAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
@@ -455,7 +455,7 @@ const PeriodTracker = () => {
                 </Badge>
               </div>
               <p className="mt-3 font-display text-[2rem] font-semibold leading-none">
-                {stats?.hasData ? formatDate(stats.nextPeriodStart, 'd MMM') : '—'}
+                {stats?.hasData ? formatDate(stats.nextPeriodStart, 'd MMM') : 'â€”'}
               </p>
               <p className="mt-1 text-xs text-white/70">
                 {stats?.hasData
@@ -470,7 +470,7 @@ const PeriodTracker = () => {
                   <p className="text-[10px] font-bold uppercase tracking-wide text-white/60">Fertile window</p>
                   <p className="text-xs font-semibold">
                     {stats?.hasData
-                      ? `${formatDate(stats.fertileStart, 'd MMM')} – ${formatDate(stats.fertileEnd, 'd MMM')}`
+                      ? `${formatDate(stats.fertileStart, 'd MMM')} â€“ ${formatDate(stats.fertileEnd, 'd MMM')}`
                       : 'Unlocks with your first log'}
                   </p>
                 </div>
@@ -495,9 +495,9 @@ const PeriodTracker = () => {
             </div>
             <div className="mt-4 grid grid-cols-2 gap-2.5">
               {[
-                { label: 'Cycle length', value: stats?.hasData ? `${stats.averageCycleLength}d` : '—' },
-                { label: 'Period length', value: stats?.hasData ? `${stats.averagePeriodLength}d` : '—' },
-                { label: 'Variation', value: stats?.hasData ? `±${stats.variation}d` : '—' },
+                { label: 'Cycle length', value: stats?.hasData ? `${stats.averageCycleLength}d` : 'â€”' },
+                { label: 'Period length', value: stats?.hasData ? `${stats.averagePeriodLength}d` : 'â€”' },
+                { label: 'Variation', value: stats?.hasData ? `Â±${stats.variation}d` : 'â€”' },
                 { label: 'Logged cycles', value: stats?.hasData ? stats.cycleCount : 0 },
               ].map((item) => (
                 <div key={item.label} className="rounded-xl bg-rose-mist/80 px-3 py-2.5">
@@ -540,10 +540,10 @@ const PeriodTracker = () => {
                       <div className="min-w-0 flex-1">
                         <p className="text-xs font-bold text-ink">
                           {formatDate(cycle.startDate, 'd MMM')}
-                          {cycle.endDate ? ` – ${formatDate(cycle.endDate, 'd MMM yyyy')}` : `, ${formatDate(cycle.startDate, 'yyyy')}`}
+                          {cycle.endDate ? ` â€“ ${formatDate(cycle.endDate, 'd MMM yyyy')}` : `, ${formatDate(cycle.startDate, 'yyyy')}`}
                         </p>
                         <p className="mt-0.5 text-[10px] capitalize text-muted">
-                          {meta.label} flow{duration ? ` · ${duration} days` : ' · in progress'}
+                          {meta.label} flow{duration ? ` Â· ${duration} days` : ' Â· in progress'}
                         </p>
                       </div>
                       <button
@@ -695,7 +695,7 @@ const PeriodTracker = () => {
               value={form.notes}
               onChange={(event) => setForm((current) => ({ ...current, notes: event.target.value }))}
               className="input-field resize-none"
-              placeholder="e.g. heavier on day two, cramps eased with a heat pack…"
+              placeholder="e.g. heavier on day two, cramps eased with a heat packâ€¦"
             />
           </Field>
 

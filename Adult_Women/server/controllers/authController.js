@@ -5,8 +5,39 @@ import { asyncHandler } from '../middleware/asyncHandler.js';
 import { ApiError } from '../middleware/error.js';
 import { addDays, isValidISODate } from '../utils/dates.js';
 
-const LIFE_STAGES = ['general', 'pcos', 'perimenopause', 'fertility'];
+const LIFE_STAGES = ['general', 'pcos', 'perimenopause', 'postmenopause', 'fertility'];
+const LIFE_STAGE_VALUES = ['teen', 'adolescent', 'adult', 'perimenopause', 'senior'];
+const FOCUS_AREA_VALUES = [
+  'general',
+  'pcos',
+  'perimenopause',
+  'postmenopause',
+  'fertility',
+  'irregular-periods',
+  'bone-health',
+  'heart-health',
+  'intimate-health',
+  'healthy-aging',
+];
 const EMAIL_RE = /^\S+@\S+\.\S+$/;
+
+/**
+ * Normalise the user's saved priorities. Focus areas can be sent directly, or
+ * derived from their life-stage choices and goal labels for older clients.
+ */
+const normalizeFocusAreas = (focusAreas, stages, goals = []) => {
+  // An explicit list from the client wins as-is. The goal-based derivation is
+  // only a fallback for older payloads that predate focus areas.
+  const explicit = Array.isArray(focusAreas) && focusAreas.length > 0;
+  const source = explicit ? focusAreas : stages;
+  const cleaned = [
+    ...new Set(source.map((area) => String(area).trim()).filter((area) => FOCUS_AREA_VALUES.includes(area))),
+  ];
+  if (!explicit && goals.some((goal) => /irregular/i.test(goal)) && !cleaned.includes('irregular-periods')) {
+    cleaned.push('irregular-periods');
+  }
+  return cleaned.length ? cleaned : ['general'];
+};
 
 const signToken = (id) =>
   jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -73,7 +104,7 @@ export const getMe = asyncHandler(async (req, res) => {
 });
 
 export const completeOnboarding = asyncHandler(async (req, res) => {
-  const { lifeStages, goals, cycleProfile, age } = req.body;
+  const { lifeStages, goals, focusAreas, lifeStage, cycleProfile, age } = req.body;
 
   const stages = Array.isArray(lifeStages) ? [...new Set(lifeStages)] : [];
   if (!stages.length || stages.some((stage) => !LIFE_STAGES.includes(stage))) {
@@ -87,12 +118,22 @@ export const completeOnboarding = asyncHandler(async (req, res) => {
   if (age !== undefined && age !== null && age !== '') {
     const numericAge = Number(age);
     if (!Number.isFinite(numericAge) || numericAge < 13 || numericAge > 80) {
-      throw new ApiError(422, 'Please enter an age between 13 and 80.');
+      throw new ApiError(422, 'Please enter an age between 13 and 110.');
     }
     req.user.age = numericAge;
   }
 
+  if (lifeStage !== undefined) {
+    if (!LIFE_STAGE_VALUES.includes(lifeStage)) {
+      throw new ApiError(422, 'Choose a valid life stage.');
+    }
+    req.user.lifeStage = lifeStage;
+  } else if (!req.user.lifeStage) {
+    req.user.lifeStage = 'adult';
+  }
+
   req.user.lifeStages = stages;
+  req.user.focusAreas = normalizeFocusAreas(focusAreas, stages, cleanedGoals);
   req.user.goals = cleanedGoals;
 
   if (cycleProfile && typeof cycleProfile === 'object') {
@@ -134,7 +175,7 @@ export const completeOnboarding = asyncHandler(async (req, res) => {
 });
 
 export const updateProfile = asyncHandler(async (req, res) => {
-  const { name, age, lifeStages, goals, cycleProfile } = req.body;
+  const { name, age, lifeStages, goals, focusAreas, lifeStage, cycleProfile } = req.body;
 
   if (name !== undefined) {
     if (!String(name).trim()) throw new ApiError(422, 'Name cannot be empty.');
@@ -144,7 +185,7 @@ export const updateProfile = asyncHandler(async (req, res) => {
   if (age !== undefined) {
     const numericAge = Number(age);
     if (!Number.isFinite(numericAge) || numericAge < 13 || numericAge > 80) {
-      throw new ApiError(422, 'Please enter an age between 13 and 80.');
+      throw new ApiError(422, 'Please enter an age between 13 and 110.');
     }
     req.user.age = numericAge;
   }
@@ -161,6 +202,17 @@ export const updateProfile = asyncHandler(async (req, res) => {
     req.user.goals = Array.isArray(goals)
       ? [...new Set(goals.map((goal) => String(goal).trim()).filter(Boolean))].slice(0, 12)
       : [];
+  }
+
+  if (lifeStage !== undefined) {
+    if (!LIFE_STAGE_VALUES.includes(lifeStage)) {
+      throw new ApiError(422, 'Choose a valid life stage.');
+    }
+    req.user.lifeStage = lifeStage;
+  }
+
+  if (focusAreas !== undefined) {
+    req.user.focusAreas = normalizeFocusAreas(focusAreas, req.user.lifeStages, req.user.goals);
   }
 
   if (cycleProfile && typeof cycleProfile === 'object') {

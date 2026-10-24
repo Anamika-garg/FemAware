@@ -134,7 +134,12 @@ const Onboarding = () => {
     setSaving(true);
     try {
       await completeOnboarding({
+        lifeStage: 'adult',
         lifeStages: stages,
+        focusAreas: [
+          ...stages,
+          ...(goals.includes('Manage irregular periods') ? ['irregular-periods'] : []),
+        ],
         goals,
         age: age || undefined,
         cycleProfile: {

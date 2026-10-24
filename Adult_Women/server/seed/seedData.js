@@ -8,6 +8,7 @@ import { addDays, todayISO } from '../utils/dates.js';
 import { buildReportSnapshot } from '../utils/reportBuilder.js';
 
 const DEMO_EMAIL = 'demo@cyclesense.app';
+const SENIOR_EMAIL = 'senior@cyclesense.app';
 
 const cycleBlueprint = [
   { offset: 0, startOffset: -218, duration: 5, flow: 'medium' },
@@ -38,6 +39,9 @@ const addSymptom = (map, date, data) => {
     ...data,
     physical,
     mood: [...new Set([...(existing.mood || []), ...(data.mood || [])])],
+    senior: data.senior
+      ? { ...(existing.senior || {}), ...data.senior }
+      : existing.senior,
     notes: data.notes ?? existing.notes,
   });
 };
@@ -48,8 +52,8 @@ export const seedDatabase = async ({ silent = false } = {}) => {
   };
 
   const today = todayISO();
-  const existing = await User.findOne({ email: DEMO_EMAIL });
-  if (existing) {
+  const existingUsers = await User.find({ email: { $in: [DEMO_EMAIL, SENIOR_EMAIL] } });
+  for (const existing of existingUsers) {
     await Promise.all([
       CycleLog.deleteMany({ user: existing._id }),
       SymptomLog.deleteMany({ user: existing._id }),
@@ -63,7 +67,9 @@ export const seedDatabase = async ({ silent = false } = {}) => {
     email: DEMO_EMAIL,
     password: 'CycleSense123!',
     age: 29,
+    lifeStage: 'adult',
     lifeStages: ['general', 'pcos'],
+    focusAreas: ['general', 'pcos', 'irregular-periods'],
     goals: [
       'Understand my cycle patterns',
       'Manage irregular periods',
@@ -205,7 +211,214 @@ export const seedDatabase = async ({ silent = false } = {}) => {
   log(`🌱 Seeded demo account: ${DEMO_EMAIL} / CycleSense123!`);
   log(`   ${cycles.length} periods · ${symptomMap.size} journal entries · 1 saved report`);
 
+  // -------------------------------------------------------------------------
+  // Senior care demo account
+  // -------------------------------------------------------------------------
+
+  const seniorUser = await User.create({
+    name: 'Meera Iyer',
+    email: SENIOR_EMAIL,
+    password: 'CycleSense123!',
+    age: 58,
+    lifeStage: 'senior',
+    lifeStages: ['postmenopause'],
+    focusAreas: ['postmenopause', 'bone-health', 'heart-health', 'intimate-health'],
+    goals: [
+      'Protect my bone health',
+      'Sleep more comfortably',
+      'Prepare for doctor visits',
+      'Understand heart health',
+    ],
+    onboardingComplete: true,
+    cycleProfile: {
+      averageCycleLength: 28,
+      averagePeriodLength: 5,
+      lastPeriodStart: null,
+    },
+    clinicianQuestions: [
+      'Am I due for a bone density scan?',
+      'What can I do about night sweats that disturb my sleep?',
+    ],
+  });
+
+  const seniorMap = new Map();
+  const physicalForSenior = (details) => {
+    const items = [];
+    if (details.hotFlashCount > 0) {
+      items.push({
+        name: 'Hot flashes',
+        severity:
+          details.hotFlashCount >= 3 ? 'severe' : details.hotFlashCount === 2 ? 'moderate' : 'mild',
+      });
+    }
+    const pairs = [
+      ['Night sweats', details.nightSweats],
+      ['Fatigue', details.daytimeExhaustion],
+      ['Vaginal dryness', details.vaginalDryness],
+      ['Bladder urgency', details.bladderUrgency],
+      ['Pelvic discomfort', details.pelvicComfort],
+      ['Joint stiffness', details.jointStiffness],
+      ['Bone discomfort', details.boneDiscomfort],
+    ];
+    pairs.forEach(([name, level]) => {
+      if (level && level !== 'none') items.push({ name, severity: level });
+    });
+    if (details.memoryClarity !== null && details.memoryClarity <= 2) {
+      items.push({ name: 'Brain fog', severity: details.memoryClarity === 1 ? 'severe' : 'moderate' });
+    }
+    return items;
+  };
+
+  const seniorNotes = [
+    'Slept better after keeping the bedroom cool. Hot flashes were brief.',
+    'A busy day. I noticed more warmth in the afternoon and felt tired by evening.',
+    'Walked for 20 minutes and did light strength exercises. Joints felt looser afterwards.',
+    'Night sweats woke me twice. I kept water by the bed and used a lighter blanket.',
+    'Felt steady today. Memory and mood both felt clearer after a good night.',
+    'Some bladder urgency in the morning, but it settled during the day.',
+  ];
+
+  for (let offset = 88; offset >= 0; offset -= 2) {
+    const date = addDays(today, -offset);
+    const recent = offset <= 28;
+    const middle = offset > 28 && offset <= 60;
+
+    const hotFlashCount = recent
+      ? offset % 8 === 4
+        ? 1
+        : 0
+      : middle
+        ? offset % 4 === 0
+          ? 3
+          : offset % 2 === 0
+            ? 2
+            : 1
+        : offset % 4 === 0
+          ? 4
+          : offset % 2 === 0
+            ? 3
+            : 2;
+
+    const sleepQuality = recent
+      ? offset % 4 === 0
+        ? 4
+        : 3
+      : middle
+        ? offset % 4 === 0
+          ? 3
+          : 2
+        : offset % 4 === 0
+          ? 2
+          : 1;
+
+    const nightSweats = recent
+      ? offset % 6 === 0
+        ? 'mild'
+        : 'none'
+      : middle
+        ? offset % 4 === 0
+          ? 'moderate'
+          : 'mild'
+        : offset % 2 === 0
+          ? 'severe'
+          : 'moderate';
+
+    const jointStiffness = recent
+      ? offset % 6 === 0
+        ? 'mild'
+        : 'none'
+      : middle
+        ? offset % 4 === 0
+          ? 'moderate'
+          : 'mild'
+        : offset % 2 === 0
+          ? 'severe'
+          : 'moderate';
+
+    const details = {
+      sleepQuality,
+      nightSweats,
+      daytimeExhaustion: recent ? (offset % 8 === 2 ? 'mild' : 'none') : middle ? 'mild' : 'moderate',
+      hotFlashCount,
+      hotFlashSeverity:
+        hotFlashCount === 0 ? 'none' : hotFlashCount >= 3 ? 'severe' : hotFlashCount === 2 ? 'moderate' : 'mild',
+      vaginalDryness: offset % 6 === 0 ? 'moderate' : 'mild',
+      bladderUrgency: offset % 8 === 0 ? 'moderate' : offset % 4 === 0 ? 'mild' : 'none',
+      pelvicComfort: offset % 10 === 0 ? 'mild' : 'none',
+      jointStiffness,
+      boneDiscomfort: recent ? 'none' : middle ? 'mild' : 'moderate',
+      memoryClarity: recent ? (offset % 6 === 0 ? 3 : 4) : middle ? 3 : offset % 4 === 0 ? 2 : 3,
+      emotionalWellbeing: recent ? (offset % 6 === 0 ? 3 : 4) : middle ? 3 : offset % 4 === 0 ? 2 : 3,
+      postmenopausalBleeding: false,
+      mobilityNotes: recent
+        ? 'Morning walk and gentle stretching helped loosen stiff joints.'
+        : middle
+          ? 'Stairs felt harder today; I paced myself and rested between tasks.'
+          : 'Joint stiffness made getting moving slower this morning.',
+      memoryNotes: recent
+        ? 'Word-finding felt steadier after a full night of sleep.'
+        : 'Wrote things down to help with a busy week.',
+    };
+
+    addSymptom(seniorMap, date, {
+      physical: physicalForSenior(details),
+      mood:
+        details.emotionalWellbeing >= 4
+          ? ['Calm', 'Hopeful']
+          : details.emotionalWellbeing === 3
+            ? ['Calm']
+            : ['Low energy'],
+      energyLevel: recent ? 4 : middle ? 3 : 2,
+      sleepHours: recent ? 7 : middle ? 6.5 : 5.5,
+      notes: seniorNotes[Math.floor(Math.abs(offset) / 2) % seniorNotes.length],
+      senior: details,
+    });
+  }
+
+  for (const [date, entry] of seniorMap) {
+    await SymptomLog.create({ user: seniorUser._id, date, ...entry });
+  }
+
+  const seniorSymptomLogs = await SymptomLog.find({ user: seniorUser._id }).sort({ date: 1 });
+  const seniorRangeStart = addDays(today, -90);
+  const seniorSnapshot = buildReportSnapshot({
+    user: seniorUser,
+    cycles: [],
+    symptoms: seniorSymptomLogs,
+    rangeStart: seniorRangeStart,
+    rangeEnd: today,
+    careContext: 'senior',
+    visitDate: addDays(today, 9),
+    concerns: [
+      'Am I due for a bone density scan, and how often should it be repeated?',
+      'Hot flashes are less frequent, but night sweats still interrupt my sleep. What options fit my health history?',
+      'Should I adjust my calcium or vitamin D intake?',
+    ],
+    medications: [
+      'Vitamin D3 1000 IU daily',
+      'Calcium citrate 500 mg twice daily',
+      'Atorvastatin 10 mg nightly',
+    ],
+  });
+
+  await HealthReport.create({
+    user: seniorUser._id,
+    title: 'Postmenopause care summary · last 3 months',
+    rangeStart: seniorRangeStart,
+    rangeEnd: today,
+    questions: [
+      'Am I due for a bone density scan?',
+      'What can I do about night sweats that disturb my sleep?',
+    ],
+    notes:
+      'I have been walking for 20 minutes most mornings and doing light strength exercises twice a week. I would like to discuss sleep, joint stiffness, and bone health.',
+    snapshot: seniorSnapshot,
+  });
+
+  log(`🌱 Seeded senior demo account: ${SENIOR_EMAIL} / CycleSense123!`);
+  log(`   ${seniorMap.size} senior check-ins · 1 saved appointment summary`);
+
   return user;
 };
 
-export { DEMO_EMAIL };
+export { DEMO_EMAIL, SENIOR_EMAIL };

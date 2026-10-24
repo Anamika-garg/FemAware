@@ -32,10 +32,34 @@ const userSchema = new mongoose.Schema(
       minlength: [8, 'Password must be at least 8 characters'],
       select: false,
     },
-    age: { type: Number, min: 13, max: 80, default: null },
+    age: { type: Number, min: 13, max: 110, default: null },
+    // The active product module. The senior care experience renders when this
+    // is 'senior'; future modules can add their own value without a migration.
+    lifeStage: {
+      type: String,
+      enum: ['teen', 'adolescent', 'adult', 'perimenopause', 'senior'],
+      default: 'adult',
+    },
     lifeStages: {
       type: [String],
-      enum: ['general', 'pcos', 'perimenopause', 'fertility'],
+      enum: ['general', 'pcos', 'perimenopause', 'postmenopause', 'fertility'],
+      default: ['general'],
+    },
+    // Focus areas are the user's saved priorities, distinct from life stage.
+    focusAreas: {
+      type: [String],
+      enum: [
+        'general',
+        'pcos',
+        'perimenopause',
+        'postmenopause',
+        'fertility',
+        'irregular-periods',
+        'bone-health',
+        'heart-health',
+        'intimate-health',
+        'healthy-aging',
+      ],
       default: ['general'],
     },
     goals: {

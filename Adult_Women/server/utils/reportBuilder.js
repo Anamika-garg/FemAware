@@ -2,6 +2,11 @@ import { computeCycleStats } from './cycleStats.js';
 
 const SEVERITY_WEIGHT = { mild: 1, moderate: 2, severe: 3 };
 
+const round1 = (value) => Math.round(value * 10) / 10;
+
+const average = (values) =>
+  values.length ? round1(values.reduce((sum, value) => sum + value, 0) / values.length) : null;
+
 const topEntries = (map, limit = 6) =>
   [...map.entries()]
     .sort((a, b) => b[1].count - a[1].count || a[0].localeCompare(b[0]))
@@ -14,6 +19,10 @@ export const buildReportSnapshot = ({
   symptoms,
   rangeStart,
   rangeEnd,
+  concerns = [],
+  medications = [],
+  visitDate = null,
+  careContext = null,
 }) => {
   const stats = computeCycleStats(cycles, user.cycleProfile);
   const cyclesInRange = stats.history
@@ -59,6 +68,52 @@ export const buildReportSnapshot = ({
   const severeSymptoms = topPhysical.filter((item) => item.worstSeverity === 'severe');
   const heavyFlowCount = cyclesInRange.filter((cycle) => cycle.flow === 'heavy').length;
 
+  const seniorLogs = symptoms.filter((log) => log.senior);
+  const isSenior =
+    careContext === 'senior' || user.lifeStage === 'senior' || seniorLogs.length > 0;
+
+  const seniorLevelDays = (field) =>
+    seniorLogs.filter((log) => log.senior?.[field] && log.senior[field] !== 'none').length;
+
+  const seniorSummary = seniorLogs.length
+    ? {
+        checkIns: seniorLogs.length,
+        hotFlashDays: seniorLogs.filter(
+          (log) => log.senior.hotFlashCount > 0 || log.senior.hotFlashSeverity !== 'none'
+        ).length,
+        totalHotFlashes: seniorLogs.reduce((sum, log) => sum + (log.senior.hotFlashCount || 0), 0),
+        nightSweatDays: seniorLevelDays('nightSweats'),
+        daytimeExhaustionDays: seniorLevelDays('daytimeExhaustion'),
+        vaginalDrynessDays: seniorLevelDays('vaginalDryness'),
+        bladderUrgencyDays: seniorLevelDays('bladderUrgency'),
+        pelvicDiscomfortDays: seniorLevelDays('pelvicComfort'),
+        jointStiffnessDays: seniorLevelDays('jointStiffness'),
+        boneDiscomfortDays: seniorLevelDays('boneDiscomfort'),
+        bleedingReports: seniorLogs.filter((log) => log.senior.postmenopausalBleeding).length,
+        averageSleepQuality: average(
+          seniorLogs.map((log) => log.senior.sleepQuality).filter((value) => Number.isFinite(value))
+        ),
+        averageMemoryClarity: average(
+          seniorLogs.map((log) => log.senior.memoryClarity).filter((value) => Number.isFinite(value))
+        ),
+        averageWellbeing: average(
+          seniorLogs
+            .map((log) => log.senior.emotionalWellbeing)
+            .filter((value) => Number.isFinite(value))
+        ),
+        recent: seniorLogs.slice(-10).map((log) => ({
+          date: log.date,
+          hotFlashCount: log.senior.hotFlashCount || 0,
+          hotFlashSeverity: log.senior.hotFlashSeverity || 'none',
+          nightSweats: log.senior.nightSweats || 'none',
+          sleepQuality: log.senior.sleepQuality ?? null,
+          jointStiffness: log.senior.jointStiffness || 'none',
+          bladderUrgency: log.senior.bladderUrgency || 'none',
+          postmenopausalBleeding: Boolean(log.senior.postmenopausalBleeding),
+        })),
+      }
+    : null;
+
   const discussionPoints = [];
   if (stats.regularity === 'irregular') {
     discussionPoints.push(
@@ -88,20 +143,61 @@ export const buildReportSnapshot = ({
       'I have logged heavy flow more than once in this period. Could this affect my iron levels?'
     );
   }
-  if (!discussionPoints.length) {
-    discussionPoints.push('Are there any patterns in my logs that I should pay closer attention to?');
+
+  if (seniorSummary) {
+    if (seniorSummary.bleedingReports > 0) {
+      discussionPoints.unshift(
+        'I noticed vaginal bleeding after menopause. I would like this checked promptly, even though it may have a benign cause.'
+      );
+    }
+    if (seniorSummary.hotFlashDays >= 5) {
+      discussionPoints.push(
+        `I recorded hot flashes on ${seniorSummary.hotFlashDays} days in this period. Are there treatments that fit my health history?`
+      );
+    }
+    if (seniorSummary.averageSleepQuality !== null && seniorSummary.averageSleepQuality < 3) {
+      discussionPoints.push(
+        `My sleep quality averaged ${seniorSummary.averageSleepQuality} out of 5. Could night sweats or other symptoms be affecting it?`
+      );
+    }
+    if (seniorSummary.jointStiffnessDays >= 5) {
+      discussionPoints.push(
+        'Joint stiffness has been showing up often. Should we review arthritis, activity, or bone health?'
+      );
+    }
+    if (seniorSummary.bladderUrgencyDays >= 5) {
+      discussionPoints.push(
+        'Bladder urgency has been more noticeable. What pelvic floor or urinary health options should I consider?'
+      );
+    }
   }
+
+  if (!discussionPoints.length) {
+    discussionPoints.push(
+      isSenior
+        ? 'What preventive checks and screenings are due for me this year?'
+        : 'Are there any patterns in my logs that I should pay closer attention to?'
+    );
+  }
+
+  const appointment =
+    concerns.length || medications.length || visitDate
+      ? { visitDate, concerns, medications }
+      : null;
 
   return {
     generatedAt: new Date().toISOString(),
     rangeStart,
     rangeEnd,
+    careContext: isSenior ? 'senior' : 'adult',
     patient: {
       name: user.name,
       age: user.age || null,
+      lifeStage: user.lifeStage || null,
       lifeStages: user.lifeStages,
       goals: user.goals,
     },
+    appointment,
     summary: {
       averageCycleLength: stats.averageCycleLength,
       averagePeriodLength: stats.averagePeriodLength,
@@ -112,6 +208,7 @@ export const buildReportSnapshot = ({
       symptomsLogged: symptoms.length,
       lastPeriodStart: stats.lastPeriodStart,
     },
+    seniorSummary,
     phase: stats.phase,
     cycles: cyclesInRange,
     flowDistribution,
@@ -124,6 +221,7 @@ export const buildReportSnapshot = ({
       prolongedBleeding: stats.averagePeriodLength >= 7,
       heavyFlowReports: heavyFlowCount,
       severeSymptoms: severeSymptoms.map((item) => item.name),
+      postmenopausalBleeding: Boolean(seniorSummary?.bleedingReports),
     },
     discussionPoints,
     disclaimer:

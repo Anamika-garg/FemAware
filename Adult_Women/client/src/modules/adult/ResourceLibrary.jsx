@@ -10,14 +10,14 @@ import {
   Sparkles,
   X,
 } from 'lucide-react';
-import PageHeader from '../components/ui/PageHeader';
-import Badge from '../components/ui/Badge';
-import Modal from '../components/ui/Modal';
-import Button from '../components/ui/Button';
-import { EmptyState } from '../components/ui/States';
-import { CATEGORY_STYLES } from '../lib/constants';
-import { RESOURCES, RESOURCE_CATEGORIES } from '../data/resources';
-import { cn } from '../lib/utils';
+import PageHeader from '../../components/ui/PageHeader';
+import Badge from '../../components/ui/Badge';
+import Modal from '../../components/ui/Modal';
+import Button from '../../components/ui/Button';
+import { EmptyState } from '../../components/ui/States';
+import { CATEGORY_STYLES } from '../../lib/constants';
+import { RESOURCES, RESOURCE_CATEGORIES } from '../../data/resources';
+import { cn } from '../../lib/utils';
 
 const BOOKMARK_KEY = 'cyclesense_saved_resources';
 
@@ -73,7 +73,18 @@ const ResourceLibrary = () => {
       if (savedOnly && !saved.includes(resource.id)) return false;
       if (category !== 'All' && resource.category !== category) return false;
       if (!normalizedQuery) return true;
-      return [resource.title, resource.summary, resource.category, ...resource.tags]
+      const bodyText = (resource.sections || [])
+        .flatMap((section) => [section.heading, ...(section.paragraphs || []), ...(section.bullets || [])])
+        .join(' ');
+      return [
+        resource.title,
+        resource.summary,
+        resource.intro,
+        resource.takeaway,
+        resource.category,
+        bodyText,
+        ...resource.tags,
+      ]
         .join(' ')
         .toLowerCase()
         .includes(normalizedQuery);
@@ -152,7 +163,7 @@ const ResourceLibrary = () => {
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               className="input-field pl-10 pr-10"
-              placeholder="Search articles, topics or questions…"
+              placeholder="Search articles, topics or questionsâ€¦"
               aria-label="Search the resource library"
             />
             {query ? (
@@ -303,7 +314,7 @@ const ResourceLibrary = () => {
         <p className="text-[10px] leading-relaxed text-muted">
           CycleSense articles are educational and cannot account for your full medical history. They
           are not a substitute for personalised advice from a qualified clinician. If you are worried
-          about a symptom, book an appointment — you do not need to wait for it to become severe.
+          about a symptom, book an appointment â€” you do not need to wait for it to become severe.
         </p>
       </div>
 

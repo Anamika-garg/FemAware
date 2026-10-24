@@ -19,8 +19,8 @@ import {
   TrendingUp,
   Wind,
 } from 'lucide-react';
-import { useAuth } from '../context/AuthContext';
-import api, { getErrorMessage } from '../lib/api';
+import { useAuth } from '../../context/AuthContext';
+import api, { getErrorMessage } from '../../lib/api';
 import {
   differenceInCalendarDays,
   formatDate,
@@ -28,14 +28,14 @@ import {
   parseISO,
   relativeDay,
   todayISO,
-} from '../lib/dates';
-import PageHeader from '../components/ui/PageHeader';
-import CycleRing from '../components/ui/CycleRing';
-import Badge from '../components/ui/Badge';
-import Button from '../components/ui/Button';
-import { CardSkeleton, ErrorState } from '../components/ui/States';
-import { cn } from '../lib/utils';
-import { LIFE_STAGES } from '../lib/constants';
+} from '../../lib/dates';
+import PageHeader from '../../components/ui/PageHeader';
+import CycleRing from '../../components/ui/CycleRing';
+import Badge from '../../components/ui/Badge';
+import Button from '../../components/ui/Button';
+import { CardSkeleton, ErrorState } from '../../components/ui/States';
+import { cn } from '../../lib/utils';
+import { LIFE_STAGES } from '../../lib/constants';
 
 const greetingForHour = (hour) => {
   if (hour < 12) return 'Good morning';
@@ -205,7 +205,7 @@ const MonthTrack = ({ stats }) => {
   );
 };
 
-const DashboardHome = () => {
+const AdultDashboard = () => {
   const { user } = useAuth();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -313,7 +313,7 @@ const DashboardHome = () => {
             {stats?.hasData ? (
               <>
                 <p className="mt-2 text-sm leading-relaxed text-deep-rose/80 sm:text-[15px]">
-                  <span className="font-bold">{stats.phase.label}</span> — Day {cycleDay} of{' '}
+                  <span className="font-bold">{stats.phase.label}</span> â€” Day {cycleDay} of{' '}
                   {stats.averageCycleLength}. {stats.phase.description}
                 </p>
                 <div className="mt-5 flex flex-wrap items-center gap-2.5">
@@ -350,7 +350,7 @@ const DashboardHome = () => {
           <div className="flex items-center justify-center lg:pr-3">
             <div className="relative rounded-full bg-white/25 p-2 ring-1 ring-white/50 backdrop-blur-sm">
               <CycleRing
-                day={cycleDay || '—'}
+                day={cycleDay || 'â€”'}
                 total={stats?.averageCycleLength || 28}
                 phaseLabel={
                   stats?.hasData
@@ -381,7 +381,7 @@ const DashboardHome = () => {
           value={stats?.hasData ? formatDate(stats.ovulationDate, 'd MMM') : 'Add a period first'}
           helper={
             stats?.hasData
-              ? `Fertile window ${formatShortDate(stats.fertileStart)} – ${formatShortDate(stats.fertileEnd)}`
+              ? `Fertile window ${formatShortDate(stats.fertileStart)} â€“ ${formatShortDate(stats.fertileEnd)}`
               : 'Your fertile window appears after your first log.'
           }
           tone="glow"
@@ -393,7 +393,7 @@ const DashboardHome = () => {
           value={stats?.hasData ? `${stats.averageCycleLength} days` : `${user?.cycleProfile?.averageCycleLength || 28} days`}
           helper={
             stats?.hasData
-              ? `Variation ±${stats.variation} days · ${stats.regularity}`
+              ? `Variation Â±${stats.variation} days Â· ${stats.regularity}`
               : 'A starting estimate from your setup.'
           }
           tone="rose"
@@ -405,7 +405,7 @@ const DashboardHome = () => {
           value={latestLog ? relativeDay(latestLog.date) : 'No entry yet'}
           helper={
             latestLog
-              ? `${recentSymptoms} signal${recentSymptoms === 1 ? '' : 's'} recorded${latestLog.flow !== 'none' ? ` · ${latestLog.flow} flow` : ''}`
+              ? `${recentSymptoms} signal${recentSymptoms === 1 ? '' : 's'} recorded${latestLog.flow !== 'none' ? ` Â· ${latestLog.flow} flow` : ''}`
               : 'How are you feeling today?'
           }
           tone="soft"
@@ -584,7 +584,7 @@ const DashboardHome = () => {
               <div className="mt-4 rounded-2xl bg-rose-mist/70 p-5 text-center">
                 <NotebookPen className="mx-auto h-7 w-7 text-pink-glow" aria-hidden="true" />
                 <p className="mt-2 text-sm font-bold text-deep-rose">Your journal is a blank page</p>
-                <p className="mt-1 text-xs text-muted">Log how you feel — even “nothing today” is useful.</p>
+                <p className="mt-1 text-xs text-muted">Log how you feel â€” even â€œnothing todayâ€ is useful.</p>
                 <Link to="/symptoms" className="btn-secondary btn-sm mt-3">
                   Start today&apos;s entry
                 </Link>
@@ -634,7 +634,7 @@ const DashboardHome = () => {
               Make your next appointment count.
             </h2>
             <p className="mt-1.5 text-xs leading-relaxed text-muted">
-              Turn 3–6 months of logs into a clear, printable summary with your questions for the
+              Turn 3â€“6 months of logs into a clear, printable summary with your questions for the
               clinician.
             </p>
             <QueueReportStats stats={stats} totalLogs={data?.totalLogs || 0} />
@@ -682,7 +682,7 @@ const DashboardHome = () => {
             </div>
             <p className="mt-1.5 text-xs leading-relaxed text-muted">
               Most variation is normal. Reach out to a gynecologist or clinician if you notice any of
-              the following — especially if it is new or persistent.
+              the following â€” especially if it is new or persistent.
             </p>
             <div className="mt-3 flex flex-wrap gap-1.5">
               {[
@@ -726,7 +726,7 @@ const QueueReportStats = ({ stats, totalLogs }) => (
     {[
       { label: 'Cycles', value: stats?.cycleCount ?? 0, icon: Wind },
       { label: 'Logs', value: totalLogs ?? 0, icon: NotebookPen },
-      { label: 'Variance', value: stats ? `±${stats.variation}d` : '—', icon: TrendingUp },
+      { label: 'Variance', value: stats ? `Â±${stats.variation}d` : 'â€”', icon: TrendingUp },
     ].map((item) => {
       const Icon = item.icon;
       return (
@@ -740,4 +740,4 @@ const QueueReportStats = ({ stats, totalLogs }) => (
   </div>
 );
 
-export default DashboardHome;
+export default AdultDashboard;

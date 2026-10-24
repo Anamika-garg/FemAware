@@ -2,42 +2,23 @@ import { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import {
   Ellipsis,
-  LayoutDashboard,
-  CalendarHeart,
-  LineChart,
-  Plus,
-  BookOpen,
-  FileText,
-  HeartHandshake,
-  Activity,
-  ShieldCheck,
-  LogOut,
   ChevronRight,
+  LogOut,
+  NotebookPen,
 } from 'lucide-react';
 import Modal from './ui/Modal';
 import Avatar from './ui/Avatar';
 import { useAuth } from '../context/AuthContext';
+import { getMobileTabs, getMoreLinks } from '../lib/navItems';
 import { cn } from '../lib/utils';
-
-const tabs = [
-  { to: '/dashboard', label: 'Home', icon: LayoutDashboard, end: true },
-  { to: '/cycle', label: 'Cycle', icon: CalendarHeart },
-  { to: '/symptoms', label: 'Log', icon: Plus, center: true },
-  { to: '/insights', label: 'Insights', icon: LineChart },
-];
-
-const moreLinks = [
-  { to: '/doctor-report', label: 'Doctor report', icon: FileText, description: 'Prepare a clinical summary' },
-  { to: '/late-period', label: 'Late period guide', icon: HeartHandshake, description: 'Step-by-step assessment' },
-  { to: '/pcos', label: 'PCOS awareness', icon: Activity, description: 'Patterns and education' },
-  { to: '/resources', label: 'Resource library', icon: BookOpen, description: 'Articles and guides' },
-  { to: '/privacy', label: 'Privacy & data', icon: ShieldCheck, description: 'Export or delete your data' },
-];
 
 const MobileNav = () => {
   const [moreOpen, setMoreOpen] = useState(false);
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const isSenior = user?.lifeStage === 'senior';
+  const tabs = getMobileTabs(user?.lifeStage);
+  const moreLinks = getMoreLinks(user?.lifeStage);
 
   const handleLogout = () => {
     setMoreOpen(false);
@@ -60,7 +41,7 @@ const MobileNav = () => {
                   key={tab.to}
                   to={tab.to}
                   className="flex flex-col items-center gap-1 text-[10px] font-semibold text-deep-rose"
-                  aria-label="Log today's symptoms"
+                  aria-label={isSenior ? 'Open today’s care check-in' : "Log today's symptoms"}
                 >
                   {({ isActive }) => (
                     <>
@@ -86,6 +67,7 @@ const MobileNav = () => {
                 className={({ isActive }) =>
                   cn(
                     'flex flex-col items-center gap-1 py-1.5 text-[10px] font-semibold transition-colors',
+                    isSenior && 'min-h-[48px] justify-center text-xs',
                     isActive ? 'text-deep-rose' : 'text-muted'
                   )
                 }
@@ -105,7 +87,10 @@ const MobileNav = () => {
           <button
             type="button"
             onClick={() => setMoreOpen(true)}
-            className="flex flex-col items-center gap-1 py-1.5 text-[10px] font-semibold text-muted transition-colors hover:text-deep-rose"
+            className={cn(
+              'flex flex-col items-center gap-1 py-1.5 text-[10px] font-semibold text-muted transition-colors hover:text-deep-rose',
+              isSenior && 'min-h-[48px] justify-center text-xs'
+            )}
             aria-haspopup="dialog"
           >
             <Ellipsis className="h-5 w-5" aria-hidden="true" />
@@ -117,8 +102,10 @@ const MobileNav = () => {
       <Modal
         open={moreOpen}
         onClose={() => setMoreOpen(false)}
-        title="All sections"
-        description="Everything in your CycleSense space."
+        title={isSenior ? 'Your care sections' : 'All sections'}
+        description={
+          isSenior ? 'Everything in your care space, in one place.' : 'Everything in your CycleSense space.'
+        }
         size="sm"
       >
         <div className="flex items-center gap-3 rounded-xl bg-rose-mist p-3">
@@ -133,14 +120,21 @@ const MobileNav = () => {
           <Link
             to="/symptoms"
             onClick={() => setMoreOpen(false)}
-            className="flex items-center gap-3 rounded-xl px-3 py-3 transition-colors hover:bg-rose-mist"
+            className={cn(
+              'flex items-center gap-3 rounded-xl px-3 py-3 transition-colors hover:bg-rose-mist',
+              isSenior && 'min-h-[56px]'
+            )}
           >
             <span className="grid h-9 w-9 place-items-center rounded-xl bg-pink-glow text-white">
-              <CalendarHeart className="h-4 w-4" />
+              <NotebookPen className="h-4 w-4" />
             </span>
             <div className="min-w-0 flex-1">
-              <p className="text-sm font-semibold text-ink">Symptom journal</p>
-              <p className="text-xs text-muted">Log how today feels</p>
+              <p className="text-sm font-semibold text-ink">
+                {isSenior ? 'Daily check-in' : 'Symptom journal'}
+              </p>
+              <p className="text-xs text-muted">
+                {isSenior ? 'Log comfort, sleep and symptoms' : 'Log how today feels'}
+              </p>
             </div>
             <ChevronRight className="h-4 w-4 text-muted" />
           </Link>
@@ -151,7 +145,10 @@ const MobileNav = () => {
                 key={item.to}
                 to={item.to}
                 onClick={() => setMoreOpen(false)}
-                className="flex items-center gap-3 rounded-xl px-3 py-3 transition-colors hover:bg-rose-mist"
+                className={cn(
+                  'flex items-center gap-3 rounded-xl px-3 py-3 transition-colors hover:bg-rose-mist',
+                  isSenior && 'min-h-[56px]'
+                )}
               >
                 <span className="grid h-9 w-9 place-items-center rounded-xl bg-soft-petal text-deep-rose">
                   <Icon className="h-4 w-4" />

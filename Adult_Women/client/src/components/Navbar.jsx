@@ -3,7 +3,7 @@ import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { ChevronDown, Lock, LogOut, Plus, ShieldCheck, UserRound } from 'lucide-react';
 import Logo from './Logo';
 import Avatar from './ui/Avatar';
-import { pageMeta } from '../lib/navItems';
+import { getPageMeta } from '../lib/navItems';
 import { useAuth } from '../context/AuthContext';
 import { formatLongDate, todayISO } from '../lib/dates';
 
@@ -14,7 +14,8 @@ const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
 
-  const meta = pageMeta[pathname] || { title: 'CycleSense', eyebrow: 'Your health space' };
+  const isSenior = user?.lifeStage === 'senior';
+  const meta = getPageMeta(pathname, user?.lifeStage);
 
   useEffect(() => {
     setMenuOpen(false);
@@ -58,12 +59,12 @@ const Navbar = () => {
           </span>
           <Link to="/symptoms" className="btn-primary btn-sm hidden sm:inline-flex">
             <Plus className="h-4 w-4" aria-hidden="true" />
-            Quick log
+            {isSenior ? 'Daily check-in' : 'Quick log'}
           </Link>
           <NavLink
             to="/symptoms"
             className="btn-primary grid h-9 w-9 place-items-center !rounded-full !p-0 sm:hidden"
-            aria-label="Log today's symptoms"
+            aria-label={isSenior ? 'Open today’s check-in' : "Log today's symptoms"}
           >
             <Plus className="h-4 w-4" />
           </NavLink>
@@ -72,7 +73,9 @@ const Navbar = () => {
             <button
               type="button"
               onClick={() => setMenuOpen((open) => !open)}
-              className="flex items-center gap-2 rounded-full border border-blush-pink/60 bg-white/80 p-1 pr-2 transition-colors hover:border-pink-glow"
+              className={`flex items-center gap-2 rounded-full border border-blush-pink/60 bg-white/80 p-1 pr-2 transition-colors hover:border-pink-glow ${
+                isSenior ? 'min-h-[48px]' : ''
+              }`}
               aria-expanded={menuOpen}
               aria-haspopup="menu"
               aria-label="Open account menu"

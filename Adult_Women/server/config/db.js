@@ -31,8 +31,11 @@ export const connectDB = async () => {
 
   if (process.env.USE_MEMORY_DB === 'true') {
     const { User } = await import('../models/User.js');
-    const existing = await User.findOne({ email: 'demo@cyclesense.app' });
-    if (!existing) {
+    const [existingDemo, existingSenior] = await Promise.all([
+      User.findOne({ email: 'demo@cyclesense.app' }),
+      User.findOne({ email: 'senior@cyclesense.app' }),
+    ]);
+    if (!existingDemo || !existingSenior) {
       const { seedDatabase } = await import('../seed/seedData.js');
       await seedDatabase({ silent: true });
       console.log('🌱 Demo data seeded for the in-memory database');

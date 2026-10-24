@@ -247,7 +247,12 @@ const PrivacySettings = () => {
       await updateProfile({
         name: profile.name.trim(),
         age: profile.age || undefined,
+        lifeStage: user?.lifeStage || 'adult',
         lifeStages: profile.lifeStages,
+        focusAreas: [
+          ...profile.lifeStages,
+          ...(profile.goals.includes('Manage irregular periods') ? ['irregular-periods'] : []),
+        ],
         goals: profile.goals,
         cycleProfile: {
           averageCycleLength: Number(profile.averageCycleLength),

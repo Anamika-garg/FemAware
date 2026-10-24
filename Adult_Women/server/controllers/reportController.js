@@ -28,8 +28,15 @@ const gatherData = async (user, from, to) => {
   return { start, end, cycles, symptoms };
 };
 
+const cleanLines = (value, limit = 15) =>
+  Array.isArray(value)
+    ? value.map((item) => String(item).trim()).filter(Boolean).slice(0, limit)
+    : [];
+
+const cleanText = (value, maxLength = 2000) => String(value || '').trim().slice(0, maxLength);
+
 export const previewReport = asyncHandler(async (req, res) => {
-  const { from, to } = req.body || {};
+  const { from, to, concerns, medications, visitDate, careContext } = req.body || {};
   const { start, end, cycles, symptoms } = await gatherData(req.user, from, to);
   const snapshot = buildReportSnapshot({
     user: req.user,
@@ -37,33 +44,43 @@ export const previewReport = asyncHandler(async (req, res) => {
     symptoms,
     rangeStart: start,
     rangeEnd: end,
+    concerns: cleanLines(concerns),
+    medications: cleanLines(medications),
+    visitDate: isValidISODate(visitDate) ? visitDate : null,
+    careContext: careContext === 'senior' ? 'senior' : null,
   });
 
   res.json({ success: true, snapshot });
 });
 
 export const saveReport = asyncHandler(async (req, res) => {
-  const { from, to, questions, notes, title } = req.body;
+  const { from, to, questions, notes, title, concerns, medications, visitDate, careContext } =
+    req.body;
   const { start, end, cycles, symptoms } = await gatherData(req.user, from, to);
+  const cleanConcerns = cleanLines(concerns);
+  const cleanMedications = cleanLines(medications);
+  const seniorContext = careContext === 'senior';
   const snapshot = buildReportSnapshot({
     user: req.user,
     cycles,
     symptoms,
     rangeStart: start,
     rangeEnd: end,
+    concerns: cleanConcerns,
+    medications: cleanMedications,
+    visitDate: isValidISODate(visitDate) ? visitDate : null,
+    careContext: seniorContext ? 'senior' : null,
   });
 
   const report = await HealthReport.create({
     user: req.user._id,
     title:
       String(title || '').trim().slice(0, 120) ||
-      `Cycle summary · ${start} to ${end}`,
+      `${seniorContext ? 'Care' : 'Cycle'} summary · ${start} to ${end}`,
     rangeStart: start,
     rangeEnd: end,
-    questions: Array.isArray(questions)
-      ? questions.map((q) => String(q).trim()).filter(Boolean).slice(0, 15)
-      : [],
-    notes: String(notes || '').trim().slice(0, 2000),
+    questions: cleanLines(questions),
+    notes: cleanText(notes),
     snapshot,
   });
 

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { AlertCircle, ArrowRight, Eye, EyeOff, Lock, Mail, Sparkles } from 'lucide-react';
+import { AlertCircle, ArrowRight, Eye, EyeOff, HeartPulse, Lock, Mail, Sparkles } from 'lucide-react';
 import AuthLayout from '../components/AuthLayout';
 import Field from '../components/ui/Field';
 import Button from '../components/ui/Button';
@@ -12,7 +12,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [demoLoading, setDemoLoading] = useState(false);
+  const [demoLoading, setDemoLoading] = useState(null);
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -42,11 +42,14 @@ const Login = () => {
     }
   };
 
-  const handleDemo = async () => {
+  const handleDemo = async (role = 'adult') => {
     setError('');
-    setDemoLoading(true);
+    setDemoLoading(role);
     try {
-      const user = await login('demo@cyclesense.app', 'CycleSense123!');
+      const user = await login(
+        role === 'senior' ? 'senior@cyclesense.app' : 'demo@cyclesense.app',
+        'CycleSense123!'
+      );
       goNext(user);
     } catch (err) {
       setError(
@@ -54,7 +57,7 @@ const Login = () => {
           ' If you are running locally, start the API with demo data enabled (USE_MEMORY_DB=true).'
       );
     } finally {
-      setDemoLoading(false);
+      setDemoLoading(null);
     }
   };
 
@@ -141,25 +144,47 @@ const Login = () => {
           <span className="h-px flex-1 bg-blush-pink/70" />
         </div>
 
-        <button
-          type="button"
-          onClick={handleDemo}
-          disabled={demoLoading || loading}
-          className="group flex w-full items-center gap-3 rounded-2xl border border-blush-pink bg-white p-3.5 text-left transition-all hover:border-pink-glow hover:shadow-soft disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-soft-petal text-deep-rose">
-            <Sparkles className="h-5 w-5" aria-hidden="true" />
-          </span>
-          <span className="min-w-0 flex-1">
-            <span className="block text-sm font-bold text-deep-rose">
-              {demoLoading ? 'Opening your demo…' : 'Explore the demo account'}
-            </span>
-            <span className="mt-0.5 block text-[11px] text-muted">
-              8 months of cycle and symptom data, instantly
-            </span>
-          </span>
-          <ArrowRight className="h-4 w-4 shrink-0 text-pink-glow transition-transform group-hover:translate-x-0.5" />
-        </button>
+        <div className="space-y-2.5">
+          {[
+            {
+              role: 'adult',
+              icon: Sparkles,
+              title: 'Explore the adult demo',
+              description: '8 months of cycle and symptom data, instantly',
+            },
+            {
+              role: 'senior',
+              icon: HeartPulse,
+              title: 'Explore the senior care demo',
+              description: 'Postmenopause check-ins, trends and a saved visit summary',
+            },
+          ].map((demo) => {
+            const Icon = demo.icon;
+            const isLoading = demoLoading === demo.role;
+            return (
+              <button
+                key={demo.role}
+                type="button"
+                onClick={() => handleDemo(demo.role)}
+                disabled={Boolean(demoLoading) || loading}
+                className="group flex w-full items-center gap-3 rounded-2xl border border-blush-pink bg-white p-3.5 text-left transition-all hover:border-pink-glow hover:shadow-soft disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-soft-petal text-deep-rose">
+                  <Icon className="h-5 w-5" aria-hidden="true" />
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block text-sm font-bold text-deep-rose">
+                    {isLoading ? 'Opening your demo…' : demo.title}
+                  </span>
+                  <span className="mt-0.5 block text-[11px] leading-relaxed text-muted">
+                    {demo.description}
+                  </span>
+                </span>
+                <ArrowRight className="h-4 w-4 shrink-0 text-pink-glow transition-transform group-hover:translate-x-0.5" />
+              </button>
+            );
+          })}
+        </div>
 
         <p className="mt-8 text-center text-sm text-muted">
           New to CycleSense?{' '}

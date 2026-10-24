@@ -29,16 +29,26 @@ app.set('trust proxy', 1);
 app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
 app.use(compression());
 
-const allowedOrigins = (process.env.CLIENT_URL || 'http://localhost:5173')
-  .split(',')
-  .map((origin) => origin.trim())
-  .filter(Boolean);
+const PORT = Number(process.env.PORT) || 5000;
+
+const allowedOrigins = new Set([
+  ...(process.env.CLIENT_URL || 'http://localhost:5173')
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean),
+  // The compiled SPA is served by this same server in production, and browsers
+  // send an Origin header for ES module requests.
+  `http://localhost:${PORT}`,
+  `http://127.0.0.1:${PORT}`,
+]);
 
 app.use(
   cors({
     origin(origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
-      return callback(new Error('This origin is not allowed to access the API.'));
+      if (!origin || allowedOrigins.has(origin)) return callback(null, true);
+      // Do not throw: a rejected cross-origin request should simply receive no
+      // CORS headers instead of turning into a 500 for every static asset.
+      return callback(null, false);
     },
     credentials: true,
   })
@@ -97,8 +107,6 @@ if (fs.existsSync(clientDist)) {
 
 app.use(notFound);
 app.use(errorHandler);
-
-const PORT = Number(process.env.PORT) || 5000;
 
 const start = async () => {
   try {
