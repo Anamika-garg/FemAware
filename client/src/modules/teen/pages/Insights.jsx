@@ -45,7 +45,7 @@ function DataTable({ caption, columns, rows }) {
         <thead>
           <tr className="border-b border-petal">
             {columns.map((c) => (
-              <th key={c} scope="col" className="py-1 font-black">
+              <th key={c} scope="col" className="py-1 font-bold">
                 {c}
               </th>
             ))}
@@ -117,7 +117,7 @@ export default function TeenInsights() {
       </dl>
 
       <Card className="mb-6">
-        <h2 className="flex items-center gap-2 text-xl font-black">
+        <h2 className="flex items-center gap-2 text-xl font-display font-semibold text-deep-rose">
           <AlertTriangle aria-hidden className="size-5" /> Things to talk to a doctor about
         </h2>
         {flags.length === 0 ? (
@@ -134,15 +134,15 @@ export default function TeenInsights() {
             ))}
           </ul>
         )}
-        <p className="mt-4 text-xs text-deep/70">
+        <p className="mt-4 text-xs text-muted">
           These are observations, not a diagnosis. Download your summary to share with a doctor or nurse.
         </p>
       </Card>
 
       <div className="grid gap-6 lg:grid-cols-2">
         <Card className="lg:col-span-2">
-          <h2 className="text-xl font-black">Cycle length (days)</h2>
-          <p className="text-sm text-deep/80">Shaded band: the typical teen range of 21–45 days.</p>
+          <h2 className="text-xl font-display font-semibold text-deep-rose">Cycle length (days)</h2>
+          <p className="text-sm text-muted">Shaded band: the typical teen range of 21–45 days.</p>
           {cycleData.length === 0 ? (
             <div className="mt-4">
               <EmptyState title="Log at least two periods to see cycle lengths" />
@@ -167,7 +167,7 @@ export default function TeenInsights() {
         </Card>
 
         <Card>
-          <h2 className="text-xl font-black">Most logged symptoms</h2>
+          <h2 className="text-xl font-display font-semibold text-deep-rose">Most logged symptoms</h2>
           {symptomData.length === 0 ? (
             <div className="mt-4">
               <EmptyState title="No symptoms logged yet" />
@@ -191,7 +191,7 @@ export default function TeenInsights() {
         </Card>
 
         <Card>
-          <h2 className="text-xl font-black">Average severity by month (1–5)</h2>
+          <h2 className="text-xl font-display font-semibold text-deep-rose">Average severity by month (1–5)</h2>
           {severityData.length === 0 ? (
             <div className="mt-4">
               <EmptyState title="No symptoms logged yet" />
@@ -221,9 +221,9 @@ export default function TeenInsights() {
 function Tile({ label, value, hint }) {
   return (
     <div className="card p-5">
-      <dt className="text-xs font-black uppercase tracking-wide text-rose">{label}</dt>
-      <dd className="mt-1 text-2xl font-black capitalize">{value}</dd>
-      <dd className="text-xs font-semibold text-deep/70">{hint}</dd>
+      <dt className="text-xs font-bold uppercase tracking-wide text-rose">{label}</dt>
+      <dd className="mt-1 text-2xl font-display font-semibold text-deep-rose capitalize">{value}</dd>
+      <dd className="text-xs font-semibold text-muted">{hint}</dd>
     </div>
   );
 }

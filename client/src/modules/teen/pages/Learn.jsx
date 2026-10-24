@@ -20,8 +20,8 @@ export default function Learn() {
         <Card className="mb-6">
           <div className="flex flex-wrap items-center gap-6">
             <div>
-              <p className="text-xs font-black uppercase tracking-wide text-rose">Level</p>
-              <p className="text-3xl font-black">{p.level}</p>
+              <p className="text-xs font-bold uppercase tracking-wide text-rose">Level</p>
+              <p className="text-3xl font-display font-semibold text-deep-rose">{p.level}</p>
             </div>
             <div className="min-w-48 flex-1">
               <p className="mb-1 text-sm font-bold">
@@ -37,8 +37,8 @@ export default function Learn() {
                 <li key={a.code} className={`flex items-center gap-3 rounded-2xl p-3 ${earned ? 'bg-deep text-white' : 'bg-mist'}`}>
                   {earned ? <Star aria-hidden className="size-5 fill-current" /> : <Lock aria-hidden className="size-5 text-blush" />}
                   <span>
-                    <span className="block text-sm font-black">{a.title}</span>
-                    <span className={`block text-xs ${earned ? 'text-petal' : 'text-deep/70'}`}>
+                    <span className="block text-sm font-bold">{a.title}</span>
+                    <span className={`block text-xs ${earned ? 'text-petal' : 'text-muted'}`}>
                       {a.description}
                       {!earned && <span className="sr-only"> (locked)</span>}
                     </span>
@@ -69,8 +69,8 @@ export default function Learn() {
                       </Badge>
                     )}
                   </div>
-                  <h2 className="mt-4 text-lg font-black">{m.title}</h2>
-                  <p className="mt-1 flex-1 text-deep/80">{m.summary}</p>
+                  <h2 className="mt-4 text-lg font-display font-semibold text-deep-rose">{m.title}</h2>
+                  <p className="mt-1 flex-1 text-muted">{m.summary}</p>
                   <div className="mt-4 flex flex-wrap gap-2 text-xs font-bold">
                     <Badge>
                       <Clock aria-hidden className="size-3.5" /> {m.estimatedMinutes} min

@@ -59,7 +59,7 @@ const DASHBOARDS = {
 // Teen pages are written against the short pink tokens and inherit their
 // text colour, so they render inside this wrapper.
 const TeenPage = ({ page: Page }) => (
-  <div className="text-deep">
+  <div className="text-ink">
     <Page />
   </div>
 );

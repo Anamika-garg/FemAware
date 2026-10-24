@@ -24,8 +24,8 @@ export default function Lesson() {
           <ModuleIcon name={m.icon} className="size-8" />
         </span>
         <div>
-          <h1 className="text-3xl font-black sm:text-4xl">{m.title}</h1>
-          <p className="mt-1 text-deep/80">{m.summary}</p>
+          <h1 className="text-3xl font-display font-semibold text-deep-rose sm:text-4xl">{m.title}</h1>
+          <p className="mt-1 text-muted">{m.summary}</p>
           <div className="mt-2 flex gap-2">
             <Badge>
               <Clock aria-hidden className="size-3.5" /> {m.estimatedMinutes} min
@@ -44,7 +44,7 @@ export default function Lesson() {
       <div className="space-y-4">
         {m.sections.map((s) => (
           <Card key={s.heading}>
-            <h2 className="text-xl font-black">{s.heading}</h2>
+            <h2 className="text-xl font-display font-semibold text-deep-rose">{s.heading}</h2>
             <p className="mt-2 leading-relaxed">{s.body}</p>
           </Card>
         ))}
@@ -52,7 +52,7 @@ export default function Lesson() {
 
       {m.keyPoints?.length > 0 && (
         <aside className="mt-6 rounded-3xl bg-deep p-6 text-white">
-          <h2 className="flex items-center gap-2 text-lg font-black">
+          <h2 className="flex items-center gap-2 text-lg font-display font-semibold text-deep-rose">
             <Lightbulb aria-hidden className="size-5" /> Key points
           </h2>
           <ul className="mt-3 list-inside list-disc space-y-1 text-petal">
@@ -64,7 +64,7 @@ export default function Lesson() {
       )}
 
       <section className="mt-10" aria-labelledby="quiz-heading">
-        <h2 id="quiz-heading" className="mb-4 text-2xl font-black">
+        <h2 id="quiz-heading" className="mb-4 text-2xl font-display font-semibold text-deep-rose">
           Quiz time
         </h2>
         <Quiz key={m.slug} questions={m.quiz} onSubmit={(answers) => api.learning.submitQuiz(m.slug, answers)} />

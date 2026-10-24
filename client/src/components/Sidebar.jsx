@@ -25,8 +25,8 @@ const Sidebar = () => {
   };
 
   return (
-    <aside className="fixed inset-y-0 left-0 z-40 hidden w-72 flex-col border-r border-blush-pink/50 bg-white/80 backdrop-blur-xl lg:flex">
-      <div className="px-6 pb-5 pt-7">
+    <aside className="fixed inset-y-0 left-0 z-40 hidden w-72 flex-col border-r border-blush-pink/40 bg-white lg:flex">
+      <div className="px-6 pb-7 pt-7">
         <Logo />
       </div>
 
@@ -62,12 +62,12 @@ const Sidebar = () => {
         ))}
       </nav>
 
-      <div className="mx-4 mb-4 rounded-2xl bg-gradient-to-br from-soft-petal via-blush-pink/70 to-soft-petal p-4">
+      <div className="mx-4 mb-4 rounded-2xl border border-blush-pink/40 bg-rose-mist p-4">
         <div className="flex items-center gap-2 text-deep-rose">
           <Sparkles className="h-4 w-4" aria-hidden="true" />
           <p className="text-xs font-bold">{isSenior ? 'A note for today' : 'A note for today'}</p>
         </div>
-        <p className="mt-1.5 text-xs leading-relaxed text-deep-rose/80">
+        <p className="mt-1.5 text-xs leading-relaxed text-muted">
           {isSenior
             ? 'Your notes are a record, not a rule. Bring them to your clinician and ask what matters for you.'
             : 'There is no perfect cycle. Patterns — not single days — tell the most useful story.'}

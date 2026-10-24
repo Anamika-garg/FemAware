@@ -119,7 +119,7 @@ const DoctorReport = () => {
       const response = await api.post('/reports', {
         from: dateRange.from,
         to: dateRange.to,
-        title: `Cycle summary Â· ${formatDate(dateRange.from, 'd MMM')} â€“ ${formatDate(dateRange.to, 'd MMM yyyy')}`,
+        title: `Cycle summary · ${formatDate(dateRange.from, 'd MMM')} – ${formatDate(dateRange.to, 'd MMM yyyy')}`,
         questions: parseQuestions(),
         notes,
       });
@@ -145,7 +145,7 @@ const DoctorReport = () => {
       setQuestionsText((response.data.report.questions || []).join('\n'));
       setNotes(response.data.report.notes || '');
       setActiveReportId(report._id);
-      addToast({ title: 'Saved report opened', message: `${formatDate(report.rangeStart)} â€“ ${formatDate(report.rangeEnd)}` });
+      addToast({ title: 'Saved report opened', message: `${formatDate(report.rangeStart)} – ${formatDate(report.rangeEnd)}` });
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (err) {
       addToast({ type: 'error', title: 'Could not open report', message: getErrorMessage(err) });
@@ -268,7 +268,7 @@ const DoctorReport = () => {
               </div>
               <p className="mt-2 flex items-center gap-1.5 text-[10px] text-muted">
                 <CalendarRange className="h-3 w-3" aria-hidden="true" />
-                {formatDate(dateRange.from, 'd MMM yyyy')} â€“ {formatDate(dateRange.to, 'd MMM yyyy')}
+                {formatDate(dateRange.from, 'd MMM yyyy')} – {formatDate(dateRange.to, 'd MMM yyyy')}
               </p>
             </div>
 
@@ -285,7 +285,7 @@ const DoctorReport = () => {
                   value={questionsText}
                   onChange={(event) => setQuestionsText(event.target.value)}
                   className="input-field resize-none text-xs"
-                  placeholder={'My cycles vary by about a week â€” should I be tested?\nAre my severe cramps something to investigate?'}
+                  placeholder={'My cycles vary by about a week — should I be tested?\nAre my severe cramps something to investigate?'}
                 />
               </Field>
             </div>
@@ -303,7 +303,7 @@ const DoctorReport = () => {
                   value={notes}
                   onChange={(event) => setNotes(event.target.value)}
                   className="input-field resize-none text-xs"
-                  placeholder="e.g. I started a new job in June and my sleep changedâ€¦"
+                  placeholder="e.g. I started a new job in June and my sleep changed…"
                 />
               </Field>
             </div>
@@ -346,7 +346,7 @@ const DoctorReport = () => {
                     >
                       <p className="truncate text-[11px] font-bold text-ink">{report.title}</p>
                       <p className="mt-0.5 text-[9px] text-muted">
-                        {formatDate(report.rangeStart, 'd MMM')} â€“ {formatDate(report.rangeEnd, 'd MMM yyyy')}
+                        {formatDate(report.rangeStart, 'd MMM')} – {formatDate(report.rangeEnd, 'd MMM yyyy')}
                       </p>
                       <p className="text-[9px] text-muted">
                         Saved {formatDate(report.generatedAt, 'd MMM yyyy')}
@@ -365,7 +365,7 @@ const DoctorReport = () => {
               </ul>
             ) : (
               <p className="px-4 py-6 text-center text-[10px] leading-relaxed text-muted">
-                Saved reports live here for easy reprinting. Create one, then choose â€œSave reportâ€.
+                Saved reports live here for easy reprinting. Create one, then choose “Save report”.
               </p>
             )}
           </section>
@@ -374,7 +374,7 @@ const DoctorReport = () => {
             <Stethoscope className="mt-0.5 h-4 w-4 shrink-0 text-pink-glow" aria-hidden="true" />
             <p className="text-[10px] leading-relaxed text-muted">
               This report is a record of what you logged, not a medical opinion. It is designed to
-              support â€” not replace â€” a conversation with a qualified clinician.
+              support — not replace — a conversation with a qualified clinician.
             </p>
           </div>
         </aside>
@@ -387,7 +387,7 @@ const DoctorReport = () => {
               </h2>
               {activeReportId ? <Badge tone="calm" icon={Check}>Saved report</Badge> : <Badge tone="pink">Preview</Badge>}
             </div>
-            <p className="text-[10px] text-muted">A4 Â· Print or save as PDF from your browser</p>
+            <p className="text-[10px] text-muted">A4 · Print or save as PDF from your browser</p>
           </div>
 
           {snapshot ? (
@@ -396,13 +396,13 @@ const DoctorReport = () => {
                 <div className="flex flex-wrap items-start justify-between gap-4">
                   <div>
                     <p className="text-[9px] font-bold uppercase tracking-[0.22em] text-pink-glow">
-                      FemAware Â· Health summary
+                      FemAware · Health summary
                     </p>
                     <h1 className="mt-2 font-display text-[1.7rem] font-semibold leading-tight text-deep-rose sm:text-3xl">
                       Cycle &amp; symptom report
                     </h1>
                     <p className="mt-1 text-xs text-muted">
-                      Prepared for a clinical conversation Â· Not a diagnosis
+                      Prepared for a clinical conversation · Not a diagnosis
                     </p>
                   </div>
                   <div className="text-right text-[10px] leading-relaxed text-muted">
@@ -410,7 +410,7 @@ const DoctorReport = () => {
                     <p>{formatDate(snapshot.generatedAt, 'd MMMM yyyy')}</p>
                     <p className="mt-2 font-bold text-deep-rose">Reporting period</p>
                     <p>
-                      {formatDate(snapshot.rangeStart, 'd MMM yyyy')} â€“{' '}
+                      {formatDate(snapshot.rangeStart, 'd MMM yyyy')} –{' '}
                       {formatDate(snapshot.rangeEnd, 'd MMM yyyy')}
                     </p>
                   </div>
@@ -443,7 +443,7 @@ const DoctorReport = () => {
                     {[
                       { label: 'Average cycle', value: `${summary.averageCycleLength} days` },
                       { label: 'Average period', value: `${summary.averagePeriodLength} days` },
-                      { label: 'Variation', value: `Â±${summary.variation} days` },
+                      { label: 'Variation', value: `±${summary.variation} days` },
                       { label: 'Regularity', value: summary.regularity },
                     ].map((item) => (
                       <div key={item.label} className="rounded-lg border border-blush-pink/60 bg-rose-mist/50 p-2.5">
@@ -481,8 +481,8 @@ const DoctorReport = () => {
                             <tr key={cycle.id || `${cycle.startDate}-${cycle.endDate}`} className="border-b border-blush-pink/40">
                               <td className="px-2.5 py-2 font-semibold text-ink">{formatDate(cycle.startDate, 'd MMM yyyy')}</td>
                               <td className="px-2.5 py-2 text-muted">{cycle.endDate ? formatDate(cycle.endDate, 'd MMM yyyy') : 'Ongoing'}</td>
-                              <td className="px-2.5 py-2 text-muted">{cycle.cycleLength ? `${cycle.cycleLength} days` : 'â€”'}</td>
-                              <td className="px-2.5 py-2 text-muted">{cycle.periodLength ? `${cycle.periodLength} days` : 'â€”'}</td>
+                              <td className="px-2.5 py-2 text-muted">{cycle.cycleLength ? `${cycle.cycleLength} days` : '—'}</td>
+                              <td className="px-2.5 py-2 text-muted">{cycle.periodLength ? `${cycle.periodLength} days` : '—'}</td>
                               <td className="px-2.5 py-2 capitalize text-deep-rose">{cycle.flow}</td>
                             </tr>
                           ))}
@@ -512,7 +512,7 @@ const DoctorReport = () => {
                                 <span className={cn('rounded-full px-1.5 py-0.5 text-[8px] font-bold capitalize', severityTone[item.worstSeverity])}>
                                   {item.worstSeverity}
                                 </span>
-                                <span className="font-bold text-deep-rose">{item.count}Ã—</span>
+                                <span className="font-bold text-deep-rose">{item.count}×</span>
                               </span>
                             </li>
                           ))}
@@ -527,7 +527,7 @@ const DoctorReport = () => {
                         {snapshot.topMood.length ? (
                           snapshot.topMood.map((item) => (
                             <span key={item.name} className="rounded-full bg-rose-mist px-2 py-0.5 text-[9px] font-semibold text-deep-rose">
-                              {item.name} Â· {item.count}
+                              {item.name} · {item.count}
                             </span>
                           ))
                         ) : (
@@ -601,7 +601,7 @@ const DoctorReport = () => {
                 <footer className="border-t border-blush-pink/50 pt-4">
                   <p className="text-[8px] leading-relaxed text-muted">{snapshot.disclaimer}</p>
                   <p className="mt-2 text-[8px] text-muted">
-                    Generated by FemAware on {formatDate(snapshot.generatedAt, 'd MMMM yyyy')} Â· Data entered by the patient.
+                    Generated by FemAware on {formatDate(snapshot.generatedAt, 'd MMMM yyyy')} · Data entered by the patient.
                   </p>
                 </footer>
               </div>

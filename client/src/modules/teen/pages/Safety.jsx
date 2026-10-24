@@ -33,9 +33,9 @@ export default function Safety() {
                   <span className="grid size-12 place-items-center rounded-2xl bg-petal">
                     <ModuleIcon name={m.icon} className="size-6" />
                   </span>
-                  <h2 className="text-2xl font-black">{m.title}</h2>
+                  <h2 className="text-2xl font-display font-semibold text-deep-rose">{m.title}</h2>
                 </div>
-                <p className="mt-3 text-deep/85">{m.summary}</p>
+                <p className="mt-3 text-muted">{m.summary}</p>
                 <ul className="mt-4 space-y-2">
                   {m.keyPoints.map((k) => (
                     <li key={k} className="rounded-2xl bg-mist px-4 py-3 font-bold">
@@ -43,7 +43,7 @@ export default function Safety() {
                     </li>
                   ))}
                 </ul>
-                <Link to={`/learn/${m.slug}`} className="mt-4 inline-flex items-center gap-1 font-black underline">
+                <Link to={`/learn/${m.slug}`} className="mt-4 inline-flex items-center gap-1 font-bold underline">
                   Read the full lesson & take the quiz <ArrowRight aria-hidden className="size-4" />
                 </Link>
               </Card>
@@ -52,7 +52,7 @@ export default function Safety() {
 
           {data.helplines && (
             <aside className="space-y-4 self-start rounded-3xl bg-deep p-6 text-white">
-              <h2 className="flex items-center gap-2 text-xl font-black">
+              <h2 className="flex items-center gap-2 text-xl font-display font-semibold text-deep-rose">
                 <Phone aria-hidden className="size-5" /> {data.helplines.title}
               </h2>
               <p className="text-petal">{data.helplines.body}</p>

@@ -100,7 +100,7 @@ export default function TeenDashboard() {
 
       <div className="grid gap-6 lg:grid-cols-3">
         <Card className="lg:col-span-2">
-          <h2 className="flex items-center gap-2 text-xl font-black">
+          <h2 className="flex items-center gap-2 text-xl font-display font-semibold text-deep-rose">
             <CalendarHeart aria-hidden className="size-5" /> Cycle snapshot
           </h2>
           {cycle.periodsLogged === 0 ? (
@@ -135,15 +135,15 @@ export default function TeenDashboard() {
         </Card>
 
         <Card>
-          <h2 className="flex items-center gap-2 text-xl font-black">
+          <h2 className="flex items-center gap-2 text-xl font-display font-semibold text-deep-rose">
             <Trophy aria-hidden className="size-5" /> Level {progress.level}
           </h2>
-          <p className="mt-1 text-sm text-deep/80">
+          <p className="mt-1 text-sm text-muted">
             {progress.xp} XP · {progress.completedModules.length}/{progress.totalModules} lessons
           </p>
           <div className="mt-3">
             <ProgressBar value={xpIntoLevel} max={150} label="XP towards next level" />
-            <p className="mt-1 text-xs font-semibold text-deep/70">{150 - xpIntoLevel} XP to level {progress.level + 1}</p>
+            <p className="mt-1 text-xs font-semibold text-muted">{150 - xpIntoLevel} XP to level {progress.level + 1}</p>
           </div>
           <div className="mt-4 flex flex-wrap gap-2">
             {progress.achievements.length ? (
@@ -153,7 +153,7 @@ export default function TeenDashboard() {
                 </Badge>
               ))
             ) : (
-              <p className="text-sm text-deep/70">Finish a lesson to earn your first badge.</p>
+              <p className="text-sm text-muted">Finish a lesson to earn your first badge.</p>
             )}
           </div>
           {nextModule && (
@@ -169,7 +169,7 @@ export default function TeenDashboard() {
 
         <Card className="lg:col-span-3">
           <div className="flex items-center justify-between">
-            <h2 className="flex items-center gap-2 text-xl font-black">
+            <h2 className="flex items-center gap-2 text-xl font-display font-semibold text-deep-rose">
               <NotebookPen aria-hidden className="size-5" /> Recent symptoms
             </h2>
             <Link to="/symptoms" className="text-sm font-bold underline">
@@ -177,14 +177,14 @@ export default function TeenDashboard() {
             </Link>
           </div>
           {recentSymptoms.length === 0 ? (
-            <p className="mt-3 text-deep/80">Nothing logged yet.</p>
+            <p className="mt-3 text-muted">Nothing logged yet.</p>
           ) : (
             <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               {recentSymptoms.map((log) => (
                 <li key={log.id} className="rounded-2xl bg-mist p-4">
-                  <p className="text-sm font-black text-rose">{formatDay(log.date, { weekday: 'short', day: 'numeric', month: 'short' })}</p>
+                  <p className="text-sm font-bold text-rose">{formatDay(log.date, { weekday: 'short', day: 'numeric', month: 'short' })}</p>
                   <p className="mt-1 font-bold">{log.symptoms.map((s) => SYMPTOM_LABELS[s]).join(', ')}</p>
-                  <p className="text-sm text-deep/80">{SEVERITY_LABELS[log.severity]}</p>
+                  <p className="text-sm text-muted">{SEVERITY_LABELS[log.severity]}</p>
                 </li>
               ))}
             </ul>
@@ -206,9 +206,9 @@ export default function TeenDashboard() {
 function Stat({ label, value, hint }) {
   return (
     <div className="rounded-2xl bg-mist p-4">
-      <dt className="text-xs font-black uppercase tracking-wide text-rose">{label}</dt>
-      <dd className="mt-1 text-2xl font-black">{value}</dd>
-      {hint && <dd className="text-xs font-semibold text-deep/70">{hint}</dd>}
+      <dt className="text-xs font-bold uppercase tracking-wide text-rose">{label}</dt>
+      <dd className="mt-1 text-2xl font-display font-semibold text-deep-rose">{value}</dd>
+      {hint && <dd className="text-xs font-semibold text-muted">{hint}</dd>}
     </div>
   );
 }
