@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+/*
+ * FemAware design tokens — the single source of truth for colour.
+ * The default Tailwind palette is removed so only the pink theme can be used.
+ * Keep in sync with src/theme/tokens.js (used by charts).
+ */
+@theme {
+  --color-*: initial;
+  --color-mist: #fff1f6;   /* Rose Mist  — page background */
+  --color-petal: #ffd6e7;  /* Soft Petal — surfaces, chips */
+  --color-blush: #f8bbd0;  /* Blush Pink — borders, period days */
+  --color-glow: #f672a7;   /* Pink Glow  — decoration, highlights */
+  --color-rose: #e0487e;   /* Rose Pink  — large text, icons */
+  --color-deep: #c2185b;   /* Deep Rose  — body text, primary actions */
+  --color-white: #ffffff;
+
+  --font-sans: "Nunito", ui-sans-serif, system-ui, sans-serif;
+  --radius-blob: 2rem;
+  --shadow-soft: 0 10px 30px -12px rgb(194 24 91 / 0.25);
+}
+
+@layer base {
+  html {
+    background: var(--color-mist);
+    color: var(--color-deep);
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    min-height: 100vh;
+    font-family: var(--font-sans);
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-glow);
+    outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@utility card {
+  background: var(--color-white);
+  border: 1px solid var(--color-petal);
+  border-radius: 1.5rem;
+  box-shadow: var(--shadow-soft);
+}
+
+@utility bg-hero {
+  background:
+    radial-gradient(60% 80% at 85% 10%, var(--color-blush) 0%, transparent 60%),
+    radial-gradient(50% 60% at 10% 90%, var(--color-petal) 0%, transparent 60%),
+    var(--color-mist);
+}
