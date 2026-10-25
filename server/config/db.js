@@ -43,16 +43,14 @@ const connect = async () => {
     console.log(`📚 Teen content: ${content.created} created, ${content.updated} updated`);
   }
 
-  if (process.env.USE_MEMORY_DB === 'true') {
-    const { seedDatabase, DEMO_EMAIL, SENIOR_EMAIL, TEEN_EMAIL } = await import('../seed/seedData.js');
-    const { User } = await import('../models/User.js');
-    const demoCount = await User.countDocuments({
-      email: { $in: [DEMO_EMAIL, SENIOR_EMAIL, TEEN_EMAIL] },
-    });
-    if (demoCount < 3) {
-      await seedDatabase({ silent: true });
-      console.log('🌱 Demo data seeded for the in-memory database');
-    }
+  // Demo accounts are part of the product tour, so keep them available in
+  // every environment — including Vercel — unless explicitly disabled. The
+  // helper is idempotent and locks across instances so concurrent cold starts
+  // cannot seed over each other.
+  if (process.env.SEED_DEMO_ACCOUNTS !== 'false') {
+    const { ensureDemoAccounts } = await import('../seed/seedData.js');
+    const result = await ensureDemoAccounts({ silent: true });
+    if (result.seeded) console.log('🌱 Demo accounts seeded');
   }
 
   return conn;

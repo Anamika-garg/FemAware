@@ -109,14 +109,19 @@ must never be added to the client.
 `server/.env` is loaded when the API starts, so restart it after editing any of
 these values.
 
-### 3. Seed the demo accounts (Atlas)
+### 3. Seed the demo accounts
+
+The API creates the three demo accounts automatically on first connection when
+they are missing, in every environment including Atlas and Vercel. `npm run seed`
+is still useful to reset them to their sample state:
 
 ```bash
 npm run seed
 ```
 
-The seed only touches the three demo accounts below. Teen lessons and
-guided-check guidance are seeded automatically every time the API starts.
+Set `SEED_DEMO_ACCOUNTS=false` to disable automatic demo seeding — recommended
+once the deployment holds real user data. Teen lessons and guided-check
+guidance are seeded automatically every time the API starts.
 
 ### 4. Run
 
@@ -154,6 +159,7 @@ Configure these environment variables in the Vercel project:
 | Variable                  | Notes                                                                 |
 | ------------------------- | --------------------------------------------------------------------- |
 | `MONGODB_URI`             | Atlas connection string. `USE_MEMORY_DB` is rejected on Vercel.        |
+| `SEED_DEMO_ACCOUNTS`      | Optional; defaults to `true`. Set to `false` to stop creating the demo accounts in production. |
 | `JWT_SECRET`              | Long random string. Without it the API returns a clear 503 instead of an opaque 500. |
 | `CLIENT_URL`              | Deployed client origin, e.g. `https://your-app.vercel.app`. Comma-separate multiple origins. |
 | `GEMINI_API_KEY`          | Optional; enables live chat replies.                                   |
@@ -180,8 +186,10 @@ one-click button for each.
 | Senior | `senior@femaware.app` | Comfort check-ins and a saved visit summary       |
 
 Every account uses the same password, `FemAware123!`, and opens directly on the
-dashboard for its life stage. With `USE_MEMORY_DB=true` the accounts are
-recreated on each server start.
+dashboard for its life stage. The accounts are available in every environment by
+default: on first connection the API creates any that are missing, and rebuilds
+all three to their sample state if one has been deleted. Set
+`SEED_DEMO_ACCOUNTS=false` to stop that in production.
 
 ---
 

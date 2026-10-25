@@ -451,4 +451,49 @@ export const seedDatabase = async ({ silent = false } = {}) => {
   return user;
 };
 
+/**
+ * Make sure the three demo accounts exist without touching real accounts.
+ *
+ * Safe to call on every boot: when all three demo users are present this is a
+ * single count query. If any are missing, the demo data is rebuilt from scratch
+ * (demo accounts are disposable by design). A short-lived lock stops two
+ * serverless instances from seeding over each other during a cold start.
+ */
+export const ensureDemoAccounts = async ({ silent = false } = {}) => {
+  const db = mongoose.connection.db;
+  if (!db) throw new Error('MongoDB is not connected.');
+
+  const demoEmails = [DEMO_EMAIL, SENIOR_EMAIL, TEEN_EMAIL];
+  const existing = await User.countDocuments({ email: { $in: demoEmails } });
+  if (existing >= demoEmails.length) return { seeded: false, reason: 'exists' };
+
+  const locks = db.collection('seedlocks');
+  const lockId = 'demo-accounts';
+  const staleBefore = new Date(Date.now() - 2 * 60 * 1000);
+
+  try {
+    await locks.findOneAndUpdate(
+      { _id: lockId, lockedAt: { $lt: staleBefore } },
+      { $set: { lockedAt: new Date() } },
+      { upsert: true }
+    );
+  } catch (error) {
+    // A fresh lock document means another instance is already seeding.
+    if (error?.code === 11000) return { seeded: false, reason: 'locked' };
+    throw error;
+  }
+
+  try {
+    // Re-check inside the lock: another instance may have finished while this
+    // one was waiting.
+    const afterLock = await User.countDocuments({ email: { $in: demoEmails } });
+    if (afterLock >= demoEmails.length) return { seeded: false, reason: 'exists' };
+
+    await seedDatabase({ silent });
+    return { seeded: true };
+  } finally {
+    await locks.deleteOne({ _id: lockId });
+  }
+};
+
 export { DEMO_EMAIL, SENIOR_EMAIL, TEEN_EMAIL };
