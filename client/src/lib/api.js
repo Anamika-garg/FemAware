@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { resolveApiBase } from './apiBase';
 
 const TOKEN_KEY = 'femaware_token';
 
@@ -7,7 +8,7 @@ export const setToken = (token) => localStorage.setItem(TOKEN_KEY, token);
 export const clearToken = () => localStorage.removeItem(TOKEN_KEY);
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '/api',
+  baseURL: resolveApiBase(),
   timeout: 20000,
   headers: { 'Content-Type': 'application/json' },
 });

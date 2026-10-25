@@ -1,6 +1,7 @@
 import { clearToken, getToken } from '../../../lib/api';
+import { resolveApiBase } from '../../../lib/apiBase';
 
-const BASE = `${import.meta.env.VITE_API_URL || '/api'}/teen`;
+const BASE = `${resolveApiBase()}/teen`;
 
 export class ApiError extends Error {
   constructor(status, message, details) {
