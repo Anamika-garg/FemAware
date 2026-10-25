@@ -18,7 +18,8 @@ Every space includes a guided symptom navigator, personal charts, and a
 shareable summary to bring to a clinician. Each space also has a private AI
 health guide — **Bloom** for teens, **Ava** for adults and **Mira** for
 seniors — that answers questions in the tone and reading level of that life
-stage.
+stage. Open the guide from the sidebar, the mobile **More** menu, or the
+floating button in the bottom-right of any signed-in page.
 
 > FemAware is educational. It does not diagnose medical conditions and is not a
 > substitute for professional medical advice. It points out warning signs that
@@ -50,7 +51,7 @@ FemAware/
 │     │  ├─ adult/     # Adult space: tracker, journal, insights, doctor report, library
 │     │  ├─ senior/    # Senior space: check-ins, trends, visit preparation, library
 │     │  └─ chat/      # Shared chat UI with stage-aware fallback copy
-│     ├─ components/   # Shared shell (sidebar, navbar, mobile nav) and UI primitives
+│     ├─ components/   # Shared shell (sidebar, navbar, mobile nav, chat launcher) and UI primitives
 │     ├─ context/      # Auth and toast providers
 │     ├─ lib/          # API client, constants, navigation per life stage
 │     ├─ pages/        # Login, register, onboarding, privacy, PCOS, late-period guide
@@ -96,10 +97,16 @@ accounts already loaded.
 
 To enable the health guide, also set `GEMINI_API_KEY` from
 <https://aistudio.google.com/apikey>. The key is read only by the server and
-must never be added to the client. `GEMINI_MODEL` defaults to
-`gemini-2.5-flash`. `GEMINI_THINKING_BUDGET` controls hidden reasoning for
-thinking-capable models (default `1024`; set `0` to disable). Until a key is
-set, `/chat` returns a clear setup message instead of a model answer.
+must never be added to the client.
+
+| Variable                 | Default             | Purpose                                                                 |
+| ------------------------ | ------------------- | ----------------------------------------------------------------------- |
+| `GEMINI_API_KEY`         | *(empty)*           | Server-side Gemini key. Until it is set, `/chat` returns a clear setup message instead of a model answer. |
+| `GEMINI_MODEL`           | `gemini-2.5-flash`  | Model used for every guide.                                              |
+| `GEMINI_THINKING_BUDGET` | `1024`              | Hidden reasoning budget for thinking-capable models. Set `0` to disable. |
+
+`server/.env` is loaded when the API starts, so restart it after editing any of
+these values.
 
 ### 3. Seed the demo accounts (Atlas)
 
@@ -166,6 +173,21 @@ itself.
 | Adult  | Ava   | Warm, evidence-informed, practical next steps               |
 | Senior | Mira  | Calm, plain language and larger-print-friendly spacing      |
 
+### Code map
+
+| Path                                      | Role                                                              |
+| ----------------------------------------- | ----------------------------------------------------------------- |
+| `server/chatbot/modules.js`               | Guide identities, scope, reading level, word limits, safety rules |
+| `server/chatbot/prompts.js`               | System prompt and reasoning instructions                          |
+| `server/chatbot/safety.js`                | Red-flag screen and fixed crisis/emergency replies                |
+| `server/chatbot/context.js`               | Profile and recent health-log summary sent to the model           |
+| `server/chatbot/gemini.js`                | SDK call, JSON schema, thinking config, error mapping             |
+| `server/chatbot/controller.js`            | Endpoints, history persistence, safety short-circuit              |
+| `server/models/ChatThread.js`             | One stored thread per account per module                          |
+| `client/src/modules/chat/`                | Shared chat UI, rich-text renderer and stage config               |
+| `client/src/components/ChatLauncher.jsx`  | Floating bottom-right shortcut                                    |
+| `client/src/modules/{teen,adult,senior}/` | Stage wrappers that pick the guide and copy                       |
+
 The prompt combines the person's profile and a compact summary of recent cycle
 and symptom logs with stage-specific scope, reading level, word limit and
 safety rules. The model works through a private reasoning step, then returns
@@ -174,6 +196,10 @@ structured JSON containing the visible `answer`, a short user-facing
 `emergency` or `crisis`) and two or three `followUps`. The UI shows the urgency
 as a banner and lets the person expand **How I thought about this** to read the
 summary. That summary is deliberately not raw chain of thought.
+
+If the model is unavailable, misconfigured or times out, the API returns a
+friendly error instead of a partial answer, and the UI puts the message back in
+the box so it can be sent again.
 
 ### Safety
 
@@ -203,6 +229,19 @@ module's thread without touching health logs.
 | `GET`    | `/api/chat`           | Current guide, module and recent messages     |
 | `POST`   | `/api/chat/messages`  | Send `{ "message": "..." }` and get a reply   |
 | `DELETE` | `/api/chat`           | Clear the current module's conversation       |
+
+### Tests
+
+The chatbot has focused server and client suites that do not need a Gemini key
+(the model call is mocked):
+
+```bash
+npm --prefix server test -- tests/chatbot.test.js tests/chatbotSafety.test.js
+npm --prefix client test -- src/modules/chat/__tests__/ChatPage.test.jsx src/components/__tests__/ChatLauncher.test.jsx
+```
+
+They cover module resolution, message validation, red-flag short-circuits,
+export/delete, the chat UI states and the launcher's stage label.
 
 ---
 
@@ -270,7 +309,7 @@ and `/auth/login` needs `Authorization: Bearer <token>`.
 | Auth & profile | `POST /auth/register`, `POST /auth/login`, `GET /auth/me`, `POST /auth/onboarding`, `PATCH /auth/profile` |
 | Adult / senior | `/cycles`, `/symptoms`, `/reports`                                                   |
 | Chat guide     | `GET /chat`, `POST /chat/messages`, `DELETE /chat` (30 messages / 15 minutes)         |
-| Privacy        | `GET /user/export` (includes teen data), `DELETE /user/data`                         |
+| Privacy        | `GET /user/export` (includes teen and chat data), `DELETE /user/data`                |
 | Teen           | `/teen/cycles`, `/teen/symptoms`, `/teen/learning/modules[/:slug[/quiz]]`, `/teen/learning/progress`, `/teen/assessments`, `/teen/insights[/summary]`, `/teen/guidance/:key`, `POST /teen/sample-data` |
 
 The teen API returns errors as `{ error, details }`. The rest of the API returns
