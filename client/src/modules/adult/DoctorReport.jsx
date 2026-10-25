@@ -33,7 +33,7 @@ import { cn } from '../../lib/utils';
 const severityTone = {
   mild: 'bg-rose-mist text-deep-rose',
   moderate: 'bg-soft-petal text-deep-rose',
-  severe: 'bg-pink-glow text-white',
+  severe: 'bg-deep-rose text-white',
 };
 
 const DoctorReport = () => {
@@ -233,10 +233,10 @@ const DoctorReport = () => {
                 <FileText className="h-4 w-4" aria-hidden="true" />
               </span>
               <div>
-                <h2 id="settings-title" className="font-display text-lg font-semibold text-deep-rose">
+                <h2 id="settings-title" className="font-display text-lg text-ink">
                   Report details
                 </h2>
-                <p className="text-[10px] text-muted">Choose what to include.</p>
+                <p className="text-xs text-muted">Choose what to include.</p>
               </div>
             </div>
 
@@ -256,9 +256,9 @@ const DoctorReport = () => {
                     onClick={() => setRange(item.value)}
                     aria-pressed={range === item.value}
                     className={cn(
-                      'rounded-lg border px-1 py-2 text-[10px] font-bold transition-colors',
+                      'rounded-lg border px-1 py-2 text-xs font-semibold transition-colors',
                       range === item.value && !activeReportId
-                        ? 'border-pink-glow bg-pink-glow text-white'
+                        ? 'border-deep-rose bg-deep-rose text-white'
                         : 'border-blush-pink/70 bg-white text-muted hover:border-pink-glow'
                     )}
                   >
@@ -266,7 +266,7 @@ const DoctorReport = () => {
                   </button>
                 ))}
               </div>
-              <p className="mt-2 flex items-center gap-1.5 text-[10px] text-muted">
+              <p className="mt-2 flex items-center gap-1.5 text-xs text-muted">
                 <CalendarRange className="h-3 w-3" aria-hidden="true" />
                 {formatDate(dateRange.from, 'd MMM yyyy')} – {formatDate(dateRange.to, 'd MMM yyyy')}
               </p>
@@ -317,7 +317,7 @@ const DoctorReport = () => {
             >
               Update preview
             </Button>
-            <p className="mt-2 text-center text-[9px] leading-relaxed text-muted">
+            <p className="mt-2 text-center text-xs leading-relaxed text-muted">
               Nothing is shared automatically. You choose when and with whom.
             </p>
           </section>
@@ -325,10 +325,10 @@ const DoctorReport = () => {
           <section className="card overflow-hidden" aria-labelledby="saved-title">
             <div className="flex items-center justify-between bg-soft-petal/45 px-4 py-3">
               <div>
-                <h2 id="saved-title" className="font-display text-base font-semibold text-deep-rose">
+                <h2 id="saved-title" className="font-display text-base text-ink">
                   Saved reports
                 </h2>
-                <p className="text-[9px] text-muted">{savedReports.length} in your account</p>
+                <p className="text-xs text-muted">{savedReports.length} in your account</p>
               </div>
               <Badge tone="outline">{savedReports.length}</Badge>
             </div>
@@ -344,11 +344,11 @@ const DoctorReport = () => {
                         activeReportId === report._id && 'bg-rose-mist'
                       )}
                     >
-                      <p className="truncate text-[11px] font-bold text-ink">{report.title}</p>
-                      <p className="mt-0.5 text-[9px] text-muted">
+                      <p className="truncate text-xs font-semibold text-ink">{report.title}</p>
+                      <p className="mt-0.5 text-xs text-muted">
                         {formatDate(report.rangeStart, 'd MMM')} – {formatDate(report.rangeEnd, 'd MMM yyyy')}
                       </p>
-                      <p className="text-[9px] text-muted">
+                      <p className="text-xs text-muted">
                         Saved {formatDate(report.generatedAt, 'd MMM yyyy')}
                       </p>
                     </button>
@@ -364,7 +364,7 @@ const DoctorReport = () => {
                 ))}
               </ul>
             ) : (
-              <p className="px-4 py-6 text-center text-[10px] leading-relaxed text-muted">
+              <p className="px-4 py-6 text-center text-xs leading-relaxed text-muted">
                 Saved reports live here for easy reprinting. Create one, then choose “Save report”.
               </p>
             )}
@@ -372,7 +372,7 @@ const DoctorReport = () => {
 
           <div className="flex items-start gap-2 rounded-xl border border-blush-pink/60 bg-white/70 p-3.5">
             <Stethoscope className="mt-0.5 h-4 w-4 shrink-0 text-pink-glow" aria-hidden="true" />
-            <p className="text-[10px] leading-relaxed text-muted">
+            <p className="text-xs leading-relaxed text-muted">
               This report is a record of what you logged, not a medical opinion. It is designed to
               support — not replace — a conversation with a qualified clinician.
             </p>
@@ -382,12 +382,12 @@ const DoctorReport = () => {
         <section className="min-w-0" aria-labelledby="preview-title">
           <div className="mb-3 flex flex-wrap items-center justify-between gap-3 no-print">
             <div className="flex items-center gap-2">
-              <h2 id="preview-title" className="text-xs font-bold uppercase tracking-[0.14em] text-muted">
+              <h2 id="preview-title" className="text-xs font-semibold text-muted">
                 Live preview
               </h2>
               {activeReportId ? <Badge tone="calm" icon={Check}>Saved report</Badge> : <Badge tone="pink">Preview</Badge>}
             </div>
-            <p className="text-[10px] text-muted">A4 · Print or save as PDF from your browser</p>
+            <p className="text-xs text-muted">A4 · Print or save as PDF from your browser</p>
           </div>
 
           {snapshot ? (
@@ -395,20 +395,20 @@ const DoctorReport = () => {
               <header className="border-b-4 border-deep-rose px-6 pb-5 pt-6 sm:px-9 sm:pt-8">
                 <div className="flex flex-wrap items-start justify-between gap-4">
                   <div>
-                    <p className="text-[9px] font-bold uppercase tracking-[0.22em] text-pink-glow">
+                    <p className="text-xs font-semibold text-pink-glow">
                       FemAware · Health summary
                     </p>
-                    <h1 className="mt-2 font-display text-[1.7rem] font-semibold leading-tight text-deep-rose sm:text-3xl">
+                    <h1 className="mt-2 font-display text-[1.7rem] leading-tight text-ink sm:text-3xl">
                       Cycle &amp; symptom report
                     </h1>
                     <p className="mt-1 text-xs text-muted">
                       Prepared for a clinical conversation · Not a diagnosis
                     </p>
                   </div>
-                  <div className="text-right text-[10px] leading-relaxed text-muted">
-                    <p className="font-bold text-deep-rose">Report date</p>
+                  <div className="text-right text-xs leading-relaxed text-muted">
+                    <p className="font-semibold text-deep-rose">Report date</p>
                     <p>{formatDate(snapshot.generatedAt, 'd MMMM yyyy')}</p>
-                    <p className="mt-2 font-bold text-deep-rose">Reporting period</p>
+                    <p className="mt-2 font-semibold text-deep-rose">Reporting period</p>
                     <p>
                       {formatDate(snapshot.rangeStart, 'd MMM yyyy')} –{' '}
                       {formatDate(snapshot.rangeEnd, 'd MMM yyyy')}
@@ -418,15 +418,15 @@ const DoctorReport = () => {
 
                 <div className="mt-5 grid gap-3 rounded-xl bg-rose-mist/70 p-4 sm:grid-cols-3">
                   <div>
-                    <p className="text-[8px] font-bold uppercase tracking-wide text-muted">Patient</p>
-                    <p className="mt-0.5 text-sm font-bold text-deep-rose">{patient?.name}</p>
+                    <p className="text-[8px] font-semibold uppercase tracking-wide text-muted">Patient</p>
+                    <p className="mt-0.5 text-sm font-semibold text-deep-rose">{patient?.name}</p>
                   </div>
                   <div>
-                    <p className="text-[8px] font-bold uppercase tracking-wide text-muted">Age</p>
-                    <p className="mt-0.5 text-sm font-bold text-deep-rose">{patient?.age || 'Not provided'}</p>
+                    <p className="text-[8px] font-semibold uppercase tracking-wide text-muted">Age</p>
+                    <p className="mt-0.5 text-sm font-semibold text-deep-rose">{patient?.age || 'Not provided'}</p>
                   </div>
                   <div>
-                    <p className="text-[8px] font-bold uppercase tracking-wide text-muted">Focus areas</p>
+                    <p className="text-[8px] font-semibold uppercase tracking-wide text-muted">Focus areas</p>
                     <p className="mt-0.5 text-xs font-semibold capitalize text-deep-rose">
                       {(patient?.lifeStages || []).join(', ')}
                     </p>
@@ -436,7 +436,7 @@ const DoctorReport = () => {
 
               <div className="space-y-7 px-6 py-6 sm:px-9 sm:py-8">
                 <section className="print-avoid-break" aria-labelledby="summary-heading">
-                  <h2 id="summary-heading" className="font-display text-base font-semibold text-deep-rose">
+                  <h2 id="summary-heading" className="font-display text-base text-ink">
                     1. Cycle summary
                   </h2>
                   <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
@@ -447,12 +447,12 @@ const DoctorReport = () => {
                       { label: 'Regularity', value: summary.regularity },
                     ].map((item) => (
                       <div key={item.label} className="rounded-lg border border-blush-pink/60 bg-rose-mist/50 p-2.5">
-                        <p className="text-[8px] font-bold uppercase tracking-wide text-muted">{item.label}</p>
-                        <p className="mt-0.5 text-xs font-bold capitalize text-deep-rose">{item.value}</p>
+                        <p className="text-[8px] font-semibold uppercase tracking-wide text-muted">{item.label}</p>
+                        <p className="mt-0.5 text-xs font-semibold capitalize text-deep-rose">{item.value}</p>
                       </div>
                     ))}
                   </div>
-                  <p className="mt-2.5 text-[10px] leading-relaxed text-muted">
+                  <p className="mt-2.5 text-xs leading-relaxed text-muted">
                     Based on {summary.cyclesLogged} logged cycles and {summary.symptomsLogged} symptom
                     entries. {summary.regularity === 'regular'
                       ? 'Cycle lengths are relatively consistent.'
@@ -461,19 +461,19 @@ const DoctorReport = () => {
                 </section>
 
                 <section className="print-avoid-break" aria-labelledby="cycles-heading">
-                  <h2 id="cycles-heading" className="font-display text-base font-semibold text-deep-rose">
+                  <h2 id="cycles-heading" className="font-display text-base text-ink">
                     2. Period history
                   </h2>
                   {snapshot.cycles.length ? (
                     <div className="mt-3 overflow-x-auto">
-                      <table className="w-full min-w-[520px] border-collapse text-left text-[10px]">
+                      <table className="w-full min-w-[520px] border-collapse text-left text-xs">
                         <thead>
                           <tr className="bg-soft-petal/70 text-deep-rose">
-                            <th className="rounded-l-md px-2.5 py-2 font-bold">Start</th>
-                            <th className="px-2.5 py-2 font-bold">End</th>
-                            <th className="px-2.5 py-2 font-bold">Cycle length</th>
-                            <th className="px-2.5 py-2 font-bold">Bleeding days</th>
-                            <th className="rounded-r-md px-2.5 py-2 font-bold">Flow</th>
+                            <th className="rounded-l-md px-2.5 py-2 font-semibold">Start</th>
+                            <th className="px-2.5 py-2 font-semibold">End</th>
+                            <th className="px-2.5 py-2 font-semibold">Cycle length</th>
+                            <th className="px-2.5 py-2 font-semibold">Bleeding days</th>
+                            <th className="rounded-r-md px-2.5 py-2 font-semibold">Flow</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -490,59 +490,59 @@ const DoctorReport = () => {
                       </table>
                     </div>
                   ) : (
-                    <p className="mt-2 rounded-lg bg-rose-mist/60 p-3 text-[10px] text-muted">
+                    <p className="mt-2 rounded-lg bg-rose-mist/60 p-3 text-xs text-muted">
                       No period entries were recorded within this reporting window.
                     </p>
                   )}
                 </section>
 
                 <section className="print-avoid-break" aria-labelledby="symptoms-heading">
-                  <h2 id="symptoms-heading" className="font-display text-base font-semibold text-deep-rose">
+                  <h2 id="symptoms-heading" className="font-display text-base text-ink">
                     3. Symptom patterns
                   </h2>
                   <div className="mt-3 grid gap-4 sm:grid-cols-2">
                     <div>
-                      <p className="text-[9px] font-bold uppercase tracking-wide text-muted">Most frequent physical symptoms</p>
+                      <p className="text-xs font-semibold text-muted">Most frequent physical symptoms</p>
                       {snapshot.topPhysical.length ? (
                         <ul className="mt-2 space-y-1.5">
                           {snapshot.topPhysical.map((item) => (
-                            <li key={item.name} className="flex items-center justify-between gap-2 text-[10px]">
+                            <li key={item.name} className="flex items-center justify-between gap-2 text-xs">
                               <span className="text-ink">{item.name}</span>
                               <span className="flex items-center gap-1.5">
-                                <span className={cn('rounded-full px-1.5 py-0.5 text-[8px] font-bold capitalize', severityTone[item.worstSeverity])}>
+                                <span className={cn('rounded-full px-1.5 py-0.5 text-[8px] font-semibold capitalize', severityTone[item.worstSeverity])}>
                                   {item.worstSeverity}
                                 </span>
-                                <span className="font-bold text-deep-rose">{item.count}×</span>
+                                <span className="font-semibold text-deep-rose">{item.count}×</span>
                               </span>
                             </li>
                           ))}
                         </ul>
                       ) : (
-                        <p className="mt-2 text-[10px] italic text-muted">No physical symptoms in this period.</p>
+                        <p className="mt-2 text-xs italic text-muted">No physical symptoms in this period.</p>
                       )}
                     </div>
                     <div>
-                      <p className="text-[9px] font-bold uppercase tracking-wide text-muted">Mood &amp; flow</p>
+                      <p className="text-xs font-semibold text-muted">Mood &amp; flow</p>
                       <div className="mt-2 flex flex-wrap gap-1.5">
                         {snapshot.topMood.length ? (
                           snapshot.topMood.map((item) => (
-                            <span key={item.name} className="rounded-full bg-rose-mist px-2 py-0.5 text-[9px] font-semibold text-deep-rose">
+                            <span key={item.name} className="rounded-full bg-rose-mist px-2 py-0.5 text-xs font-semibold text-deep-rose">
                               {item.name} · {item.count}
                             </span>
                           ))
                         ) : (
-                          <span className="text-[10px] italic text-muted">No moods logged.</span>
+                          <span className="text-xs italic text-muted">No moods logged.</span>
                         )}
                       </div>
                       <div className="mt-3 flex flex-wrap gap-1.5">
                         {snapshot.flowDistribution.length ? (
                           snapshot.flowDistribution.map((item) => (
-                            <span key={item.name} className="rounded-full border border-blush-pink/70 px-2 py-0.5 text-[9px] font-semibold capitalize text-deep-rose">
+                            <span key={item.name} className="rounded-full border border-blush-pink/70 px-2 py-0.5 text-xs font-semibold capitalize text-deep-rose">
                               {item.name}: {item.count}
                             </span>
                           ))
                         ) : (
-                          <span className="text-[10px] italic text-muted">No flow data.</span>
+                          <span className="text-xs italic text-muted">No flow data.</span>
                         )}
                       </div>
                     </div>
@@ -550,30 +550,30 @@ const DoctorReport = () => {
                 </section>
 
                 <section className="print-avoid-break" aria-labelledby="conversation-heading">
-                  <h2 id="conversation-heading" className="font-display text-base font-semibold text-deep-rose">
+                  <h2 id="conversation-heading" className="font-display text-base text-ink">
                     4. Conversation starters &amp; notes
                   </h2>
                   <div className="mt-3 rounded-xl border border-blush-pink/60 p-4">
-                    <p className="flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-wide text-muted">
+                    <p className="flex items-center gap-1.5 text-xs font-semibold text-muted">
                       <ClipboardList className="h-3 w-3" aria-hidden="true" />
                       Questions for my clinician
                     </p>
                     {questions.length ? (
-                      <ol className="mt-2 space-y-1.5 pl-4 text-[10px] leading-relaxed text-ink" style={{ listStyle: 'decimal' }}>
+                      <ol className="mt-2 space-y-1.5 pl-4 text-xs leading-relaxed text-ink" style={{ listStyle: 'decimal' }}>
                         {questions.map((question, index) => (
                           <li key={`${question}-${index}`}>{question}</li>
                         ))}
                       </ol>
                     ) : (
-                      <p className="mt-1.5 text-[10px] italic text-muted">
+                      <p className="mt-1.5 text-xs italic text-muted">
                         No questions added yet. Use the panel to prepare.
                       </p>
                     )}
 
-                    <p className="mt-4 text-[9px] font-bold uppercase tracking-wide text-muted">
+                    <p className="mt-4 text-xs font-semibold text-muted">
                       Patterns worth discussing
                     </p>
-                    <ul className="mt-1.5 space-y-1 pl-4 text-[10px] leading-relaxed text-ink" style={{ listStyle: 'disc' }}>
+                    <ul className="mt-1.5 space-y-1 pl-4 text-xs leading-relaxed text-ink" style={{ listStyle: 'disc' }}>
                       {snapshot.discussionPoints.map((point, index) => (
                         <li key={`${point}-${index}`}>{point}</li>
                       ))}
@@ -581,15 +581,15 @@ const DoctorReport = () => {
 
                     {notes ? (
                       <>
-                        <p className="mt-4 text-[9px] font-bold uppercase tracking-wide text-muted">My notes</p>
-                        <p className="mt-1 whitespace-pre-line text-[10px] leading-relaxed text-ink">{notes}</p>
+                        <p className="mt-4 text-xs font-semibold text-muted">My notes</p>
+                        <p className="mt-1 whitespace-pre-line text-xs leading-relaxed text-ink">{notes}</p>
                       </>
                     ) : null}
 
                     {snapshot.flags?.heavyFlowReports || snapshot.flags?.prolongedBleeding || snapshot.flags?.severeSymptoms?.length ? (
                       <div className="mt-4 flex items-start gap-2 rounded-lg bg-rose-mist p-2.5">
                         <TriangleAlert className="mt-0.5 h-3 w-3 shrink-0 text-deep-rose" aria-hidden="true" />
-                        <p className="text-[9px] leading-relaxed text-deep-rose/80">
+                        <p className="text-xs leading-relaxed text-muted">
                           This report includes logged heavy flow, prolonged bleeding, or severe symptoms.
                           These are worth raising at your appointment.
                         </p>

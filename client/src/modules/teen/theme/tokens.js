@@ -12,6 +12,6 @@ export const colors = {
 /** Guidance level → visual treatment (colours from the pink palette only). */
 export const levelStyles = {
   urgent: { container: 'bg-deep text-white border-deep', badge: 'bg-white text-deep' },
-  see_doctor: { container: 'bg-petal text-deep border-rose', badge: 'bg-rose text-white' },
-  self_care: { container: 'bg-white text-deep border-blush', badge: 'bg-petal text-deep' },
+  see_doctor: { container: 'bg-mist text-ink border-blush', badge: 'bg-deep text-white' },
+  self_care: { container: 'bg-white text-ink border-blush', badge: 'bg-petal text-deep' },
 };

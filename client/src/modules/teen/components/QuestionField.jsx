@@ -8,11 +8,11 @@ export function QuestionField({ question: q, value, onChange }) {
     const v = value ?? Math.round((q.min + q.max) / 2);
     return (
       <div>
-        <label htmlFor={id} className="block text-xl font-bold">
+        <label htmlFor={id} className="block font-display text-2xl leading-snug text-ink">
           {q.prompt}
         </label>
         {q.help && <p className="mt-1 text-sm text-muted">{q.help}</p>}
-        <p className="mt-4 text-center text-5xl font-bold text-rose" aria-hidden>
+        <p className="mt-4 text-center font-display text-6xl text-ink" aria-hidden>
           {value ?? '–'}
         </p>
         <input
@@ -27,7 +27,7 @@ export function QuestionField({ question: q, value, onChange }) {
           onKeyUp={(e) => onChange(Number(e.currentTarget.value))}
           className="mt-2 w-full accent-deep"
         />
-        <div className="flex justify-between text-xs font-bold text-muted">
+        <div className="flex justify-between text-xs font-semibold text-muted">
           <span>{q.min} · none</span>
           <span>{q.max} · worst</span>
         </div>
@@ -38,7 +38,7 @@ export function QuestionField({ question: q, value, onChange }) {
   if (q.kind === 'number') {
     return (
       <div>
-        <label htmlFor={id} className="block text-xl font-bold">
+        <label htmlFor={id} className="block font-display text-2xl leading-snug text-ink">
           {q.prompt}
         </label>
         {q.help && <p className="mt-1 text-sm text-muted">{q.help}</p>}
@@ -50,7 +50,7 @@ export function QuestionField({ question: q, value, onChange }) {
           max={q.max}
           value={value ?? ''}
           onChange={(e) => onChange(e.target.value === '' ? null : Number(e.target.value))}
-          className="mt-4 w-40 rounded-2xl border-2 border-blush bg-white px-4 py-3 text-2xl font-display font-semibold text-deep-rose focus:border-deep focus:outline-none"
+          className="input-field mt-4 w-40 text-2xl"
         />
       </div>
     );
@@ -65,7 +65,7 @@ export function QuestionField({ question: q, value, onChange }) {
 
   return (
     <fieldset>
-      <legend className="text-xl font-bold">{q.prompt}</legend>
+      <legend className="font-display text-2xl leading-snug text-ink">{q.prompt}</legend>
       {q.help && <p className="mt-1 text-sm text-muted">{q.help}</p>}
       <div className="mt-4 grid gap-2">
         {q.options.map((o) => {
@@ -77,11 +77,11 @@ export function QuestionField({ question: q, value, onChange }) {
               role={multi ? 'checkbox' : 'radio'}
               aria-checked={on}
               onClick={() => toggle(o.value)}
-              className={`flex items-center gap-3 rounded-2xl border-2 px-4 py-3 text-left font-bold transition-colors ${
-                on ? 'border-deep bg-deep text-white' : 'border-blush bg-white hover:border-rose'
+              className={`flex min-h-[52px] items-center gap-3 rounded-xl border px-4 py-3 text-left font-medium transition-colors ${
+                on ? 'border-deep bg-mist text-deep' : 'border-blush bg-white hover:border-deep hover:bg-mist'
               }`}
             >
-              <span className={`grid size-5 shrink-0 place-items-center border-2 ${multi ? 'rounded' : 'rounded-full'} ${on ? 'border-white' : 'border-blush'}`}>
+              <span className={`grid size-5 shrink-0 place-items-center border-2 ${multi ? 'rounded' : 'rounded-full'} ${on ? 'border-deep bg-deep text-white' : 'border-blush'}`}>
                 {on && <Check aria-hidden className="size-3.5" />}
               </span>
               {o.label}
@@ -91,6 +91,17 @@ export function QuestionField({ question: q, value, onChange }) {
       </div>
     </fieldset>
   );
+}
+
+/** A short, readable version of an answer for the review step. */
+export function formatAnswer(q, value) {
+  if (q.kind === 'multi') {
+    const labels = (value || []).map((v) => q.options.find((o) => o.value === v)?.label || v);
+    return labels.length ? labels.join(', ') : 'None of these';
+  }
+  if (q.kind === 'scale') return `${value} out of ${q.max}`;
+  if (q.kind === 'number') return String(value);
+  return q.options.find((o) => o.value === value)?.label || '—';
 }
 
 /** Is the answer complete enough to continue? Multi-selects may be empty. */

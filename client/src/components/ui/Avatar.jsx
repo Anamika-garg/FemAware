@@ -18,7 +18,7 @@ const Avatar = ({ name = '', size = 'md', className }) => {
   return (
     <span
       className={cn(
-        'grid shrink-0 place-items-center rounded-full bg-gradient-to-br from-pink-glow to-deep-rose font-bold text-white ring-2 ring-white',
+        'grid shrink-0 place-items-center rounded-full border border-blush-pink bg-rose-mist font-semibold text-deep-rose',
         SIZES[size],
         className
       )}

@@ -35,26 +35,21 @@ const Navbar = () => {
   };
 
   return (
-    <header className="sticky top-0 z-30 border-b border-blush-pink/40 bg-canvas/85 backdrop-blur-xl">
+    <header className="sticky top-0 z-30 border-b border-line bg-white">
       <div className="mx-auto flex h-[70px] max-w-[1440px] items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <div className="flex min-w-0 items-center gap-3">
           <Link to="/dashboard" className="lg:hidden" aria-label="FemAware home">
             <Logo compact />
           </Link>
-          <div className="hidden min-w-0 lg:block">
-            <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-rose-pink">
-              {meta.eyebrow}
-            </p>
-            <p className="truncate font-display text-lg font-semibold text-deep-rose">{meta.title}</p>
-          </div>
-          <span className="hidden text-[11px] font-medium text-muted xl:inline">
+          <p className="hidden text-sm text-muted lg:block">
+            <span className="sr-only">{meta.title}. </span>
             {formatLongDate(todayISO())}
-          </span>
+          </p>
         </div>
 
         <div className="flex items-center gap-2 sm:gap-3">
-          <span className="hidden items-center gap-1.5 rounded-full border border-blush-pink/80 bg-white/70 px-3 py-1.5 text-[11px] font-semibold text-muted md:inline-flex">
-            <Lock className="h-3 w-3 text-pink-glow" aria-hidden="true" />
+          <span className="hidden items-center gap-1.5 text-xs font-medium text-muted md:inline-flex">
+            <Lock className="h-3.5 w-3.5 text-deep-rose" aria-hidden="true" />
             Private by design
           </span>
           <Link to="/symptoms" className="btn-primary btn-sm hidden sm:inline-flex">
@@ -63,7 +58,7 @@ const Navbar = () => {
           </Link>
           <NavLink
             to="/symptoms"
-            className="btn-primary grid h-9 w-9 place-items-center !rounded-full !p-0 sm:hidden"
+            className="btn-primary grid !min-h-[40px] w-10 place-items-center !p-0 sm:hidden"
             aria-label={isSenior ? 'Open today’s check-in' : "Log today's symptoms"}
           >
             <Plus className="h-4 w-4" />
@@ -73,7 +68,7 @@ const Navbar = () => {
             <button
               type="button"
               onClick={() => setMenuOpen((open) => !open)}
-              className={`flex items-center gap-2 rounded-full border border-blush-pink/60 bg-white/80 p-1 pr-2 transition-colors hover:border-pink-glow ${
+              className={`flex items-center gap-2 rounded-full border border-line bg-white p-1 pr-2 transition-colors hover:border-blush-pink ${
                 isSenior ? 'min-h-[48px]' : ''
               }`}
               aria-expanded={menuOpen}
@@ -86,11 +81,11 @@ const Navbar = () => {
 
             {menuOpen ? (
               <div
-                className="absolute right-0 mt-2 w-64 animate-fade-up rounded-2xl border border-blush-pink/60 bg-white p-2 shadow-card"
+                className="absolute right-0 mt-2 w-64 animate-fade-up rounded-xl border border-line bg-white p-1.5 shadow-card"
                 role="menu"
               >
-                <div className="mb-1 border-b border-blush-pink/40 px-3 py-2.5">
-                  <p className="truncate text-sm font-bold text-ink">{user?.name}</p>
+                <div className="mb-1 border-b border-line px-3 py-2.5">
+                  <p className="truncate text-sm font-semibold text-ink">{user?.name}</p>
                   <p className="truncate text-xs text-muted">{user?.email}</p>
                 </div>
                 <Link

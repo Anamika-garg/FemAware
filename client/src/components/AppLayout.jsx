@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import Navbar from './Navbar';
@@ -41,7 +41,7 @@ const AppLayout = () => {
   }, [isSenior]);
 
   return (
-    <div className="min-h-screen">
+    <div className="app-shell min-h-screen bg-[#FFF7FA]">
       <Sidebar />
       <div className="flex min-h-screen flex-col lg:pl-72">
         <Navbar />
@@ -49,14 +49,16 @@ const AppLayout = () => {
           id="main-content"
           className="mx-auto w-full max-w-[1440px] flex-1 px-4 pb-28 pt-6 sm:px-6 sm:pt-8 lg:px-8 lg:pb-12"
         >
-          <div className="animate-fade-up">
-            <Outlet />
-          </div>
+          <Suspense fallback={<div className="min-h-[50vh]" aria-busy="true" />}>
+            <div className="animate-fade-up">
+              <Outlet />
+            </div>
+          </Suspense>
         </main>
-        <footer className="mx-auto hidden w-full max-w-[1440px] items-center justify-between gap-4 px-8 pb-8 text-[11px] text-muted lg:flex">
+        <footer className="mx-auto hidden w-full max-w-[1440px] items-center justify-between gap-4 border-t border-line px-8 py-6 text-xs text-muted lg:flex">
           <p>© {new Date().getFullYear()} FemAware. Made for understanding, not diagnosing.</p>
           <p className="flex items-center gap-1.5">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#4CAF7D]" aria-hidden="true" />
+            <span className="h-1.5 w-1.5 rounded-full bg-deep-rose" aria-hidden="true" />
             Your data stays in your account
           </p>
         </footer>

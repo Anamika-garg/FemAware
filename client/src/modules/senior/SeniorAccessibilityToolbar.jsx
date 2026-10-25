@@ -35,7 +35,7 @@ const SeniorAccessibilityToolbar = () => {
   return (
     <section
       aria-label="Accessibility toolbar"
-      className="sticky top-[74px] z-20 rounded-2xl border-2 border-blush-pink bg-white/95 p-3.5 shadow-soft backdrop-blur-sm sm:top-[78px] sm:p-4"
+      className="sticky top-[74px] z-20 rounded-2xl border-2 border-blush-pink bg-white/95 p-3.5 shadow-soft sm:top-[78px] sm:p-4"
     >
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex items-center gap-2.5">
@@ -43,7 +43,7 @@ const SeniorAccessibilityToolbar = () => {
             <Accessibility className="h-5 w-5" aria-hidden="true" />
           </span>
           <div>
-            <p className="text-sm font-bold text-deep-rose">Text size</p>
+            <p className="text-sm font-semibold text-deep-rose">Text size</p>
             <p className="text-xs text-muted">Choose what feels most comfortable to read.</p>
           </div>
         </div>
@@ -62,7 +62,7 @@ const SeniorAccessibilityToolbar = () => {
                 onClick={() => setScale(option.value)}
                 aria-pressed={active}
                 className={cn(
-                  'flex min-h-[48px] items-center justify-center gap-1.5 rounded-xl border-2 px-3 py-2 text-sm font-bold transition-colors',
+                  'flex min-h-[48px] items-center justify-center gap-1.5 rounded-xl border-2 px-3 py-2 text-sm font-semibold transition-colors',
                   active
                     ? 'border-deep-rose bg-deep-rose text-white'
                     : 'border-blush-pink bg-white text-deep-rose hover:border-pink-glow hover:bg-soft-petal/60'

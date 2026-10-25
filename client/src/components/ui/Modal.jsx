@@ -66,7 +66,7 @@ const Modal = ({
       role="presentation"
     >
       <div
-        className="fixed inset-0 bg-ink/35 backdrop-blur-[2px]"
+        className="fixed inset-0 bg-ink/40"
         onClick={closeOnBackdrop ? onClose : undefined}
         aria-hidden="true"
       />
@@ -77,14 +77,14 @@ const Modal = ({
         aria-labelledby={title ? titleId : undefined}
         aria-describedby={description ? descriptionId : undefined}
         className={cn(
-          'relative z-10 my-0 w-full animate-fade-up rounded-t-3xl bg-white shadow-card sm:my-8 sm:rounded-2xl',
+          'relative z-10 my-0 w-full animate-fade-up rounded-t-2xl bg-white shadow-card sm:my-8 sm:rounded-2xl',
           SIZES[size]
         )}
       >
-        <div className="flex items-start justify-between gap-4 border-b border-blush-pink/40 px-5 py-4 sm:px-7 sm:py-5">
+        <div className="flex items-start justify-between gap-4 border-b border-line px-5 py-4 sm:px-7 sm:py-5">
           <div className="min-w-0">
             {title ? (
-              <h2 id={titleId} className="font-display text-xl font-semibold text-deep-rose">
+              <h2 id={titleId} className="font-display text-2xl leading-tight text-ink">
                 {title}
               </h2>
             ) : null}
@@ -106,7 +106,7 @@ const Modal = ({
         </div>
         <div className="max-h-[72vh] overflow-y-auto px-5 py-5 sm:px-7 sm:py-6">{children}</div>
         {footer ? (
-          <div className="flex flex-col-reverse gap-2.5 border-t border-blush-pink/40 bg-rose-mist/50 px-5 py-4 sm:flex-row sm:justify-end sm:px-7">
+          <div className="flex flex-col-reverse gap-2.5 border-t border-line bg-rose-mist/60 px-5 py-4 sm:flex-row sm:justify-end sm:px-7">
             {footer}
           </div>
         ) : null}

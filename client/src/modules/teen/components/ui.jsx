@@ -3,15 +3,15 @@ import { AlertCircle, ExternalLink, Loader2, Sparkles } from 'lucide-react';
 import { REVIEW_LABELS } from '../lib/labels';
 
 const variants = {
-  primary: 'bg-deep text-white hover:bg-rose shadow-soft',
-  secondary: 'bg-white text-deep border-2 border-blush hover:border-rose',
-  soft: 'bg-petal text-deep hover:bg-blush',
-  ghost: 'text-deep hover:bg-petal',
+  primary: 'bg-deep text-white hover:bg-[#A3134C]',
+  secondary: 'bg-white text-deep border border-blush hover:border-deep hover:bg-mist',
+  soft: 'bg-mist text-deep hover:bg-petal',
+  ghost: 'text-deep hover:bg-mist',
 };
-const sizes = { sm: 'px-3 py-1.5 text-sm', md: 'px-5 py-2.5', lg: 'px-7 py-3.5 text-lg' };
+const sizes = { sm: 'min-h-[36px] px-3 py-1.5 text-sm', md: 'min-h-[44px] px-5 py-2.5', lg: 'min-h-[52px] px-6 py-3 text-base' };
 
 const buttonClass = (variant = 'primary', size = 'md', className = '') =>
-  `inline-flex items-center justify-center gap-2 rounded-full font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${variants[variant]} ${sizes[size]} ${className}`;
+  `inline-flex items-center justify-center gap-2 rounded-lg font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${variants[variant]} ${sizes[size]} ${className}`;
 
 export function Button({ variant, size, className, ...props }) {
   return <button type="button" className={buttonClass(variant, size, className)} {...props} />;
@@ -30,8 +30,8 @@ export function PageHeader({ icon: Icon, title, subtitle, children }) {
     <header className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
       <div className="flex items-start gap-4">
         {Icon && (
-          <span className="grid size-14 shrink-0 place-items-center rounded-2xl bg-petal text-deep">
-            <Icon aria-hidden className="size-7" />
+          <span className="grid size-12 shrink-0 place-items-center rounded-xl border border-petal bg-mist text-deep">
+            <Icon aria-hidden className="size-6" />
           </span>
         )}
         <div>
@@ -45,7 +45,7 @@ export function PageHeader({ icon: Icon, title, subtitle, children }) {
 }
 
 export function Badge({ children, className = 'bg-petal text-deep' }) {
-  return <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-bold ${className}`}>{children}</span>;
+  return <span className={`inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-semibold ${className}`}>{children}</span>;
 }
 
 export function Loading({ label = 'Loading…' }) {
@@ -60,7 +60,7 @@ export function Loading({ label = 'Loading…' }) {
 export function ErrorMessage({ error, onRetry }) {
   if (!error) return null;
   return (
-    <div role="alert" className="flex flex-wrap items-center gap-3 rounded-2xl border-2 border-rose bg-petal p-4 font-semibold">
+    <div role="alert" className="flex flex-wrap items-center gap-3 rounded-xl border border-rose bg-mist p-4 font-medium">
       <AlertCircle aria-hidden className="size-5 shrink-0" />
       <span className="flex-1">{error.message || String(error)}</span>
       {onRetry && (
@@ -85,9 +85,9 @@ export function FieldErrors({ error }) {
 
 export function EmptyState({ icon: Icon = Sparkles, title, children }) {
   return (
-    <div className="flex flex-col items-center gap-2 rounded-2xl border-2 border-dashed border-blush p-8 text-center">
+    <div className="flex flex-col items-center gap-2 rounded-2xl border border-dashed border-blush bg-white p-8 text-center">
       <Icon aria-hidden className="size-8 text-glow" />
-      <p className="font-bold">{title}</p>
+      <p className="font-display text-xl text-ink">{title}</p>
       {children && <div className="text-sm text-muted">{children}</div>}
     </div>
   );
@@ -109,7 +109,7 @@ export function SourceList({ sources }) {
   if (!sources?.length) return null;
   return (
     <div>
-      <h3 className="text-sm font-display font-semibold text-deep-rose uppercase tracking-wide text-rose">Sources</h3>
+      <h3 className="eyebrow">Sources</h3>
       <ul className="mt-2 space-y-1 text-sm">
         {sources.map((s) => (
           <li key={s.url}>
@@ -130,8 +130,8 @@ export function SourceList({ sources }) {
 export function ProgressBar({ value, max = 100, label }) {
   const pct = Math.max(0, Math.min(100, Math.round((value / max) * 100)));
   return (
-    <div role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100} aria-label={label} className="h-3 w-full overflow-hidden rounded-full bg-petal">
-      <div className="h-full rounded-full bg-gradient-to-r from-glow to-deep transition-all" style={{ width: `${pct}%` }} />
+    <div role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100} aria-label={label} className="h-2 w-full overflow-hidden rounded-full bg-mist">
+      <div className="h-full rounded-full bg-deep transition-[width] duration-500" style={{ width: `${pct}%` }} />
     </div>
   );
 }

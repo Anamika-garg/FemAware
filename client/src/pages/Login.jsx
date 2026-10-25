@@ -68,7 +68,7 @@ const Login = () => {
     <AuthLayout>
       <div className="animate-fade-up">
         <p className="eyebrow">Welcome back</p>
-        <h1 className="mt-2 font-display text-4xl font-semibold tracking-tight text-deep-rose">
+        <h1 className="mt-3 font-display text-[2.5rem] leading-tight text-ink">
           Good to see you.
         </h1>
         <p className="mt-3 text-sm leading-relaxed text-muted">
@@ -141,30 +141,29 @@ const Login = () => {
           </Button>
         </form>
 
-        <div className="my-6 flex items-center gap-3">
-          <span className="h-px flex-1 bg-blush-pink/70" />
-          <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted">or</span>
-          <span className="h-px flex-1 bg-blush-pink/70" />
+        <div className="mb-3 mt-10 flex items-baseline justify-between gap-3 border-t border-line pt-6">
+          <p className="text-sm font-semibold text-ink">Try a demonstration account</p>
+          <p className="text-xs text-muted">Sample data, not real people</p>
         </div>
 
-        <div className="space-y-2.5">
+        <div className="divide-y divide-line rounded-xl border border-line">
           {[
             {
               role: 'teen',
               icon: Sprout,
-              title: 'Explore the teen demo',
+              title: 'Teen demo',
               description: 'Period calendar, symptom diary, lessons and quizzes',
             },
             {
               role: 'adult',
               icon: Sparkles,
-              title: 'Explore the adult demo',
-              description: '8 months of cycle and symptom data, instantly',
+              title: 'Adult demo',
+              description: 'Eight months of sample cycle and symptom data',
             },
             {
               role: 'senior',
               icon: HeartPulse,
-              title: 'Explore the senior care demo',
+              title: 'Senior care demo',
               description: 'Postmenopause check-ins, trends and a saved visit summary',
             },
           ].map((demo) => {
@@ -176,20 +175,20 @@ const Login = () => {
                 type="button"
                 onClick={() => handleDemo(demo.role)}
                 disabled={Boolean(demoLoading) || loading}
-                className="group flex w-full items-center gap-3 rounded-2xl border border-blush-pink bg-white p-3.5 text-left transition-all hover:border-pink-glow hover:shadow-soft disabled:cursor-not-allowed disabled:opacity-60"
+                className="group flex w-full items-center gap-3 p-3.5 text-left transition-colors first:rounded-t-xl last:rounded-b-xl hover:bg-rose-mist disabled:cursor-not-allowed disabled:opacity-60"
               >
-                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-soft-petal text-deep-rose">
-                  <Icon className="h-5 w-5" aria-hidden="true" />
+                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-rose-mist text-deep-rose">
+                  <Icon className="h-4 w-4" aria-hidden="true" />
                 </span>
                 <span className="min-w-0 flex-1">
-                  <span className="block text-sm font-bold text-deep-rose">
+                  <span className="block text-sm font-semibold text-ink">
                     {isLoading ? 'Opening your demo…' : demo.title}
                   </span>
-                  <span className="mt-0.5 block text-[11px] leading-relaxed text-muted">
+                  <span className="mt-0.5 block text-xs leading-relaxed text-muted">
                     {demo.description}
                   </span>
                 </span>
-                <ArrowRight className="h-4 w-4 shrink-0 text-pink-glow transition-transform group-hover:translate-x-0.5" />
+                <ArrowRight className="h-4 w-4 shrink-0 text-deep-rose transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
               </button>
             );
           })}
@@ -197,14 +196,11 @@ const Login = () => {
 
         <p className="mt-8 text-center text-sm text-muted">
           New to FemAware?{' '}
-          <Link to="/register" className="font-bold text-deep-rose underline decoration-blush-pink underline-offset-4 transition-colors hover:text-rose-pink">
+          <Link to="/register" className="link">
             Create your account
           </Link>
         </p>
 
-        <p className="mt-6 text-center text-[10px] leading-relaxed text-muted/80">
-          Sessions stay private to this device. FemAware does not sell health data.
-        </p>
       </div>
     </AuthLayout>
   );

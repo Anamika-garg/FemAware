@@ -5,8 +5,8 @@ const TONES = {
   pink: 'bg-blush-pink/80 text-deep-rose',
   glow: 'bg-pink-glow text-white',
   outline: 'border border-blush-pink bg-white/70 text-deep-rose',
-  calm: 'bg-[#E8F5EE] text-[#227054]',
-  warn: 'bg-[#FFF0E0] text-[#9A4E12]',
+  calm: 'bg-rose-mist text-deep-rose',
+  warn: 'bg-rose-mist text-deep-rose',
   neutral: 'bg-white/70 text-muted',
 };
 

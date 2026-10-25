@@ -30,7 +30,7 @@ const SeniorConfirmDialog = ({
           type="button"
           onClick={onConfirm}
           disabled={loading}
-          className="senior-button bg-deep-rose text-white hover:bg-[#9c124a] disabled:opacity-60"
+          className="senior-button bg-deep-rose text-white hover:bg-[#A3134C] disabled:opacity-60"
         >
           {loading ? 'Deleting…' : confirmLabel}
         </button>

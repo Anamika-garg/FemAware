@@ -29,6 +29,7 @@ import {
 import { getErrorMessage } from '../lib/api';
 import { addDays, formatDate, parseISO, todayISO } from '../lib/dates';
 import { isTeenStage } from '../lib/navItems';
+import { loadPreferences } from '../lib/preferences';
 import { cn } from '../lib/utils';
 
 const stageIcons = {
@@ -71,7 +72,16 @@ const STEPS_FOR_STAGE = {
 
 const GOALS_FOR_STAGE = { teen: TEEN_GOALS, adult: GOALS, senior: SENIOR_GOALS };
 
+// Choices made in the public "Explore your health" flow, if this browser has them.
+const startPreferences = (user) => {
+  if (user?.onboardingComplete) return null;
+  const saved = loadPreferences();
+  return saved && STEPS_FOR_STAGE[saved.stage] ? saved : null;
+};
+
 const initialStage = (user) => {
+  const saved = startPreferences(user);
+  if (saved) return saved.stage;
   if (isTeenStage(user?.lifeStage)) return 'teen';
   if (user?.lifeStage === 'senior') return 'senior';
   return 'adult';
@@ -82,12 +92,20 @@ const Onboarding = () => {
   const { addToast } = useToast();
   const navigate = useNavigate();
 
-  const [stepIndex, setStepIndex] = useState(0);
+  // Someone who already chose a stage in "Explore your health" starts on the next question.
+  const [fromStart] = useState(() => Boolean(startPreferences(user)));
+  const [stepIndex, setStepIndex] = useState(() => (startPreferences(user) ? 1 : 0));
   const [space, setSpace] = useState(() => initialStage(user));
   const [stages, setStages] = useState(
     user?.lifeStages?.length ? user.lifeStages : ['general']
   );
-  const [goals, setGoals] = useState(user?.goals || []);
+  const [goals, setGoals] = useState(() => {
+    if (user?.goals?.length) return user.goals;
+    const saved = startPreferences(user);
+    if (!saved) return [];
+    const options = GOALS_FOR_STAGE[saved.stage].map((goal) => goal.value);
+    return saved.topics.filter((topic) => options.includes(topic));
+  });
   const [age, setAge] = useState(user?.age || '');
   const [cycleLength, setCycleLength] = useState(
     user?.cycleProfile?.averageCycleLength || 28
@@ -225,9 +243,9 @@ const Onboarding = () => {
   };
 
   return (
-    <div className="min-h-screen bg-petal-radial">
-      <header className="mx-auto flex max-w-5xl items-center justify-between px-4 py-6 sm:px-6">
-        <Logo />
+    <div className="min-h-screen bg-canvas">
+      <header className="mx-auto flex max-w-5xl items-center justify-between px-4 py-5 sm:px-6">
+        <Logo compact />
         <Link
           to="/privacy"
           className="hidden items-center gap-1.5 text-xs font-semibold text-muted transition-colors hover:text-deep-rose sm:flex"
@@ -240,7 +258,7 @@ const Onboarding = () => {
       <main className="mx-auto w-full max-w-5xl px-4 pb-16 pt-2 sm:px-6">
         <div className="mb-8 text-center sm:mb-10">
           <p className="eyebrow">Welcome, {user?.name?.split(' ')[0] || 'friend'}</p>
-          <h1 className="mx-auto mt-2 max-w-2xl font-display text-3xl font-semibold leading-tight text-deep-rose sm:text-[2.6rem]">
+          <h1 className="mx-auto mt-3 max-w-2xl font-display text-[2.25rem] leading-tight text-ink sm:text-[2.75rem]">
             Let&apos;s shape your space around you.
           </h1>
           <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-muted">
@@ -248,30 +266,25 @@ const Onboarding = () => {
           </p>
         </div>
 
-        <ol className="mx-auto mb-7 flex max-w-2xl items-start justify-between" aria-label="Onboarding progress">
+        <ol
+          className="mx-auto mb-6 grid max-w-3xl gap-2"
+          style={{ gridTemplateColumns: `repeat(${steps.length}, minmax(0, 1fr))` }}
+          aria-label="Onboarding progress"
+        >
           {steps.map((item, index) => {
             const active = index === stepIndex;
-            const complete = index < stepIndex;
             return (
-              <li key={item.title} className="flex flex-1 flex-col items-center text-center">
-                <div className="flex w-full items-center">
-                  <span
-                    className={cn(
-                      'mx-auto flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold transition-colors',
-                      complete
-                        ? 'bg-pink-glow text-white'
-                        : active
-                          ? 'bg-deep-rose text-white'
-                          : 'bg-white text-muted ring-1 ring-blush-pink'
-                    )}
-                    aria-current={active ? 'step' : undefined}
-                  >
-                    {complete ? <Check className="h-4 w-4" aria-hidden="true" /> : index + 1}
-                  </span>
-                </div>
+              <li key={item.title} aria-current={active ? 'step' : undefined}>
                 <span
                   className={cn(
-                    'mt-2 hidden text-[10px] font-bold uppercase tracking-wide sm:block',
+                    'block h-1 rounded-full transition-colors duration-300',
+                    index <= stepIndex ? 'bg-deep-rose' : 'bg-soft-petal'
+                  )}
+                  aria-hidden="true"
+                />
+                <span
+                  className={cn(
+                    'mt-2 hidden text-xs font-medium sm:block',
                     active ? 'text-deep-rose' : 'text-muted'
                   )}
                 >
@@ -282,18 +295,31 @@ const Onboarding = () => {
           })}
         </ol>
 
-        <div className="mx-auto max-w-3xl overflow-hidden rounded-3xl border border-white/80 bg-white/95 shadow-card">
-          <div className="bg-gradient-to-r from-rose-mist via-soft-petal/60 to-rose-mist px-5 py-5 sm:px-8 sm:py-6">
-            <p className="eyebrow">
+        <div className="mx-auto max-w-3xl overflow-hidden rounded-2xl border border-line bg-white">
+          <div className="border-b border-line px-5 py-6 sm:px-8 sm:py-7">
+            <p className="text-sm font-medium text-muted">
               Step {stepIndex + 1} of {steps.length}
             </p>
-            <h2 className="mt-1 font-display text-2xl font-semibold text-deep-rose">
+            <h2 className="mt-1 font-display text-[1.75rem] leading-tight text-ink">
               {steps[stepIndex].heading}
             </h2>
             <p className="mt-1.5 text-sm leading-relaxed text-muted">{steps[stepIndex].caption}</p>
           </div>
 
           <div className="px-5 py-6 sm:px-8 sm:py-8">
+            {fromStart && stepIndex > 0 && step !== 'space' ? (
+              <p className="mb-6 flex flex-wrap items-center gap-x-2 gap-y-1 rounded-lg bg-rose-mist px-4 py-3 text-sm text-ink">
+                <Check className="h-4 w-4 text-deep-rose" aria-hidden="true" />
+                Setting up your <span className="font-semibold">{spaceDetails.label.toLowerCase()}</span>, as you chose earlier.
+                <button
+                  type="button"
+                  onClick={() => setStepIndex(0)}
+                  className="font-semibold text-deep-rose underline underline-offset-2"
+                >
+                  Change
+                </button>
+              </p>
+            ) : null}
             {error ? (
               <div
                 className="mb-5 flex items-start gap-2.5 rounded-xl border border-blush-pink bg-rose-mist p-3.5 text-sm text-deep-rose"
@@ -319,20 +345,20 @@ const Onboarding = () => {
                       className={cn(
                         'relative flex flex-col items-start rounded-2xl border p-4 text-left transition-all sm:p-5',
                         selected
-                          ? 'border-pink-glow bg-soft-petal/70 shadow-soft'
-                          : 'border-blush-pink/70 bg-white hover:border-pink-glow/60 hover:bg-rose-mist/60'
+                          ? 'border-deep-rose bg-rose-mist ring-1 ring-deep-rose'
+                          : 'border-line bg-white hover:border-blush-pink hover:bg-rose-mist/50'
                       )}
                     >
                       <span
                         className={cn(
                           'grid h-10 w-10 place-items-center rounded-xl transition-colors',
-                          selected ? 'bg-pink-glow text-white' : 'bg-soft-petal text-deep-rose'
+                          selected ? 'bg-deep-rose text-white' : 'bg-rose-mist text-deep-rose'
                         )}
                       >
                         <Icon className="h-5 w-5" aria-hidden="true" />
                       </span>
-                      <span className="mt-3 text-sm font-bold text-deep-rose">{option.label}</span>
-                      <span className="text-[11px] font-semibold uppercase tracking-wide text-rose-pink">
+                      <span className="mt-3 text-base font-semibold text-ink">{option.label}</span>
+                      <span className="text-xs font-medium text-deep-rose">
                         {option.ages}
                       </span>
                       <span className="mt-1.5 text-xs leading-relaxed text-muted">{option.description}</span>
@@ -356,19 +382,19 @@ const Onboarding = () => {
                       className={cn(
                         'group relative flex flex-col items-start rounded-2xl border p-4 text-left transition-all sm:p-5',
                         selected
-                          ? 'border-pink-glow bg-soft-petal/70 shadow-soft'
-                          : 'border-blush-pink/70 bg-white hover:border-pink-glow/60 hover:bg-rose-mist/60'
+                          ? 'border-deep-rose bg-rose-mist ring-1 ring-deep-rose'
+                          : 'border-line bg-white hover:border-blush-pink hover:bg-rose-mist/50'
                       )}
                     >
                       <span
                         className={cn(
                           'grid h-10 w-10 place-items-center rounded-xl transition-colors',
-                          selected ? 'bg-pink-glow text-white' : 'bg-soft-petal text-deep-rose'
+                          selected ? 'bg-deep-rose text-white' : 'bg-rose-mist text-deep-rose'
                         )}
                       >
                         <Icon className="h-5 w-5" aria-hidden="true" />
                       </span>
-                      <span className="mt-3 text-sm font-bold text-deep-rose">{stage.label}</span>
+                      <span className="mt-3 text-base font-semibold text-ink">{stage.label}</span>
                       <span className="mt-1 text-xs leading-relaxed text-muted">
                         {stage.description}
                       </span>
@@ -376,7 +402,7 @@ const Onboarding = () => {
                         className={cn(
                           'absolute right-3.5 top-3.5 grid h-5 w-5 place-items-center rounded-full border transition-colors',
                           selected
-                            ? 'border-pink-glow bg-pink-glow text-white'
+                            ? 'border-deep-rose bg-deep-rose text-white'
                             : 'border-blush-pink bg-white text-transparent'
                         )}
                         aria-hidden="true"
@@ -410,11 +436,11 @@ const Onboarding = () => {
                 </div>
                 <div className="mt-7 grid gap-4 sm:grid-cols-[1fr_200px]">
                   <div className="rounded-2xl bg-rose-mist p-4">
-                    <p className="flex items-center gap-2 text-xs font-bold text-deep-rose">
+                    <p className="flex items-center gap-2 text-sm font-semibold text-ink">
                       <Sprout className="h-4 w-4 text-pink-glow" aria-hidden="true" />
                       Why we ask
                     </p>
-                    <p className="mt-1.5 text-xs leading-relaxed text-muted">
+                    <p className="mt-1.5 text-sm leading-relaxed text-muted">
                       {space === 'teen'
                         ? 'Your goals decide which lessons and tools we show first. You can change them any time.'
                         : 'Your goals shape the prompts you receive — from preparing for a gynecology visit to understanding later-life changes. You can update them any time.'}
@@ -481,7 +507,7 @@ const Onboarding = () => {
                 <div className="rounded-2xl border border-blush-pink/70 bg-rose-mist/70 p-4 sm:p-5">
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <div>
-                      <p className="text-sm font-bold text-deep-rose">When did your last period start?</p>
+                      <p className="text-sm font-semibold text-ink">When did your last period start?</p>
                       <p className="mt-1 text-xs text-muted">
                         Optional — but it unlocks today&apos;s phase and predictions.
                       </p>
@@ -494,7 +520,7 @@ const Onboarding = () => {
                           setNotSure(event.target.checked);
                           if (event.target.checked) setLastPeriod('');
                         }}
-                        className="h-4 w-4 rounded border-blush-pink accent-pink-glow"
+                        className="h-4 w-4 rounded border-blush-pink accent-deep-rose"
                       />
                       I&apos;m not sure
                     </label>
@@ -516,31 +542,31 @@ const Onboarding = () => {
                 </div>
 
                 {preview ? (
-                  <div className="rounded-2xl border border-pink-glow/25 bg-gradient-to-br from-soft-petal/80 to-white p-4 sm:p-5">
-                    <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-deep-rose">
-                      <CalendarDays className="h-4 w-4" aria-hidden="true" />
-                      A first prediction
+                  <div className="rounded-2xl border border-pink-glow/25 bg-rose-mist p-4 sm:p-5">
+                    <p className="flex items-center gap-2 text-sm font-semibold text-ink">
+                      <CalendarDays className="h-4 w-4 text-deep-rose" aria-hidden="true" />
+                      A first estimate
                     </p>
                     <div className="mt-3 grid gap-3 sm:grid-cols-2">
                       <div>
-                        <p className="text-[10px] font-bold uppercase tracking-wide text-muted">Next period</p>
-                        <p className="text-sm font-bold text-deep-rose">{preview.next}</p>
+                        <p className="text-xs font-semibold text-muted">Next period</p>
+                        <p className="text-sm font-semibold text-deep-rose">{preview.next}</p>
                       </div>
                       <div>
-                        <p className="text-[10px] font-bold uppercase tracking-wide text-muted">Estimated fertile window</p>
-                        <p className="text-sm font-bold text-deep-rose">
+                        <p className="text-xs font-semibold text-muted">Estimated fertile window</p>
+                        <p className="text-sm font-semibold text-deep-rose">
                           {preview.fertileStart} – {preview.fertileEnd}
                         </p>
                       </div>
                     </div>
-                    <p className="mt-3 text-[10px] leading-relaxed text-muted">
+                    <p className="mt-3 text-xs leading-relaxed text-muted">
                       Predictions are estimates based on averages, not a contraceptive method.
                     </p>
                   </div>
                 ) : null}
 
                 {selectedStageDetails.some((item) => item.value === 'pcos') ? (
-                  <p className="rounded-xl bg-white p-3 text-[11px] leading-relaxed text-muted ring-1 ring-blush-pink/60">
+                  <p className="rounded-xl bg-white p-3 text-xs leading-relaxed text-muted ring-1 ring-blush-pink/60">
                     You selected PCOS awareness. FemAware can help you collect patterns for a
                     clinician, but it does not diagnose PCOS.
                   </p>
@@ -549,7 +575,7 @@ const Onboarding = () => {
             ) : null}
           </div>
 
-          <div className="flex flex-col-reverse items-stretch justify-between gap-3 border-t border-blush-pink/40 bg-rose-mist/50 px-5 py-4 sm:flex-row sm:items-center sm:px-8">
+          <div className="flex flex-col-reverse items-stretch justify-between gap-3 border-t border-line bg-rose-mist/50 px-5 py-4 sm:flex-row sm:items-center sm:px-8">
             <Button
               variant="ghost"
               onClick={back}
@@ -571,7 +597,7 @@ const Onboarding = () => {
           </div>
         </div>
 
-        <p className="mx-auto mt-6 flex max-w-3xl items-start justify-center gap-2 text-center text-[10px] leading-relaxed text-muted">
+        <p className="mx-auto mt-6 flex max-w-3xl items-start justify-center gap-2 text-center text-xs leading-relaxed text-muted">
           <Lock className="mt-0.5 h-3 w-3 shrink-0" aria-hidden="true" />
           Your answers are used only to personalise your experience. You can export or delete them at
           any time from Privacy &amp; data.

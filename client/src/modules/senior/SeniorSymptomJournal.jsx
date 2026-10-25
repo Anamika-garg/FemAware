@@ -66,7 +66,7 @@ const SectionCard = ({ icon: Icon, title, description, children, id }) => (
         <Icon className="h-5 w-5" aria-hidden="true" />
       </span>
       <div>
-        <h3 id={id} className="font-display text-lg font-semibold text-deep-rose">
+        <h3 id={id} className="font-display text-lg text-ink">
           {title}
         </h3>
         {description ? <p className="mt-0.5 text-sm leading-relaxed text-muted">{description}</p> : null}
@@ -78,7 +78,7 @@ const SectionCard = ({ icon: Icon, title, description, children, id }) => (
 
 const ChoiceScale = ({ legend, hint, value, onChange, options = SENIOR_LEVELS, columns = 4 }) => (
   <fieldset>
-    <legend className="text-base font-bold text-ink">{legend}</legend>
+    <legend className="text-base font-semibold text-ink">{legend}</legend>
     {hint ? <p className="mt-0.5 text-sm text-muted">{hint}</p> : null}
     <div
       className={cn('mt-2.5 grid gap-2', columns === 2 ? 'grid-cols-2' : 'grid-cols-2 sm:grid-cols-4')}
@@ -109,7 +109,7 @@ const RatingScale = ({ field, legend, hint, value, onChange }) => {
   const labels = RATING_LABELS[field] || {};
   return (
     <fieldset>
-      <legend className="text-base font-bold text-ink">{legend}</legend>
+      <legend className="text-base font-semibold text-ink">{legend}</legend>
       {hint ? <p className="mt-0.5 text-sm text-muted">{hint}</p> : null}
       <div className="mt-2.5 grid grid-cols-5 gap-1.5 sm:gap-2" role="radiogroup" aria-label={legend}>
         {[1, 2, 3, 4, 5].map((rating) => {
@@ -129,8 +129,8 @@ const RatingScale = ({ field, legend, hint, value, onChange }) => {
                   : 'border-blush-pink bg-white text-deep-rose hover:border-pink-glow hover:bg-soft-petal/60'
               )}
             >
-              <span className="text-lg font-bold leading-none">{rating}</span>
-              <span className="text-center text-[10px] font-semibold leading-tight sm:text-xs">
+              <span className="text-lg font-semibold leading-none">{rating}</span>
+              <span className="text-center text-xs font-semibold leading-tight sm:text-xs">
                 {labels[rating] || ''}
               </span>
             </button>
@@ -361,12 +361,12 @@ const SeniorSymptomJournal = () => {
       />
 
       <div className="flex flex-wrap items-center gap-2">
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-white/80 px-3 py-1.5 text-sm font-bold text-deep-rose">
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-white/80 px-3 py-1.5 text-sm font-semibold text-deep-rose">
           <CalendarDays className="h-4 w-4" aria-hidden="true" />
           {formatLongDate(today)}
         </span>
         {loggedToday ? (
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-soft-petal px-3 py-1.5 text-sm font-bold text-deep-rose">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-soft-petal px-3 py-1.5 text-sm font-semibold text-deep-rose">
             <Check className="h-4 w-4" aria-hidden="true" />
             Today’s check-in is saved
           </span>
@@ -400,7 +400,7 @@ const SeniorSymptomJournal = () => {
           </div>
 
           <div>
-            <label htmlFor="senior-journal-date" className="text-base font-bold text-ink">
+            <label htmlFor="senior-journal-date" className="text-base font-semibold text-ink">
               Date
             </label>
             <p className="mt-0.5 text-sm text-muted">
@@ -441,7 +441,7 @@ const SeniorSymptomJournal = () => {
               onChange={(value) => set('sleepQuality', value)}
             />
             <div>
-              <label htmlFor="senior-sleep-hours" className="text-base font-bold text-ink">
+              <label htmlFor="senior-sleep-hours" className="text-base font-semibold text-ink">
                 Hours slept <span className="font-medium text-muted">(optional)</span>
               </label>
               <input
@@ -478,7 +478,7 @@ const SeniorSymptomJournal = () => {
             description="Hot flashes can be brief or linger. Recording frequency helps spot patterns."
           >
             <div>
-              <label htmlFor="senior-hot-flash-count" className="text-base font-bold text-ink">
+              <label htmlFor="senior-hot-flash-count" className="text-base font-semibold text-ink">
                 How many hot flashes did you notice today?
               </label>
               <input
@@ -542,7 +542,7 @@ const SeniorSymptomJournal = () => {
               onChange={(value) => set('boneDiscomfort', value)}
             />
             <div>
-              <label htmlFor="senior-mobility-notes" className="text-base font-bold text-ink">
+              <label htmlFor="senior-mobility-notes" className="text-base font-semibold text-ink">
                 Mobility notes <span className="font-medium text-muted">(optional)</span>
               </label>
               <p className="mt-0.5 text-sm text-muted">
@@ -586,7 +586,7 @@ const SeniorSymptomJournal = () => {
             />
 
             <fieldset>
-              <legend className="text-base font-bold text-ink">Words that fit today</legend>
+              <legend className="text-base font-semibold text-ink">Words that fit today</legend>
               <p className="mt-0.5 text-sm text-muted">Choose any that feel true. You can skip this.</p>
               <div className="mt-2.5 flex flex-wrap gap-2">
                 {SENIOR_MOOD_OPTIONS.map((mood) => {
@@ -611,7 +611,7 @@ const SeniorSymptomJournal = () => {
             </fieldset>
 
             <div>
-              <label htmlFor="senior-memory-notes" className="text-base font-bold text-ink">
+              <label htmlFor="senior-memory-notes" className="text-base font-semibold text-ink">
                 Memory notes <span className="font-medium text-muted">(optional)</span>
               </label>
               <textarea
@@ -639,7 +639,7 @@ const SeniorSymptomJournal = () => {
                 className="mt-0.5 h-6 w-6 shrink-0 rounded border-2 border-blush-pink text-deep-rose focus:ring-4 focus:ring-pink-glow/30"
               />
               <span>
-                <span className="block text-base font-bold text-deep-rose">
+                <span className="block text-base font-semibold text-deep-rose">
                   I noticed vaginal bleeding after menopause
                 </span>
                 <span className="mt-0.5 block text-sm leading-relaxed text-muted">
@@ -649,7 +649,7 @@ const SeniorSymptomJournal = () => {
               </span>
             </label>
             {form.postmenopausalBleeding ? (
-              <p className="mt-3 flex items-start gap-2 rounded-xl bg-[#FFF0E0] px-3 py-2.5 text-sm font-semibold text-[#8A4510]">
+              <p className="mt-3 flex items-start gap-2 rounded-xl bg-rose-mist px-3 py-2.5 text-sm font-semibold text-deep-rose">
                 <ShieldAlert className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
                 Please contact your clinician soon. If bleeding is heavy or you feel unwell, seek
                 same-day care.
@@ -658,7 +658,7 @@ const SeniorSymptomJournal = () => {
           </div>
 
           <div>
-            <label htmlFor="senior-general-notes" className="text-base font-bold text-ink">
+            <label htmlFor="senior-general-notes" className="text-base font-semibold text-ink">
               Anything else you would like to remember?{' '}
               <span className="font-medium text-muted">(optional)</span>
             </label>
@@ -686,7 +686,7 @@ const SeniorSymptomJournal = () => {
             <button
               type="submit"
               disabled={saving}
-              className="senior-button bg-deep-rose text-white hover:bg-[#a81450]"
+              className="senior-button bg-deep-rose text-white hover:bg-[#A3134C]"
             >
               <Save className="h-5 w-5" aria-hidden="true" />
               {saving ? 'Saving…' : editingId ? 'Save changes' : 'Save today’s check-in'}
@@ -709,7 +709,7 @@ const SeniorSymptomJournal = () => {
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <label htmlFor="senior-history-date" className="text-sm font-bold text-deep-rose">
+            <label htmlFor="senior-history-date" className="text-sm font-semibold text-deep-rose">
               Find a date
             </label>
             <input
@@ -727,7 +727,7 @@ const SeniorSymptomJournal = () => {
               <button
                 type="button"
                 onClick={() => setExactDate('')}
-                className="min-h-[48px] rounded-xl px-3 text-sm font-bold text-deep-rose hover:bg-rose-mist"
+                className="min-h-[48px] rounded-xl px-3 text-sm font-semibold text-deep-rose hover:bg-rose-mist"
               >
                 Clear
               </button>
@@ -771,12 +771,12 @@ const SeniorSymptomJournal = () => {
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div className="min-w-0">
                       <div className="flex flex-wrap items-center gap-2">
-                        <p className="text-base font-bold text-deep-rose">{relativeDay(log.date)}</p>
+                        <p className="text-base font-semibold text-deep-rose">{relativeDay(log.date)}</p>
                         <span className="text-sm font-semibold text-muted">
                           {formatDate(log.date, 'EEEE, d MMMM yyyy')}
                         </span>
                         {isEditing ? (
-                          <span className="rounded-full bg-deep-rose px-2.5 py-0.5 text-xs font-bold text-white">
+                          <span className="rounded-full bg-deep-rose px-2.5 py-0.5 text-xs font-semibold text-white">
                             Editing
                           </span>
                         ) : null}
@@ -785,7 +785,7 @@ const SeniorSymptomJournal = () => {
                         {notes.length ? notes.join(' · ') : 'No symptoms recorded — a calm day is still a useful record.'}
                       </p>
                       {log.senior?.postmenopausalBleeding ? (
-                        <p className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-[#FFF0E0] px-2.5 py-1 text-xs font-bold text-[#8A4510]">
+                        <p className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-rose-mist px-2.5 py-1 text-xs font-semibold text-deep-rose">
                           <ShieldAlert className="h-3.5 w-3.5" aria-hidden="true" />
                           Bleeding reported
                         </p>

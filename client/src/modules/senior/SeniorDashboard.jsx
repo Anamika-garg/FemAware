@@ -40,22 +40,22 @@ const greetingForHour = (hour) => {
 };
 
 const Metric = ({ icon: Icon, label, value, helper, tone = 'rose' }) => (
-  <div className="rounded-3xl border-2 border-white/90 bg-white/95 p-4 shadow-soft sm:p-5">
+  <div className="rounded-2xl border border-line bg-white p-5">
     <span
       className={cn(
         'grid h-11 w-11 place-items-center rounded-2xl',
-        tone === 'deep' && 'bg-deep-rose text-white',
-        tone === 'glow' && 'bg-pink-glow text-white',
-        tone === 'soft' && 'bg-soft-petal text-deep-rose',
-        tone === 'rose' && 'bg-blush-pink/70 text-deep-rose'
+        tone === 'deep' && 'bg-rose-mist text-deep-rose',
+        tone === 'glow' && 'bg-rose-mist text-deep-rose',
+        tone === 'soft' && 'bg-rose-mist text-deep-rose',
+        tone === 'rose' && 'bg-rose-mist text-deep-rose'
       )}
     >
       <Icon className="h-5 w-5" aria-hidden="true" />
     </span>
-    <p className="mt-4 text-[11px] font-bold uppercase tracking-[0.14em] text-deep-rose/60">
+    <p className="mt-4 text-sm font-medium text-muted">
       {label}
     </p>
-    <p className="mt-1 font-display text-xl font-semibold leading-tight text-deep-rose">{value}</p>
+    <p className="mt-1 font-display text-2xl leading-tight text-ink">{value}</p>
     <p className="mt-1.5 text-sm leading-relaxed text-muted">{helper}</p>
   </div>
 );
@@ -64,22 +64,22 @@ const QuickAction = ({ to, icon: Icon, title, description, primary = false }) =>
   <Link
     to={to}
     className={cn(
-      'group flex min-h-[112px] items-center gap-4 rounded-3xl border-2 p-5 transition-all hover:-translate-y-0.5 hover:shadow-card',
+      'group flex min-h-[112px] items-center gap-4 rounded-2xl border-2 p-5 transition-colors',
       primary
-        ? 'border-deep-rose bg-deep-rose text-white shadow-card hover:bg-[#a81450]'
-        : 'border-blush-pink bg-white text-deep-rose hover:border-pink-glow'
+        ? 'border-deep-rose bg-deep-rose text-white hover:bg-[#A3134C]'
+        : 'border-line bg-white text-ink hover:border-deep-rose hover:bg-rose-mist'
     )}
   >
     <span
       className={cn(
         'grid h-14 w-14 shrink-0 place-items-center rounded-2xl',
-        primary ? 'bg-white/15 text-white' : 'bg-soft-petal text-deep-rose'
+        primary ? 'bg-white/15 text-white' : 'bg-rose-mist text-deep-rose'
       )}
     >
       <Icon className="h-6 w-6" aria-hidden="true" />
     </span>
     <span className="min-w-0 flex-1">
-      <span className="block text-lg font-bold leading-snug">{title}</span>
+      <span className="block text-lg font-semibold leading-snug">{title}</span>
       <span
         className={cn(
           'mt-1 block text-sm leading-relaxed',
@@ -92,7 +92,7 @@ const QuickAction = ({ to, icon: Icon, title, description, primary = false }) =>
     <ArrowRight
       className={cn(
         'h-5 w-5 shrink-0 transition-transform group-hover:translate-x-1',
-        primary ? 'text-white' : 'text-pink-glow'
+        primary ? 'text-white' : 'text-deep-rose'
       )}
       aria-hidden="true"
     />
@@ -194,40 +194,32 @@ const SeniorDashboard = () => {
   return (
     <SeniorPageShell>
       {/* Warm greeting */}
-      <section className="relative overflow-hidden rounded-3xl border-2 border-white/90 bg-hero-gradient p-6 shadow-soft sm:p-8">
-        <div className="pointer-events-none absolute -right-14 -top-24 h-72 w-72 rounded-full bg-white/40 blur-2xl" />
-        <div className="relative">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-white/70 px-3 py-1.5 text-xs font-bold text-deep-rose">
-              <Sparkles className="h-4 w-4" aria-hidden="true" />
-              Postmenopause care
-            </span>
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-white/70 px-3 py-1.5 text-xs font-bold text-deep-rose">
-              <HeartPulse className="h-4 w-4" aria-hidden="true" />
-              Wellness check-in
-            </span>
-            <span className="text-xs font-semibold text-deep-rose/70">
+      <section className="rounded-2xl border border-line bg-white p-6 sm:p-10">
+        <div>
+          <p className="text-sm font-semibold text-deep-rose">
+            Care &amp; wellbeing
+            <span className="ml-2 font-medium normal-case tracking-normal text-muted">
               {formatLongDate(summary.today)}
             </span>
-          </div>
+          </p>
 
-          <h1 className="mt-4 max-w-3xl font-display text-[2rem] font-semibold leading-tight tracking-tight text-deep-rose sm:text-[2.6rem]">
+          <h1 className="mt-4 max-w-3xl font-display text-[2.5rem] leading-[1.08] text-ink sm:text-[3rem]">
             {greetingForHour(new Date().getHours())}, {firstName}.
           </h1>
-          <p className="mt-3 max-w-2xl text-base leading-relaxed text-deep-rose/80 sm:text-lg">
+          <p className="mt-4 max-w-2xl text-lg leading-relaxed text-muted">
             {loggedToday
               ? 'Your check-in for today is saved. You can add more detail at any time.'
               : 'How are you feeling today? A short check-in helps you notice patterns and prepares you for your next visit.'}
           </p>
 
-          <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-            <Link to="/symptoms" className="senior-button bg-deep-rose text-white hover:bg-[#a81450]">
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <Link to="/symptoms" className="senior-button bg-deep-rose text-white hover:bg-[#A3134C]">
               <ClipboardPlus className="h-5 w-5" aria-hidden="true" />
               {loggedToday ? 'Update today’s check-in' : 'Log today’s symptoms'}
             </Link>
             <Link
               to="/doctor-report"
-              className="senior-button border-2 border-blush-pink bg-white/85 text-deep-rose hover:bg-white"
+              className="senior-button border-2 border-blush-pink bg-white text-deep-rose hover:border-deep-rose hover:bg-rose-mist"
             >
               <Stethoscope className="h-5 w-5" aria-hidden="true" />
               Prepare for a doctor visit
@@ -334,7 +326,7 @@ const SeniorDashboard = () => {
             </div>
             <Link
               to="/symptoms"
-              className="inline-flex min-h-[48px] items-center gap-1.5 rounded-xl px-3 text-sm font-bold text-deep-rose hover:bg-rose-mist"
+              className="inline-flex min-h-[48px] items-center gap-1.5 rounded-xl px-3 text-sm font-semibold text-deep-rose hover:bg-rose-mist"
             >
               Open journal
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
@@ -360,17 +352,17 @@ const SeniorDashboard = () => {
 
                 return (
                   <li key={log._id} className="flex items-start gap-3 py-4 first:pt-2 last:pb-0">
-                    <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-soft-petal text-sm font-bold text-deep-rose">
+                    <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-soft-petal text-sm font-semibold text-deep-rose">
                       {formatDate(log.date, 'd')}
                       <span className="sr-only">{formatDate(log.date, 'MMMM')}</span>
                     </span>
                     <div className="min-w-0 flex-1">
-                      <p className="text-base font-bold text-ink">{relativeDay(log.date)}</p>
+                      <p className="text-base font-semibold text-ink">{relativeDay(log.date)}</p>
                       <p className="mt-1 text-sm leading-relaxed text-muted">
                         {notes.length ? notes.join(' · ') : 'No symptoms noted — that is useful too.'}
                       </p>
                       {details.postmenopausalBleeding ? (
-                        <p className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-[#FFF0E0] px-2.5 py-1 text-xs font-bold text-[#8A4510]">
+                        <p className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-rose-mist px-2.5 py-1 text-xs font-semibold text-deep-rose">
                           <ShieldAlert className="h-3.5 w-3.5" aria-hidden="true" />
                           Bleeding reported — mention this to your clinician
                         </p>
@@ -390,11 +382,11 @@ const SeniorDashboard = () => {
           ) : (
             <div className="mt-4 rounded-2xl border-2 border-dashed border-blush-pink bg-rose-mist/60 p-6 text-center">
               <ClipboardPlus className="mx-auto h-9 w-9 text-pink-glow" aria-hidden="true" />
-              <p className="mt-3 text-base font-bold text-deep-rose">Your journal is a blank page</p>
+              <p className="mt-3 text-base font-semibold text-deep-rose">Your journal is a blank page</p>
               <p className="mx-auto mt-1 max-w-sm text-sm leading-relaxed text-muted">
                 Log how you feel today — even “nothing today” is a helpful record.
               </p>
-              <Link to="/symptoms" className="senior-button mt-4 bg-deep-rose text-white hover:bg-[#a81450]">
+              <Link to="/symptoms" className="senior-button mt-4 bg-deep-rose text-white hover:bg-[#A3134C]">
                 Start today’s check-in
               </Link>
             </div>
@@ -403,23 +395,21 @@ const SeniorDashboard = () => {
 
         <div className="space-y-4">
           {/* Care note */}
-          <section className="rounded-3xl bg-gradient-to-br from-deep-rose to-[#8f1446] p-6 text-white shadow-card">
-            <span className="grid h-11 w-11 place-items-center rounded-2xl bg-white/15">
+          <section className="rounded-2xl border border-soft-petal bg-rose-mist p-6">
+            <p className="flex items-center gap-2 text-sm font-semibold text-deep-rose">
               <Sun className="h-5 w-5" aria-hidden="true" />
-            </span>
-            <p className="mt-4 text-xs font-bold uppercase tracking-[0.16em] text-blush-pink">
               A note for today
             </p>
-            <h2 className="mt-2 font-display text-xl font-semibold leading-snug">
+            <h2 className="mt-3 font-display text-2xl leading-snug text-ink">
               Small, steady habits matter more than perfect ones.
             </h2>
-            <p className="mt-2 text-sm leading-relaxed text-white/85">
+            <p className="mt-2 text-base leading-relaxed text-muted">
               A short walk, a glass of water, or a few minutes of gentle stretching all count.
               Your notes help your clinician see the whole picture.
             </p>
             <Link
               to="/resources"
-              className="mt-4 inline-flex min-h-[48px] items-center gap-1.5 text-sm font-bold text-white underline decoration-white/40 underline-offset-4 hover:decoration-white"
+              className="link mt-3 inline-flex min-h-[48px] items-center gap-1.5 text-base"
             >
               Explore the learning library
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
@@ -432,11 +422,11 @@ const SeniorDashboard = () => {
               <span className="grid h-11 w-11 place-items-center rounded-2xl bg-soft-petal text-deep-rose">
                 <FileText className="h-5 w-5" aria-hidden="true" />
               </span>
-              <span className="rounded-full bg-blush-pink/70 px-3 py-1 text-xs font-bold text-deep-rose">
+              <span className="rounded-full bg-blush-pink/70 px-3 py-1 text-xs font-semibold text-deep-rose">
                 Visit prep
               </span>
             </div>
-            <h2 className="mt-4 font-display text-lg font-semibold text-deep-rose">
+            <h2 className="mt-4 font-display text-lg text-ink">
               Make your next appointment count.
             </h2>
             <p className="mt-2 text-sm leading-relaxed text-muted">
@@ -450,8 +440,8 @@ const SeniorDashboard = () => {
                 { label: 'Sleep avg', value: summary.sleepAverage ?? '—' },
               ].map((item) => (
                 <div key={item.label} className="rounded-2xl bg-rose-mist/80 px-2 py-3">
-                  <p className="text-lg font-bold text-deep-rose">{item.value}</p>
-                  <p className="text-[10px] font-bold uppercase tracking-wide text-muted">
+                  <p className="text-lg font-semibold text-deep-rose">{item.value}</p>
+                  <p className="text-xs font-semibold text-muted">
                     {item.label}
                   </p>
                 </div>
@@ -470,7 +460,7 @@ const SeniorDashboard = () => {
           <section className="rounded-3xl border-2 border-blush-pink/70 bg-soft-petal/40 p-5">
             <div className="flex items-center gap-2 text-deep-rose">
               <Lock className="h-4 w-4" aria-hidden="true" />
-              <p className="text-xs font-bold uppercase tracking-wide">Private by design</p>
+              <p className="text-xs font-semibold">Private by design</p>
             </div>
             <p className="mt-2 text-sm leading-relaxed text-muted">
               Your health information belongs to you. Export or permanently delete it whenever you
@@ -478,7 +468,7 @@ const SeniorDashboard = () => {
             </p>
             <Link
               to="/privacy"
-              className="mt-2 inline-flex min-h-[48px] items-center gap-1 text-sm font-bold text-deep-rose hover:text-rose-pink"
+              className="mt-2 inline-flex min-h-[48px] items-center gap-1 text-sm font-semibold text-deep-rose hover:text-rose-pink"
             >
               Review privacy controls
               <ChevronRight className="h-4 w-4" aria-hidden="true" />
@@ -498,10 +488,10 @@ const SeniorDashboard = () => {
           </span>
           <div>
             <div className="flex flex-wrap items-center gap-2">
-              <h2 id="senior-warning-title" className="font-display text-xl font-semibold text-deep-rose">
+              <h2 id="senior-warning-title" className="font-display text-xl text-ink">
                 When to speak with your clinician
               </h2>
-              <span className="rounded-full bg-blush-pink/70 px-3 py-1 text-xs font-bold text-deep-rose">
+              <span className="rounded-full bg-blush-pink/70 px-3 py-1 text-xs font-semibold text-deep-rose">
                 Guidance, not diagnosis
               </span>
             </div>
@@ -529,7 +519,7 @@ const SeniorDashboard = () => {
             </div>
           </div>
           <div className="flex flex-col gap-2">
-            <Link to="/doctor-report" className="senior-button bg-deep-rose text-white hover:bg-[#a81450]">
+            <Link to="/doctor-report" className="senior-button bg-deep-rose text-white hover:bg-[#A3134C]">
               Prepare for a visit
             </Link>
             <Link
@@ -553,7 +543,7 @@ const SeniorDashboard = () => {
       {summary.wellbeingAverage !== null ? (
         <p className="text-center text-sm text-muted">
           Your emotional wellbeing averaged{' '}
-          <span className="font-bold text-deep-rose">{summary.wellbeingAverage} out of 5</span> this
+          <span className="font-semibold text-deep-rose">{summary.wellbeingAverage} out of 5</span> this
           week.
         </p>
       ) : null}

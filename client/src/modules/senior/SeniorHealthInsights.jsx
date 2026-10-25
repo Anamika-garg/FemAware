@@ -79,7 +79,7 @@ const buildWeeklyHotFlashes = (logs, days) => {
 };
 
 const SummaryCard = ({ icon: Icon, title, children, tone = 'rose' }) => (
-  <div className="rounded-3xl border-2 border-white/90 bg-white/95 p-5 shadow-soft">
+  <div className="rounded-3xl border border-line bg-white p-5 shadow-soft">
     <div className="flex items-center gap-3">
       <span
         className={cn(
@@ -89,7 +89,7 @@ const SummaryCard = ({ icon: Icon, title, children, tone = 'rose' }) => (
       >
         <Icon className="h-5 w-5" aria-hidden="true" />
       </span>
-      <h3 className="font-display text-lg font-semibold text-deep-rose">{title}</h3>
+      <h3 className="font-display text-lg text-ink">{title}</h3>
     </div>
     <div className="mt-3 text-sm leading-relaxed text-ink">{children}</div>
   </div>
@@ -247,15 +247,15 @@ const SeniorHealthInsights = () => {
       </div>
 
       {insight.bleedingInRange > 0 ? (
-        <div className="flex flex-col gap-3 rounded-3xl border-2 border-[#E9B27A] bg-[#FFF7EC] p-5 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-3 rounded-3xl border-2 border-deep-rose/40 bg-rose-mist p-5 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-start gap-3">
-            <ShieldAlert className="mt-0.5 h-6 w-6 shrink-0 text-[#8A4510]" aria-hidden="true" />
+            <ShieldAlert className="mt-0.5 h-6 w-6 shrink-0 text-deep-rose" aria-hidden="true" />
             <div>
-              <p className="text-base font-bold text-[#8A4510]">
+              <p className="text-base font-semibold text-deep-rose">
                 Vaginal bleeding after menopause was recorded {insight.bleedingInRange} time
                 {insight.bleedingInRange === 1 ? '' : 's'} in this period.
               </p>
-              <p className="mt-1 text-sm leading-relaxed text-[#8A4510]/90">
+              <p className="mt-1 text-sm leading-relaxed text-deep-rose/90">
                 Please arrange a prompt review with your clinician. This is a reason to check in,
                 not a diagnosis.
               </p>
@@ -263,7 +263,7 @@ const SeniorHealthInsights = () => {
           </div>
           <Link
             to="/doctor-report"
-            className="senior-button shrink-0 border-2 border-[#8A4510]/30 bg-white text-[#8A4510] hover:bg-[#FFF0E0]"
+            className="senior-button shrink-0 border-2 border-deep-rose/30 bg-white text-deep-rose hover:bg-rose-mist"
           >
             Prepare for a visit
           </Link>
@@ -295,7 +295,7 @@ const SeniorHealthInsights = () => {
               <>
                 <p className="text-base leading-relaxed">
                   Sleep quality averaged{' '}
-                  <span className="font-bold text-deep-rose">{insight.weekSleep} out of 5</span>{' '}
+                  <span className="font-semibold text-deep-rose">{insight.weekSleep} out of 5</span>{' '}
                   this week
                   {insight.priorSleep !== null
                     ? `, ${trendWord(insight.weekSleep, insight.priorSleep)}.`
@@ -317,7 +317,7 @@ const SeniorHealthInsights = () => {
           <SummaryCard icon={Activity} title="Joints and mobility">
             <p className="text-base leading-relaxed">
               Joint stiffness appeared on{' '}
-              <span className="font-bold text-deep-rose">{insight.weekJoints}</span> of your last 7
+              <span className="font-semibold text-deep-rose">{insight.weekJoints}</span> of your last 7
               check-ins
               {insight.weekJoints !== insight.priorJoints
                 ? `, ${trendWord(insight.weekJoints, insight.priorJoints)}.`
@@ -332,7 +332,7 @@ const SeniorHealthInsights = () => {
             {insight.weekWellbeing !== null ? (
               <p className="text-base leading-relaxed">
                 Emotional wellbeing averaged{' '}
-                <span className="font-bold text-deep-rose">{insight.weekWellbeing} out of 5</span>{' '}
+                <span className="font-semibold text-deep-rose">{insight.weekWellbeing} out of 5</span>{' '}
                 this week
                 {insight.priorWellbeing !== null
                   ? `, ${trendWord(insight.weekWellbeing, insight.priorWellbeing)}.`
@@ -360,7 +360,7 @@ const SeniorHealthInsights = () => {
                 <BarChart3 className="h-5 w-5" aria-hidden="true" />
               </span>
               <div>
-                <h2 id="frequency-chart-title" className="font-display text-lg font-semibold text-deep-rose">
+                <h2 id="frequency-chart-title" className="font-display text-lg text-ink">
                   How often each symptom appeared
                 </h2>
                 <p className="mt-0.5 text-sm text-muted">
@@ -421,7 +421,7 @@ const SeniorHealthInsights = () => {
                 <LineChartIcon className="h-5 w-5" aria-hidden="true" />
               </span>
               <div>
-                <h2 id="hotflash-chart-title" className="font-display text-lg font-semibold text-deep-rose">
+                <h2 id="hotflash-chart-title" className="font-display text-lg text-ink">
                   Hot flashes week by week
                 </h2>
                 <p className="mt-0.5 text-sm text-muted">
@@ -485,7 +485,7 @@ const SeniorHealthInsights = () => {
           title={`No check-ins in the last ${range} days`}
           description="Once you save a few daily check-ins, your trends will appear here. You can also choose a shorter period above."
           action={
-            <Link to="/symptoms" className="senior-button bg-deep-rose text-white hover:bg-[#a81450]">
+            <Link to="/symptoms" className="senior-button bg-deep-rose text-white hover:bg-[#A3134C]">
               <ClipboardPlus className="h-5 w-5" aria-hidden="true" />
               Start a check-in
             </Link>

@@ -53,9 +53,9 @@ const CustomTooltip = ({ active, payload, label, suffix = '' }) => {
   if (!active || !payload?.length) return null;
   return (
     <div className="rounded-xl border border-blush-pink bg-white px-3 py-2 shadow-card">
-      <p className="text-[10px] font-bold uppercase tracking-wide text-muted">{label}</p>
+      <p className="text-xs font-semibold text-muted">{label}</p>
       {payload.map((item) => (
-        <p key={item.dataKey} className="mt-0.5 text-sm font-bold text-deep-rose">
+        <p key={item.dataKey} className="mt-0.5 text-sm font-semibold text-deep-rose">
           {item.name}: {item.value}
           {suffix}
         </p>
@@ -69,27 +69,27 @@ const InsightCard = ({ icon: Icon, title, children, tone = 'rose' }) => (
     className={cn(
       'rounded-2xl border p-4',
       tone === 'deep'
-        ? 'border-deep-rose/20 bg-deep-rose text-white'
+        ? 'border-soft-petal bg-rose-mist text-ink'
         : 'border-blush-pink/60 bg-white text-ink'
     )}
   >
     <span
       className={cn(
         'grid h-8 w-8 place-items-center rounded-lg',
-        tone === 'deep' ? 'bg-white/15 text-white' : 'bg-soft-petal text-deep-rose'
+        tone === 'deep' ? 'bg-white text-deep-rose' : 'bg-soft-petal text-deep-rose'
       )}
     >
       <Icon className="h-4 w-4" aria-hidden="true" />
     </span>
     <p
       className={cn(
-        'mt-3 text-[9px] font-bold uppercase tracking-[0.14em]',
-        tone === 'deep' ? 'text-blush-pink' : 'text-muted'
+        'mt-3 text-xs font-semibold',
+        tone === 'deep' ? 'text-deep-rose' : 'text-muted'
       )}
     >
       {title}
     </p>
-    <div className={cn('mt-1 text-sm leading-relaxed', tone === 'deep' ? 'text-white/90' : 'text-ink')}>
+    <div className={cn('mt-1 text-sm leading-relaxed', 'text-ink')}>
       {children}
     </div>
   </div>
@@ -234,9 +234,9 @@ const HealthInsights = () => {
                   onClick={() => setRange(item.value)}
                   aria-pressed={range === item.value}
                   className={cn(
-                    'rounded-lg px-3 py-1.5 text-[11px] font-bold transition-colors',
+                    'rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors',
                     range === item.value
-                      ? 'bg-pink-glow text-white shadow-sm'
+                      ? 'bg-deep-rose text-white shadow-sm'
                       : 'text-muted hover:text-deep-rose'
                   )}
                 >
@@ -281,17 +281,17 @@ const HealthInsights = () => {
         ].map((metric) => {
           const Icon = metric.icon;
           return (
-            <div key={metric.label} className="rounded-2xl border border-white/70 bg-soft-petal/45 p-4 shadow-soft">
+            <div key={metric.label} className="rounded-2xl border border-line bg-soft-petal/45 p-4 shadow-soft">
               <div className="flex items-center justify-between">
-                <span className="text-[9px] font-bold uppercase tracking-[0.13em] text-deep-rose/60">
+                <span className="text-xs font-semibold text-muted">
                   {metric.label}
                 </span>
                 <Icon className="h-4 w-4 text-pink-glow" aria-hidden="true" />
               </div>
-              <p className="mt-2 truncate font-display text-xl font-semibold capitalize text-deep-rose">
+              <p className="mt-2 truncate font-display text-xl capitalize text-ink">
                 {metric.value}
               </p>
-              <p className="mt-0.5 text-[10px] capitalize text-muted">{metric.helper}</p>
+              <p className="mt-0.5 text-xs capitalize text-muted">{metric.helper}</p>
             </div>
           );
         })}
@@ -305,7 +305,7 @@ const HealthInsights = () => {
               <h2 id="cycle-chart-title" className="section-title mt-1">
                 Your cycle length, month by month
               </h2>
-              <p className="mt-1 text-[11px] text-muted">
+              <p className="mt-1 text-xs text-muted">
                 A healthy cycle is often 21–35 days, but your personal pattern matters most.
               </p>
             </div>
@@ -369,13 +369,13 @@ const HealthInsights = () => {
                 </ResponsiveContainer>
               </div>
               <div className="mt-3 flex flex-wrap items-center gap-4">
-                <span className="flex items-center gap-1.5 text-[10px] font-medium text-muted">
+                <span className="flex items-center gap-1.5 text-xs font-medium text-muted">
                   <span className="h-2.5 w-2.5 rounded-sm bg-blush-pink" /> Close to average
                 </span>
-                <span className="flex items-center gap-1.5 text-[10px] font-medium text-muted">
-                  <span className="h-2.5 w-2.5 rounded-sm bg-pink-glow" /> 3–4 days different
+                <span className="flex items-center gap-1.5 text-xs font-medium text-muted">
+                  <span className="h-2.5 w-2.5 rounded-sm bg-deep-rose" /> 3–4 days different
                 </span>
-                <span className="flex items-center gap-1.5 text-[10px] font-medium text-muted">
+                <span className="flex items-center gap-1.5 text-xs font-medium text-muted">
                   <span className="h-2.5 w-2.5 rounded-sm bg-deep-rose" /> 5+ days different
                 </span>
               </div>
@@ -433,11 +433,11 @@ const HealthInsights = () => {
                       <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: item.fill }} />
                       {item.name}
                     </span>
-                    <span className="text-[10px] font-bold text-deep-rose">{item.count} logged</span>
+                    <span className="text-xs font-semibold text-deep-rose">{item.count} logged</span>
                   </li>
                 ))}
               </ul>
-              <p className="mt-4 flex items-start gap-1.5 rounded-lg bg-rose-mist/70 p-2.5 text-[9px] leading-relaxed text-muted">
+              <p className="mt-4 flex items-start gap-1.5 rounded-lg bg-rose-mist/70 p-2.5 text-xs leading-relaxed text-muted">
                 <Info className="mt-0.5 h-3 w-3 shrink-0" aria-hidden="true" />
                 Flow is self-reported. Consistently soaking through protection hourly is worth a
                 clinician conversation.
@@ -461,13 +461,13 @@ const HealthInsights = () => {
             <h2 id="symptom-chart-title" className="section-title mt-1">
               What shows up most often
             </h2>
-            <p className="mt-1 text-[11px] text-muted">
+            <p className="mt-1 text-xs text-muted">
               Counted from {summary?.totalLogs || 0} journal entries in this period.
             </p>
           </div>
           <Link
             to="/symptoms"
-            className="flex items-center gap-1 text-xs font-bold text-deep-rose hover:text-rose-pink"
+            className="flex items-center gap-1 text-xs font-semibold text-deep-rose hover:text-rose-pink"
           >
             Open journal
             <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
@@ -515,19 +515,19 @@ const HealthInsights = () => {
                   : 'Keep logging to reveal your most frequent symptoms.'}
               </InsightCard>
               <div className="rounded-2xl bg-rose-mist/70 p-4">
-                <p className="text-[9px] font-bold uppercase tracking-wide text-muted">Mood snapshot</p>
+                <p className="text-xs font-semibold text-muted">Mood snapshot</p>
                 <div className="mt-2 flex flex-wrap gap-1.5">
                   {(summary?.topMood || []).length ? (
                     summary.topMood.map((mood) => (
                       <span
                         key={mood.name}
-                        className="rounded-full border border-blush-pink/70 bg-white px-2 py-1 text-[10px] font-semibold text-deep-rose"
+                        className="rounded-full border border-blush-pink/70 bg-white px-2 py-1 text-xs font-semibold text-deep-rose"
                       >
                         {mood.name} · {mood.count}
                       </span>
                     ))
                   ) : (
-                    <span className="text-[10px] text-muted">No moods logged in this range.</span>
+                    <span className="text-xs text-muted">No moods logged in this range.</span>
                   )}
                 </div>
               </div>
@@ -588,7 +588,7 @@ const HealthInsights = () => {
 
       <div className="flex items-start gap-2 rounded-2xl border border-blush-pink/60 bg-white/75 p-4">
         <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-deep-rose" aria-hidden="true" />
-        <p className="text-[10px] leading-relaxed text-muted">
+        <p className="text-xs leading-relaxed text-muted">
           These insights are generated from self-reported logs and are educational only. They cannot
           diagnose a condition. If a pattern worries you — especially very heavy bleeding, severe
           pain, cycles under 21 or over 35 days, or bleeding after menopause — please speak with a

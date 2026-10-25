@@ -63,7 +63,7 @@ const RANGE_FILTERS = [
 ];
 
 const MoodTag = ({ children }) => (
-  <span className="rounded-full bg-rose-mist px-2 py-0.5 text-[10px] font-medium text-deep-rose/80">
+  <span className="rounded-full bg-rose-mist px-2 py-0.5 text-xs font-medium text-muted">
     {children}
   </span>
 );
@@ -337,10 +337,10 @@ const SymptomJournal = () => {
       <div className="grid gap-4 xl:grid-cols-[1.45fr_1fr]">
         <div className="space-y-4">
           <section className="card overflow-hidden" aria-labelledby="entry-title">
-            <div className="flex flex-wrap items-center justify-between gap-3 bg-gradient-to-r from-rose-mist via-soft-petal/60 to-white px-5 py-4 sm:px-6">
+            <div className="flex flex-wrap items-center justify-between gap-3 bg-rose-mist px-5 py-4 sm:px-6">
               <div>
                 <p className="eyebrow">{editingId ? 'Editing entry' : 'New check-in'}</p>
-                <h2 id="entry-title" className="mt-0.5 font-display text-xl font-semibold text-deep-rose">
+                <h2 id="entry-title" className="mt-0.5 font-display text-xl text-ink">
                   How are you feeling?
                 </h2>
               </div>
@@ -348,7 +348,7 @@ const SymptomJournal = () => {
                 <Badge tone="outline" icon={CalendarDays} className="bg-white/70">
                   {relativeDay(form.date)}
                 </Badge>
-                <span className="text-[10px] font-semibold text-muted">{selectedCount} signals</span>
+                <span className="text-xs font-semibold text-muted">{selectedCount} signals</span>
               </div>
             </div>
 
@@ -389,7 +389,7 @@ const SymptomJournal = () => {
                   >
                     Yesterday
                   </button>
-                  <span className="ml-1 text-[10px] text-muted">
+                  <span className="ml-1 text-xs text-muted">
                     {editingId ? 'Editing an existing entry.' : 'No entry yet for this date.'}
                   </span>
                 </div>
@@ -403,12 +403,12 @@ const SymptomJournal = () => {
                     </span>
                     Physical symptoms
                   </legend>
-                  <span className="text-[10px] font-medium text-muted">Tap to select, then set severity</span>
+                  <span className="text-xs font-medium text-muted">Tap to select, then set severity</span>
                 </div>
                 <div className="space-y-3">
                   {PHYSICAL_SYMPTOM_GROUPS.map((group) => (
                     <div key={group.title}>
-                      <p className="mb-1.5 text-[10px] font-bold uppercase tracking-wide text-muted/70">
+                      <p className="mb-1.5 text-xs font-semibold text-muted/70">
                         {group.title}
                       </p>
                       <div className="flex flex-wrap gap-1.5">
@@ -421,9 +421,9 @@ const SymptomJournal = () => {
                               onClick={() => togglePhysical(name)}
                               aria-pressed={selected}
                               className={cn(
-                                'inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1.5 text-[11px] font-medium transition-all',
+                                'inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1.5 text-xs font-medium transition-all',
                                 selected
-                                  ? 'border-pink-glow bg-pink-glow text-white shadow-sm'
+                                  ? 'border-deep-rose bg-deep-rose text-white shadow-sm'
                                   : 'border-blush-pink/70 bg-white text-ink hover:border-pink-glow hover:bg-soft-petal/40'
                               )}
                             >
@@ -439,7 +439,7 @@ const SymptomJournal = () => {
 
                 {form.physical.length ? (
                   <div className="mt-4 space-y-2 rounded-xl border border-pink-glow/20 bg-soft-petal/35 p-3">
-                    <p className="text-[10px] font-bold uppercase tracking-wide text-deep-rose/70">
+                    <p className="text-xs font-semibold text-muted">
                       Rate how each one felt
                     </p>
                     {form.physical.map((item) => (
@@ -453,7 +453,7 @@ const SymptomJournal = () => {
                               onClick={() => setSeverity(item.name, severity.value)}
                               aria-pressed={item.severity === severity.value}
                               className={cn(
-                                'rounded-md border px-2.5 py-1 text-[10px] font-bold transition-colors',
+                                'rounded-md border px-2.5 py-1 text-xs font-semibold transition-colors',
                                 item.severity === severity.value
                                   ? SEVERITY_STYLES[severity.value]
                                   : 'border-blush-pink/50 bg-white text-muted hover:border-pink-glow'
@@ -514,7 +514,7 @@ const SymptomJournal = () => {
                         className={cn(
                           'rounded-xl border px-2 py-2 text-center transition-all',
                           selected
-                            ? 'border-pink-glow bg-pink-glow text-white shadow-sm'
+                            ? 'border-deep-rose bg-deep-rose text-white shadow-sm'
                             : 'border-blush-pink/70 bg-white text-ink hover:border-pink-glow'
                         )}
                       >
@@ -527,7 +527,7 @@ const SymptomJournal = () => {
                                 dot <= option.dots
                                   ? selected
                                     ? 'bg-white'
-                                    : 'bg-pink-glow'
+                                    : 'bg-deep-rose'
                                   : selected
                                     ? 'bg-white/30'
                                     : 'bg-blush-pink/50'
@@ -535,7 +535,7 @@ const SymptomJournal = () => {
                             />
                           ))}
                         </span>
-                        <span className="mt-1 block text-[10px] font-bold">{option.label}</span>
+                        <span className="mt-1 block text-xs font-semibold">{option.label}</span>
                       </button>
                     );
                   })}
@@ -559,9 +559,9 @@ const SymptomJournal = () => {
                         aria-pressed={form.energyLevel === level}
                         aria-label={`${ENERGY_LABELS[level]} energy`}
                         className={cn(
-                          'flex h-9 flex-1 items-center justify-center rounded-lg border text-xs font-bold transition-all',
+                          'flex h-9 flex-1 items-center justify-center rounded-lg border text-xs font-semibold transition-all',
                           form.energyLevel >= level
-                            ? 'border-pink-glow bg-pink-glow text-white'
+                            ? 'border-deep-rose bg-deep-rose text-white'
                             : 'border-blush-pink/70 bg-white text-muted hover:border-pink-glow'
                         )}
                       >
@@ -569,7 +569,7 @@ const SymptomJournal = () => {
                       </button>
                     ))}
                   </div>
-                  <p className="mt-1.5 text-[10px] font-medium text-muted">
+                  <p className="mt-1.5 text-xs font-medium text-muted">
                     {ENERGY_LABELS[form.energyLevel]}
                   </p>
                 </fieldset>
@@ -593,7 +593,7 @@ const SymptomJournal = () => {
                       className="input-field pl-10 pr-14"
                       placeholder="e.g. 7.5"
                     />
-                    <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-semibold text-muted">
+                    <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs font-semibold text-muted">
                       hours
                     </span>
                   </div>
@@ -618,7 +618,7 @@ const SymptomJournal = () => {
               </Field>
 
               <div className="flex flex-col-reverse gap-2.5 border-t border-blush-pink/40 pt-5 sm:flex-row sm:items-center sm:justify-between">
-                <p className="flex items-center gap-1.5 text-[10px] text-muted">
+                <p className="flex items-center gap-1.5 text-xs text-muted">
                   <Lock className="h-3 w-3" aria-hidden="true" />
                   Only you can see this.
                 </p>
@@ -641,18 +641,18 @@ const SymptomJournal = () => {
               <div className="flex items-center justify-between gap-2">
                 <div>
                   <p className="eyebrow">Your record</p>
-                  <h2 id="history-title" className="mt-0.5 font-display text-xl font-semibold text-deep-rose">
+                  <h2 id="history-title" className="mt-0.5 font-display text-xl text-ink">
                     Journal history
                   </h2>
                 </div>
                 <div className="text-right">
-                  <p className="font-display text-xl font-semibold text-deep-rose">{total}</p>
-                  <p className="text-[9px] font-bold uppercase tracking-wide text-muted">entries</p>
+                  <p className="font-display text-xl text-ink">{total}</p>
+                  <p className="text-xs font-semibold text-muted">entries</p>
                 </div>
               </div>
               {topSymptom ? (
-                <p className="mt-2 text-[10px] text-muted">
-                  Most logged: <span className="font-bold text-deep-rose">{topSymptom[0]}</span> ({topSymptom[1]}×)
+                <p className="mt-2 text-xs text-muted">
+                  Most logged: <span className="font-semibold text-deep-rose">{topSymptom[0]}</span> ({topSymptom[1]}×)
                 </p>
               ) : null}
             </div>
@@ -687,7 +687,7 @@ const SymptomJournal = () => {
                       }}
                       aria-pressed={rangeFilter === filter.value}
                       className={cn(
-                        'rounded-lg px-2 py-1 text-[10px] font-bold transition-colors',
+                        'rounded-lg px-2 py-1 text-xs font-semibold transition-colors',
                         rangeFilter === filter.value
                           ? 'bg-deep-rose text-white'
                           : 'bg-rose-mist text-muted hover:text-deep-rose'
@@ -697,7 +697,7 @@ const SymptomJournal = () => {
                     </button>
                   ))}
                 </div>
-                <span className="flex items-center gap-1 text-[9px] font-semibold text-muted">
+                <span className="flex items-center gap-1 text-xs font-semibold text-muted">
                   <ArrowDownUp className="h-2.5 w-2.5" aria-hidden="true" />
                   Newest
                 </span>
@@ -714,14 +714,14 @@ const SymptomJournal = () => {
                         className={cn(
                           'rounded-xl border bg-white p-3.5 transition-colors',
                           editingId === log._id
-                            ? 'border-pink-glow shadow-soft'
+                            ? 'border-deep-rose shadow-soft'
                             : 'border-blush-pink/50 hover:border-pink-glow/40'
                         )}
                       >
                         <div className="flex items-start justify-between gap-2">
                           <div className="min-w-0">
                             <div className="flex flex-wrap items-center gap-1.5">
-                              <p className="text-xs font-bold text-ink">{relativeDay(log.date)}</p>
+                              <p className="text-xs font-semibold text-ink">{relativeDay(log.date)}</p>
                               {log.flow !== 'none' ? (
                                 <Badge tone="pink" className="!px-1.5 !py-0.5 !text-[9px]">
                                   {log.flow}
@@ -729,7 +729,7 @@ const SymptomJournal = () => {
                               ) : null}
                               {editingId === log._id ? <Badge tone="glow" className="!px-1.5 !py-0.5 !text-[9px]">Editing</Badge> : null}
                             </div>
-                            <p className="mt-0.5 text-[9px] font-medium text-muted">
+                            <p className="mt-0.5 text-xs font-medium text-muted">
                               {formatDate(log.date, 'EEEE, d MMMM yyyy')}
                             </p>
                           </div>
@@ -759,7 +759,7 @@ const SymptomJournal = () => {
                               <span
                                 key={item.name}
                                 className={cn(
-                                  'rounded-full px-1.5 py-0.5 text-[9px] font-semibold capitalize',
+                                  'rounded-full px-1.5 py-0.5 text-xs font-semibold capitalize',
                                   SEVERITY_STYLES[item.severity] || SEVERITY_STYLES.mild
                                 )}
                                 title={`${item.name}: ${item.severity}`}
@@ -768,7 +768,7 @@ const SymptomJournal = () => {
                               </span>
                             ))}
                             {log.physical.length > 5 ? (
-                              <span className="text-[9px] font-semibold text-muted">+{log.physical.length - 5}</span>
+                              <span className="text-xs font-semibold text-muted">+{log.physical.length - 5}</span>
                             ) : null}
                           </div>
                         ) : null}
@@ -779,12 +779,12 @@ const SymptomJournal = () => {
                               <MoodTag key={mood}>{mood}</MoodTag>
                             ))}
                             {log.mood.length > 3 ? (
-                              <span className="text-[9px] font-semibold text-muted">+{log.mood.length - 3}</span>
+                              <span className="text-xs font-semibold text-muted">+{log.mood.length - 3}</span>
                             ) : null}
                           </div>
                         ) : null}
 
-                        <div className="mt-1.5 flex flex-wrap items-center gap-2 text-[9px] text-muted">
+                        <div className="mt-1.5 flex flex-wrap items-center gap-2 text-xs text-muted">
                           {log.energyLevel ? (
                             <span className="flex items-center gap-1">
                               <Sun className="h-2.5 w-2.5" aria-hidden="true" /> Energy {log.energyLevel}/5
@@ -798,7 +798,7 @@ const SymptomJournal = () => {
                         </div>
 
                         {log.notes ? (
-                          <p className="mt-2 line-clamp-2 rounded-lg bg-rose-mist/60 px-2 py-1.5 text-[10px] italic leading-relaxed text-muted">
+                          <p className="mt-2 line-clamp-2 rounded-lg bg-rose-mist/60 px-2 py-1.5 text-xs italic leading-relaxed text-muted">
                             “{log.notes}”
                           </p>
                         ) : null}
@@ -810,7 +810,7 @@ const SymptomJournal = () => {
                     <button
                       type="button"
                       onClick={() => setVisibleCount((count) => count + 6)}
-                      className="mt-3 flex w-full items-center justify-center gap-1 rounded-xl border border-blush-pink/60 bg-white py-2 text-[10px] font-bold text-deep-rose transition-colors hover:bg-rose-mist"
+                      className="mt-3 flex w-full items-center justify-center gap-1 rounded-xl border border-blush-pink/60 bg-white py-2 text-xs font-semibold text-deep-rose transition-colors hover:bg-rose-mist"
                     >
                       Show more
                       <ChevronDown className="h-3 w-3" aria-hidden="true" />
@@ -850,8 +850,8 @@ const SymptomJournal = () => {
           <section className="flex items-start gap-2 rounded-xl border border-blush-pink/60 bg-white/75 p-3.5">
             <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-pink-glow" aria-hidden="true" />
             <div>
-              <p className="text-[10px] font-bold text-deep-rose">A gentle reminder</p>
-              <p className="mt-0.5 text-[10px] leading-relaxed text-muted">
+              <p className="text-xs font-semibold text-deep-rose">A gentle reminder</p>
+              <p className="mt-0.5 text-xs leading-relaxed text-muted">
                 One severe symptom is a data point. A pattern over time is what helps a clinician.
                 Log consistently when you can, not perfectly.
               </p>

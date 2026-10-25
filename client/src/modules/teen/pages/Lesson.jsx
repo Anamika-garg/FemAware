@@ -16,7 +16,7 @@ export default function Lesson() {
   const m = data.item;
   return (
     <article className="mx-auto max-w-3xl">
-      <Link to="/learn" className="mb-4 inline-flex items-center gap-1 font-bold">
+      <Link to="/learn" className="mb-4 inline-flex items-center gap-1 font-semibold">
         <ArrowLeft aria-hidden className="size-4" /> All lessons
       </Link>
       <header className="mb-6 flex items-start gap-4">
@@ -24,7 +24,7 @@ export default function Lesson() {
           <ModuleIcon name={m.icon} className="size-8" />
         </span>
         <div>
-          <h1 className="text-3xl font-display font-semibold text-deep-rose sm:text-4xl">{m.title}</h1>
+          <h1 className="text-3xl font-display text-ink sm:text-4xl">{m.title}</h1>
           <p className="mt-1 text-muted">{m.summary}</p>
           <div className="mt-2 flex gap-2">
             <Badge>
@@ -44,18 +44,18 @@ export default function Lesson() {
       <div className="space-y-4">
         {m.sections.map((s) => (
           <Card key={s.heading}>
-            <h2 className="text-xl font-display font-semibold text-deep-rose">{s.heading}</h2>
+            <h2 className="text-xl font-display text-ink">{s.heading}</h2>
             <p className="mt-2 leading-relaxed">{s.body}</p>
           </Card>
         ))}
       </div>
 
       {m.keyPoints?.length > 0 && (
-        <aside className="mt-6 rounded-3xl bg-deep p-6 text-white">
-          <h2 className="flex items-center gap-2 text-lg font-display font-semibold text-deep-rose">
-            <Lightbulb aria-hidden className="size-5" /> Key points
+        <aside className="mt-6 rounded-2xl border border-petal bg-mist p-6">
+          <h2 className="flex items-center gap-2 text-2xl font-display text-ink">
+            <Lightbulb aria-hidden className="size-5 text-deep" /> Key points
           </h2>
-          <ul className="mt-3 list-inside list-disc space-y-1 text-petal">
+          <ul className="mt-3 list-inside list-disc space-y-1.5 text-ink">
             {m.keyPoints.map((k) => (
               <li key={k}>{k}</li>
             ))}
@@ -64,7 +64,7 @@ export default function Lesson() {
       )}
 
       <section className="mt-10" aria-labelledby="quiz-heading">
-        <h2 id="quiz-heading" className="mb-4 text-2xl font-display font-semibold text-deep-rose">
+        <h2 id="quiz-heading" className="mb-4 text-2xl font-display text-ink">
           Quiz time
         </h2>
         <Quiz key={m.slug} questions={m.quiz} onSubmit={(answers) => api.learning.submitQuiz(m.slug, answers)} />
