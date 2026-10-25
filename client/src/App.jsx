@@ -34,6 +34,7 @@ const SymptomJournal = lazy(() => import('./modules/adult/SymptomJournal'));
 const HealthInsights = lazy(() => import('./modules/adult/HealthInsights'));
 const DoctorReport = lazy(() => import('./modules/adult/DoctorReport'));
 const ResourceLibrary = lazy(() => import('./modules/adult/ResourceLibrary'));
+const AdultChat = lazy(() => import('./modules/adult/Chat'));
 
 // The senior women module shares the same routes and shell, replacing the
 // cycle-focused pages with care, comfort and appointment preparation.
@@ -42,6 +43,7 @@ const SeniorSymptomJournal = lazy(() => import('./modules/senior/SeniorSymptomJo
 const SeniorHealthInsights = lazy(() => import('./modules/senior/SeniorHealthInsights'));
 const SeniorDoctorReport = lazy(() => import('./modules/senior/SeniorDoctorReport'));
 const SeniorResourceLibrary = lazy(() => import('./modules/senior/SeniorResourceLibrary'));
+const SeniorChat = lazy(() => import('./modules/senior/SeniorChat'));
 
 // The teen module adds lessons, a guided symptom check and body-safety help,
 // and swaps in teen-friendly versions of the shared tracking pages.
@@ -53,6 +55,7 @@ const TeenLearn = lazy(() => import('./modules/teen/pages/Learn'));
 const TeenLesson = lazy(() => import('./modules/teen/pages/Lesson'));
 const TeenAssessment = lazy(() => import('./modules/teen/pages/Assessment'));
 const TeenSafety = lazy(() => import('./modules/teen/pages/Safety'));
+const TeenChat = lazy(() => import('./modules/teen/pages/Chat'));
 const Disclaimer = lazy(() => import('./modules/teen/pages/Disclaimer'));
 
 // Map a user's life stage to the dashboard module they should see. The adult
@@ -174,6 +177,7 @@ const App = () => (
             <Route path="/learn/:slug" element={<TeenPage page={TeenLesson} />} />
             <Route path="/check" element={<TeenPage page={TeenAssessment} />} />
             <Route path="/safety" element={<TeenPage page={TeenSafety} />} />
+            <Route path="/chat" element={<StagePage adult={AdultChat} senior={SeniorChat} teen={TeenChat} />} />
             <Route path="/disclaimer" element={<TeenPage page={Disclaimer} />} />
             <Route
               path="/doctor-report"

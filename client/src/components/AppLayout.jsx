@@ -3,6 +3,7 @@ import { Outlet } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import Navbar from './Navbar';
 import MobileNav from './MobileNav';
+import ChatLauncher from './ChatLauncher';
 import { useAuth } from '../context/AuthContext';
 
 const SENIOR_FONT_SCALE_KEY = 'femaware_senior_font_scale';
@@ -64,6 +65,7 @@ const AppLayout = () => {
         </footer>
       </div>
       <MobileNav />
+      <ChatLauncher />
     </div>
   );
 };

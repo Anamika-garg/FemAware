@@ -8,6 +8,7 @@ import {
   HeartHandshake,
   LayoutDashboard,
   LineChart,
+  MessageCircleHeart,
   NotebookPen,
   ShieldAlert,
   ShieldCheck,
@@ -29,6 +30,7 @@ export const understandNav = [
 ];
 
 export const supportNav = [
+  { to: '/chat', label: 'Ask Ava', icon: MessageCircleHeart },
   { to: '/late-period', label: 'Late period guide', icon: HeartHandshake },
   { to: '/pcos', label: 'PCOS awareness', icon: Activity },
   { to: '/resources', label: 'Resource library', icon: BookOpen },
@@ -65,6 +67,7 @@ export const seniorUnderstandNav = [
 ];
 
 export const seniorSupportNav = [
+  { to: '/chat', label: 'Ask Mira', icon: MessageCircleHeart },
   { to: '/resources', label: 'Learning library', icon: BookOpen },
 ];
 
@@ -89,6 +92,7 @@ export const teenUnderstandNav = [
 ];
 
 export const teenSupportNav = [
+  { to: '/chat', label: 'Ask Bloom', icon: MessageCircleHeart },
   { to: '/safety', label: 'Body safety & help', icon: HeartHandshake },
   { to: '/disclaimer', label: 'Health disclaimer', icon: ShieldAlert },
 ];
@@ -121,6 +125,7 @@ export const seniorMobileTabs = [
 ];
 
 export const moreLinks = [
+  { to: '/chat', label: 'Ask Ava', icon: MessageCircleHeart, description: 'Private health questions, answered' },
   { to: '/doctor-report', label: 'Doctor report', icon: FileText, description: 'Prepare a clinical summary' },
   { to: '/late-period', label: 'Late period guide', icon: HeartHandshake, description: 'Step-by-step assessment' },
   { to: '/pcos', label: 'PCOS awareness', icon: Activity, description: 'Patterns and education' },
@@ -129,6 +134,7 @@ export const moreLinks = [
 ];
 
 export const seniorMoreLinks = [
+  { to: '/chat', label: 'Ask Mira', icon: MessageCircleHeart, description: 'Private health questions, answered' },
   { to: '/resources', label: 'Learning library', icon: BookOpen, description: 'Reviewed later-life health guides' },
   { to: '/privacy', label: 'Privacy & data', icon: ShieldCheck, description: 'Export or delete your data' },
 ];
@@ -141,6 +147,7 @@ export const teenMobileTabs = [
 ];
 
 export const teenMoreLinks = [
+  { to: '/chat', label: 'Ask Bloom', icon: MessageCircleHeart, description: 'A private place to ask about your body' },
   { to: '/check', label: 'Symptom check', icon: ClipboardList, description: 'Clear next steps, not a diagnosis' },
   { to: '/insights', label: 'My insights', icon: LineChart, description: 'Patterns from your logs' },
   { to: '/safety', label: 'Body safety & help', icon: HeartHandshake, description: 'Consent, safety and who to talk to' },
@@ -165,6 +172,7 @@ export const pageMeta = {
   '/symptoms': { title: 'Symptom journal', eyebrow: 'Daily check-in' },
   '/insights': { title: 'Health insights', eyebrow: 'Patterns over time' },
   '/doctor-report': { title: 'Doctor report', eyebrow: 'Visit preparation' },
+  '/chat': { title: 'Ask Ava', eyebrow: 'Private health chat' },
   '/late-period': { title: 'Late period guide', eyebrow: 'Guided assessment' },
   '/pcos': { title: 'PCOS awareness', eyebrow: 'Understanding patterns' },
   '/resources': { title: 'Resource library', eyebrow: 'Learn at your pace' },
@@ -176,6 +184,7 @@ export const seniorPageMeta = {
   '/symptoms': { title: 'Daily check-in', eyebrow: 'Comfort & symptoms' },
   '/insights': { title: 'Health trends', eyebrow: 'Patterns at a glance' },
   '/doctor-report': { title: 'Visit preparation', eyebrow: 'Appointment planner' },
+  '/chat': { title: 'Ask Mira', eyebrow: 'Private health chat' },
   '/resources': { title: 'Learning library', eyebrow: 'Reviewed guidance' },
   '/privacy': { title: 'Privacy & data', eyebrow: 'Your information, your control' },
 };
@@ -188,6 +197,7 @@ export const teenPageMeta = {
   '/check': { title: 'Symptom check', eyebrow: 'Guided next steps' },
   '/insights': { title: 'My insights', eyebrow: 'Patterns over time' },
   '/safety': { title: 'Body safety & help', eyebrow: 'You deserve to feel safe' },
+  '/chat': { title: 'Ask Bloom', eyebrow: 'A private place to ask' },
   '/disclaimer': { title: 'Health disclaimer', eyebrow: 'What FemAware is and is not' },
   '/privacy': { title: 'Privacy & data', eyebrow: 'Your information, your control' },
 };

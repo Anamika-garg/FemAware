@@ -2,29 +2,32 @@ import { User } from '../models/User.js';
 import { CycleLog } from '../models/CycleLog.js';
 import { SymptomLog } from '../models/SymptomLog.js';
 import { HealthReport } from '../models/HealthReport.js';
+import { ChatThread } from '../models/ChatThread.js';
 import { asyncHandler } from '../middleware/asyncHandler.js';
 import { ApiError } from '../middleware/error.js';
 import { isValidISODate } from '../utils/dates.js';
 import { deleteTeenData, exportTeenData } from '../teen/index.js';
 
 export const exportData = asyncHandler(async (req, res) => {
-  const [cycles, symptoms, reports, teen] = await Promise.all([
+  const [cycles, symptoms, reports, teen, chats] = await Promise.all([
     CycleLog.find({ user: req.user._id }).sort({ startDate: 1 }).lean(),
     SymptomLog.find({ user: req.user._id }).sort({ date: 1 }).lean(),
     HealthReport.find({ user: req.user._id }).sort({ generatedAt: 1 }).lean(),
     exportTeenData(req.user._id),
+    ChatThread.find({ user: req.user._id }).sort({ createdAt: 1 }).lean(),
   ]);
 
   const payload = {
-    exportVersion: '1.1',
+    exportVersion: '1.2',
     generatedAt: new Date().toISOString(),
     account: req.user.toSafeJSON(),
     cycles,
     symptoms,
     reports,
     teen,
+    chats,
     notes:
-      'This archive contains the health information you entered in FemAware. It is personal data — store it somewhere private.',
+      'This archive contains the health information you entered in FemAware, including your chatbot conversations. It is personal data — store it somewhere private.',
   };
 
   const filename = `femaware-export-${new Date().toISOString().slice(0, 10)}.json`;
@@ -54,6 +57,7 @@ export const deleteData = asyncHandler(async (req, res) => {
       CycleLog.deleteMany({ user: user._id }),
       SymptomLog.deleteMany({ user: user._id }),
       HealthReport.deleteMany({ user: user._id }),
+      ChatThread.deleteMany({ user: user._id }),
       deleteTeenData(user._id),
     ]);
     await User.deleteOne({ _id: user._id });
@@ -70,11 +74,12 @@ export const deleteData = asyncHandler(async (req, res) => {
       throw new ApiError(422, 'Type DELETE to confirm clearing all health logs.');
     }
 
-    const [cycles, symptoms, reports, teen] = await Promise.all([
+    const [cycles, symptoms, reports, teen, chats] = await Promise.all([
       CycleLog.deleteMany({ user: user._id }),
       SymptomLog.deleteMany({ user: user._id }),
       HealthReport.deleteMany({ user: user._id }),
       deleteTeenData(user._id),
+      ChatThread.deleteMany({ user: user._id }),
     ]);
 
     user.cycleProfile.lastPeriodStart = null;
@@ -82,12 +87,13 @@ export const deleteData = asyncHandler(async (req, res) => {
 
     return res.json({
       success: true,
-      message: 'All health logs have been cleared. Your account is still active.',
+      message: 'All health logs and chat history have been cleared. Your account is still active.',
       deleted: {
         cycles: cycles.deletedCount + teen.cycles,
         symptoms: symptoms.deletedCount + teen.symptoms,
         reports: reports.deletedCount,
         assessments: teen.assessments,
+        chats: chats.deletedCount,
       },
     });
   }
