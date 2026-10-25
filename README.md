@@ -26,6 +26,10 @@ floating button in the bottom-right of any signed-in page.
 > need medical attention and helps people decide on next steps.
 
 ---
+## Deployed Website 
+
+https://fem-aware.vercel.app
+
 
 ## Tech stack
 
