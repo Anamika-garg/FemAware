@@ -26,7 +26,7 @@ export default function TeenSymptoms() {
           }}
         />
         <Card>
-          <h2 className="text-xl font-display font-semibold text-deep-rose">History</h2>
+          <h2 className="text-xl font-display text-ink">History</h2>
           {loading && !data && <Loading />}
           <ErrorMessage error={error} onRetry={reload} />
           {data?.items.length === 0 && (
@@ -80,14 +80,14 @@ function SymptomForm({ editing, onSaved, onCancel }) {
 
   return (
     <Card as="form" onSubmit={submit} className="space-y-5 self-start" aria-label={editing ? 'Edit symptom log' : 'New symptom log'}>
-      <h2 className="text-xl font-display font-semibold text-deep-rose">{editing ? 'Edit entry' : 'How are you feeling?'}</h2>
-      <label className="block text-sm font-bold">
+      <h2 className="text-xl font-display text-ink">{editing ? 'Edit entry' : 'How are you feeling?'}</h2>
+      <label className="block text-sm font-semibold">
         Date
         <input type="date" required max={todayIso()} value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} className="mt-1 w-full rounded-xl border-2 border-blush bg-white px-3 py-2" />
       </label>
 
       <fieldset>
-        <legend className="text-sm font-bold">Symptoms</legend>
+        <legend className="text-sm font-semibold">Symptoms</legend>
         <div className="mt-2 flex flex-wrap gap-2">
           {Object.entries(SYMPTOM_LABELS).map(([value, label]) => {
             const on = form.symptoms.includes(value);
@@ -107,7 +107,7 @@ function SymptomForm({ editing, onSaved, onCancel }) {
         </div>
       </fieldset>
 
-      <label className="block text-sm font-bold">
+      <label className="block text-sm font-semibold">
         How strong? <span className="text-rose">{form.severity} — {SEVERITY_LABELS[form.severity]}</span>
         <input
           type="range"
@@ -121,7 +121,7 @@ function SymptomForm({ editing, onSaved, onCancel }) {
         />
       </label>
 
-      <label className="block text-sm font-bold">
+      <label className="block text-sm font-semibold">
         Notes <span className="font-semibold text-muted/80">(optional, max 500 characters)</span>
         <textarea
           maxLength={500}
@@ -140,7 +140,7 @@ function SymptomForm({ editing, onSaved, onCancel }) {
           <FieldErrors error={error} />
         </div>
       )}
-      {saved && <p role="status" className="text-sm font-bold">Saved!</p>}
+      {saved && <p role="status" className="text-sm font-semibold">Saved!</p>}
 
       <div className="flex gap-2">
         <Button type="submit" disabled={busy || form.symptoms.length === 0}>
@@ -176,7 +176,7 @@ function SymptomRow({ log, onEdit, onDeleted }) {
     <li className="rounded-2xl bg-mist p-4">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="text-sm font-bold text-rose">{formatDay(log.date, { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })}</p>
+          <p className="text-sm font-semibold text-rose">{formatDay(log.date, { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })}</p>
           <div className="mt-1 flex flex-wrap gap-1.5">
             {log.symptoms.map((s) => (
               <Badge key={s} className="bg-white text-deep">

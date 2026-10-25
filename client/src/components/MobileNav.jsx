@@ -29,7 +29,7 @@ const MobileNav = () => {
   return (
     <>
       <nav
-        className="fixed inset-x-0 bottom-0 z-40 border-t border-blush-pink/60 bg-white/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl lg:hidden"
+        className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-white pb-[env(safe-area-inset-bottom)] lg:hidden"
         aria-label="Mobile navigation"
       >
         <div className="mx-auto grid max-w-md grid-cols-5 items-end px-2 pb-1.5 pt-2">
@@ -40,15 +40,15 @@ const MobileNav = () => {
                 <NavLink
                   key={tab.to}
                   to={tab.to}
-                  className="flex flex-col items-center gap-1 text-[10px] font-semibold text-deep-rose"
+                  className="flex flex-col items-center gap-1 text-[11px] font-medium text-deep-rose"
                   aria-label={isSenior ? 'Open today’s care check-in' : "Log today's symptoms"}
                 >
                   {({ isActive }) => (
                     <>
                       <span
                         className={cn(
-                          '-mt-6 grid h-12 w-12 place-items-center rounded-full bg-pink-glow text-white shadow-glow ring-4 ring-rose-mist transition-colors',
-                          isActive && 'bg-rose-pink'
+                          '-mt-5 grid h-12 w-12 place-items-center rounded-full bg-deep-rose text-white ring-4 ring-white transition-colors',
+                          isActive && 'bg-[#A3134C]'
                         )}
                       >
                         <Icon className="h-5 w-5" aria-hidden="true" />
@@ -66,7 +66,7 @@ const MobileNav = () => {
                 end={tab.end}
                 className={({ isActive }) =>
                   cn(
-                    'flex flex-col items-center gap-1 py-1.5 text-[10px] font-semibold transition-colors',
+                    'flex min-h-[48px] flex-col items-center justify-center gap-1 py-1.5 text-[11px] font-medium transition-colors',
                     isSenior && 'min-h-[48px] justify-center text-xs',
                     isActive ? 'text-deep-rose' : 'text-muted'
                   )
@@ -88,7 +88,7 @@ const MobileNav = () => {
             type="button"
             onClick={() => setMoreOpen(true)}
             className={cn(
-              'flex flex-col items-center gap-1 py-1.5 text-[10px] font-semibold text-muted transition-colors hover:text-deep-rose',
+              'flex min-h-[48px] flex-col items-center justify-center gap-1 py-1.5 text-[11px] font-medium text-muted transition-colors hover:text-deep-rose',
               isSenior && 'min-h-[48px] justify-center text-xs'
             )}
             aria-haspopup="dialog"
@@ -111,7 +111,7 @@ const MobileNav = () => {
         <div className="flex items-center gap-3 rounded-xl bg-rose-mist p-3">
           <Avatar name={user?.name} />
           <div className="min-w-0">
-            <p className="truncate text-sm font-bold text-ink">{user?.name}</p>
+            <p className="truncate text-sm font-semibold text-ink">{user?.name}</p>
             <p className="truncate text-xs text-muted">{user?.email}</p>
           </div>
         </div>
@@ -125,7 +125,7 @@ const MobileNav = () => {
               isSenior && 'min-h-[56px]'
             )}
           >
-            <span className="grid h-9 w-9 place-items-center rounded-xl bg-pink-glow text-white">
+            <span className="grid h-9 w-9 place-items-center rounded-lg bg-deep-rose text-white">
               <NotebookPen className="h-4 w-4" />
             </span>
             <div className="min-w-0 flex-1">
@@ -150,7 +150,7 @@ const MobileNav = () => {
                   isSenior && 'min-h-[56px]'
                 )}
               >
-                <span className="grid h-9 w-9 place-items-center rounded-xl bg-soft-petal text-deep-rose">
+                <span className="grid h-9 w-9 place-items-center rounded-lg bg-rose-mist text-deep-rose">
                   <Icon className="h-4 w-4" />
                 </span>
                 <div className="min-w-0 flex-1">

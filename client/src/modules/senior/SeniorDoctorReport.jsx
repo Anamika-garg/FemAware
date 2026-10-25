@@ -89,7 +89,7 @@ const ListEditor = ({ draft, setDraft, onAdd, placeholder, items, onRemove, remo
             key={`${item}-${index}`}
             className="flex items-start gap-3 rounded-2xl border-2 border-blush-pink/60 bg-white px-4 py-3"
           >
-            <span className="mt-1 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-soft-petal text-xs font-bold text-deep-rose">
+            <span className="mt-1 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-soft-petal text-xs font-semibold text-deep-rose">
               {index + 1}
             </span>
             <span className="min-w-0 flex-1 text-base leading-relaxed text-ink">{item}</span>
@@ -114,9 +114,9 @@ const ListEditor = ({ draft, setDraft, onAdd, placeholder, items, onRemove, remo
 
 const StatBox = ({ label, value, helper }) => (
   <div className="rounded-2xl bg-rose-mist/80 p-3 text-center">
-    <p className="font-display text-xl font-semibold text-deep-rose">{value ?? '—'}</p>
-    <p className="mt-0.5 text-[11px] font-bold uppercase tracking-wide text-muted">{label}</p>
-    {helper ? <p className="mt-1 text-[11px] leading-snug text-muted">{helper}</p> : null}
+    <p className="font-display text-xl text-ink">{value ?? '—'}</p>
+    <p className="mt-0.5 text-xs font-semibold text-muted">{label}</p>
+    {helper ? <p className="mt-1 text-xs leading-snug text-muted">{helper}</p> : null}
   </div>
 );
 
@@ -357,17 +357,17 @@ const SeniorDoctorReport = () => {
                 >
                   <span
                     className={cn(
-                      'grid h-8 w-8 shrink-0 place-items-center rounded-full text-sm font-bold',
+                      'grid h-8 w-8 shrink-0 place-items-center rounded-full text-sm font-semibold',
                       active ? 'bg-white/20 text-white' : 'bg-rose-mist text-deep-rose'
                     )}
                   >
                     {complete ? <Check className="h-4 w-4" aria-hidden="true" /> : item.id}
                   </span>
                   <span className="min-w-0">
-                    <span className="block text-[10px] font-bold uppercase tracking-wide opacity-80">
+                    <span className="block text-xs font-semibold opacity-80">
                       Step {item.id}
                     </span>
-                    <span className="block truncate text-sm font-bold">{item.title}</span>
+                    <span className="block truncate text-sm font-semibold">{item.title}</span>
                   </span>
                   <Icon className="ml-auto hidden h-4 w-4 shrink-0 opacity-70 sm:block" aria-hidden="true" />
                 </button>
@@ -395,7 +395,7 @@ const SeniorDoctorReport = () => {
           {step === 1 ? (
             <div className="mt-5 space-y-5">
               <div>
-                <label htmlFor="visit-date" className="text-base font-bold text-ink">
+                <label htmlFor="visit-date" className="text-base font-semibold text-ink">
                   When is your appointment? <span className="font-medium text-muted">(optional)</span>
                 </label>
                 <p className="mt-0.5 text-sm text-muted">
@@ -411,7 +411,7 @@ const SeniorDoctorReport = () => {
               </div>
 
               <div>
-                <h3 className="text-base font-bold text-ink">What would you like to discuss?</h3>
+                <h3 className="text-base font-semibold text-ink">What would you like to discuss?</h3>
                 <p className="mt-0.5 text-sm leading-relaxed text-muted">
                   Add one concern at a time, in your own words. There is no wrong way to phrase it.
                 </p>
@@ -435,7 +435,7 @@ const SeniorDoctorReport = () => {
           {step === 2 ? (
             <div className="mt-5 space-y-5">
               <div>
-                <h3 className="text-base font-bold text-ink">
+                <h3 className="text-base font-semibold text-ink">
                   Medicines, vitamins and supplements
                 </h3>
                 <p className="mt-0.5 text-sm leading-relaxed text-muted">
@@ -468,7 +468,7 @@ const SeniorDoctorReport = () => {
           {step === 3 ? (
             <div className="mt-5 space-y-5">
               <div>
-                <h3 className="text-base font-bold text-ink">Which symptoms should we include?</h3>
+                <h3 className="text-base font-semibold text-ink">Which symptoms should we include?</h3>
                 <p className="mt-0.5 text-sm leading-relaxed text-muted">
                   Choose any topics you would like your clinician to know about. Your saved
                   check-ins are summarised automatically.
@@ -504,7 +504,7 @@ const SeniorDoctorReport = () => {
               </div>
 
               <div>
-                <label htmlFor="symptom-notes" className="text-base font-bold text-ink">
+                <label htmlFor="symptom-notes" className="text-base font-semibold text-ink">
                   Anything else about your symptoms?{' '}
                   <span className="font-medium text-muted">(optional)</span>
                 </label>
@@ -523,7 +523,7 @@ const SeniorDoctorReport = () => {
               </div>
 
               <div>
-                <h3 className="text-base font-bold text-ink">How far back should we look?</h3>
+                <h3 className="text-base font-semibold text-ink">How far back should we look?</h3>
                 <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-3" role="radiogroup" aria-label="Summary period">
                   {RANGES.map((option) => {
                     const active = range === option.value;
@@ -568,7 +568,7 @@ const SeniorDoctorReport = () => {
                   <button
                     type="button"
                     onClick={() => window.print()}
-                    className="senior-button bg-deep-rose text-white hover:bg-[#a81450]"
+                    className="senior-button bg-deep-rose text-white hover:bg-[#A3134C]"
                   >
                     <Printer className="h-5 w-5" aria-hidden="true" />
                     Print summary
@@ -586,7 +586,7 @@ const SeniorDoctorReport = () => {
               </div>
 
               <div className="rounded-2xl border-2 border-blush-pink/60 bg-white p-4">
-                <h3 className="text-base font-bold text-deep-rose">Before you print</h3>
+                <h3 className="text-base font-semibold text-deep-rose">Before you print</h3>
                 <ul className="mt-2 space-y-1.5 text-sm leading-relaxed text-muted">
                   <li className="flex gap-2">
                     <Check className="mt-0.5 h-4 w-4 shrink-0 text-deep-rose" aria-hidden="true" />
@@ -621,7 +621,7 @@ const SeniorDoctorReport = () => {
                 type="button"
                 onClick={() => goToStep(step + 1)}
                 disabled={generating}
-                className="senior-button bg-deep-rose text-white hover:bg-[#a81450]"
+                className="senior-button bg-deep-rose text-white hover:bg-[#A3134C]"
               >
                 {generating ? <Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" /> : null}
                 {step === 3 ? 'Review summary' : 'Continue'}
@@ -647,7 +647,7 @@ const SeniorDoctorReport = () => {
                   <HeartPulse className="h-5 w-5" aria-hidden="true" />
                 </span>
                 <div>
-                  <h2 id="snapshot-glance-title" className="font-display text-lg font-semibold text-deep-rose">
+                  <h2 id="snapshot-glance-title" className="font-display text-lg text-ink">
                     What your check-ins show
                   </h2>
                   <p className="mt-0.5 text-sm text-muted">
@@ -669,7 +669,7 @@ const SeniorDoctorReport = () => {
                 <StatBox label="Joint stiffness days" value={seniorSummary.jointStiffnessDays} />
               </div>
               {seniorSummary.bleedingReports > 0 ? (
-                <p className="mt-4 flex items-start gap-2 rounded-2xl bg-[#FFF0E0] px-3 py-2.5 text-sm font-semibold text-[#8A4510]">
+                <p className="mt-4 flex items-start gap-2 rounded-2xl bg-rose-mist px-3 py-2.5 text-sm font-semibold text-deep-rose">
                   <ShieldAlert className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
                   Bleeding after menopause was recorded. Please mention this first at your
                   appointment.
@@ -678,7 +678,7 @@ const SeniorDoctorReport = () => {
             </section>
           ) : (
             <section className="senior-card">
-              <h2 className="font-display text-lg font-semibold text-deep-rose">
+              <h2 className="font-display text-lg text-ink">
                 Your summary builds here
               </h2>
               <p className="mt-2 text-sm leading-relaxed text-muted">
@@ -691,7 +691,7 @@ const SeniorDoctorReport = () => {
           <section className="rounded-3xl border-2 border-blush-pink/70 bg-soft-petal/40 p-5">
             <div className="flex items-center gap-2 text-deep-rose">
               <Stethoscope className="h-5 w-5" aria-hidden="true" />
-              <h2 className="font-display text-lg font-semibold">A calm reminder</h2>
+              <h2 className="font-display text-lg">A calm reminder</h2>
             </div>
             <p className="mt-2 text-sm leading-relaxed text-muted">
               You do not need every detail to have a useful appointment. Your notes are there to
@@ -699,7 +699,7 @@ const SeniorDoctorReport = () => {
             </p>
             <Link
               to="/resources"
-              className="mt-2 inline-flex min-h-[48px] items-center gap-1 text-sm font-bold text-deep-rose hover:text-rose-pink"
+              className="mt-2 inline-flex min-h-[48px] items-center gap-1 text-sm font-semibold text-deep-rose hover:text-rose-pink"
             >
               Read the visit preparation guide
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
@@ -730,7 +730,7 @@ const SeniorDoctorReport = () => {
                   <FileText className="h-5 w-5" aria-hidden="true" />
                 </span>
                 <div className="min-w-0 flex-1">
-                  <p className="text-base font-bold text-ink">{report.title}</p>
+                  <p className="text-base font-semibold text-ink">{report.title}</p>
                   <p className="mt-0.5 flex flex-wrap items-center gap-x-2 text-sm text-muted">
                     <span className="inline-flex items-center gap-1">
                       <CalendarDays className="h-3.5 w-3.5" aria-hidden="true" />
@@ -780,10 +780,10 @@ const SeniorDoctorReport = () => {
         <div className="print-report rounded-3xl border-2 border-blush-pink bg-white p-6 text-ink shadow-soft sm:p-8">
           <header className="flex flex-wrap items-start justify-between gap-4 border-b-2 border-blush-pink pb-5">
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.2em] text-deep-rose">
+              <p className="text-xs font-semibold text-deep-rose">
                 FemAware · Senior care
               </p>
-              <h2 className="mt-1 font-display text-2xl font-semibold text-deep-rose">
+              <h2 className="mt-1 font-display text-2xl text-ink">
                 Postmenopause care summary
               </h2>
               <p className="mt-1 text-sm text-muted">
@@ -791,7 +791,7 @@ const SeniorDoctorReport = () => {
               </p>
             </div>
             <div className="text-sm text-muted sm:text-right">
-              <p className="text-base font-bold text-ink">{snapshot?.patient?.name || user?.name}</p>
+              <p className="text-base font-semibold text-ink">{snapshot?.patient?.name || user?.name}</p>
               <p>
                 {snapshot?.patient?.age ? `Age ${snapshot.patient.age}` : 'Age not recorded'}
                 {snapshot?.patient?.lifeStage ? ` · ${snapshot.patient.lifeStage}` : ''}
@@ -807,7 +807,7 @@ const SeniorDoctorReport = () => {
           {snapshot?.appointment ? (
             <div className="mt-5 grid gap-4 sm:grid-cols-2">
               <div className="print-avoid-break">
-                <h3 className="text-sm font-bold uppercase tracking-wide text-deep-rose">
+                <h3 className="text-sm font-semibold text-deep-rose">
                   Concerns to discuss
                 </h3>
                 {snapshot.appointment.concerns?.length ? (
@@ -821,7 +821,7 @@ const SeniorDoctorReport = () => {
                 )}
               </div>
               <div className="print-avoid-break">
-                <h3 className="text-sm font-bold uppercase tracking-wide text-deep-rose">
+                <h3 className="text-sm font-semibold text-deep-rose">
                   Current medications
                 </h3>
                 {snapshot.appointment.medications?.length ? (
@@ -844,7 +844,7 @@ const SeniorDoctorReport = () => {
 
           {seniorSummary ? (
             <div className="mt-6 print-avoid-break">
-              <h3 className="text-sm font-bold uppercase tracking-wide text-deep-rose">
+              <h3 className="text-sm font-semibold text-deep-rose">
                 Recent check-in patterns
               </h3>
               <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-4">
@@ -879,15 +879,15 @@ const SeniorDoctorReport = () => {
                   },
                 ].map((item) => (
                   <div key={item.label} className="rounded-xl border border-blush-pink px-2.5 py-2 text-center">
-                    <p className="text-base font-bold text-deep-rose">{item.value}</p>
-                    <p className="text-[10px] font-semibold uppercase tracking-wide text-muted">
+                    <p className="text-base font-semibold text-deep-rose">{item.value}</p>
+                    <p className="text-xs font-semibold text-muted">
                       {item.label}
                     </p>
                   </div>
                 ))}
               </div>
               {seniorSummary.bleedingReports > 0 ? (
-                <p className="mt-3 rounded-xl border-2 border-[#E9B27A] bg-[#FFF7EC] px-3 py-2 text-sm font-bold text-[#8A4510]">
+                <p className="mt-3 rounded-xl border-2 border-deep-rose/40 bg-rose-mist px-3 py-2 text-sm font-semibold text-deep-rose">
                   Vaginal bleeding after menopause was recorded{' '}
                   {seniorSummary.bleedingReports} time
                   {seniorSummary.bleedingReports === 1 ? '' : 's'} in this period. Please review
@@ -899,20 +899,20 @@ const SeniorDoctorReport = () => {
 
           {snapshot?.topPhysical?.length ? (
             <div className="mt-6 print-avoid-break">
-              <h3 className="text-sm font-bold uppercase tracking-wide text-deep-rose">
+              <h3 className="text-sm font-semibold text-deep-rose">
                 Most frequently logged symptoms
               </h3>
               <table className="mt-2 w-full border-collapse text-sm">
                 <caption className="sr-only">Symptoms logged during this period</caption>
                 <thead>
                   <tr className="border-b border-blush-pink text-left">
-                    <th scope="col" className="py-2 pr-3 font-bold text-deep-rose">
+                    <th scope="col" className="py-2 pr-3 font-semibold text-deep-rose">
                       Symptom
                     </th>
-                    <th scope="col" className="py-2 pr-3 font-bold text-deep-rose">
+                    <th scope="col" className="py-2 pr-3 font-semibold text-deep-rose">
                       Days recorded
                     </th>
-                    <th scope="col" className="py-2 font-bold text-deep-rose">
+                    <th scope="col" className="py-2 font-semibold text-deep-rose">
                       Strongest rating
                     </th>
                   </tr>
@@ -932,25 +932,25 @@ const SeniorDoctorReport = () => {
 
           {snapshot?.seniorSummary?.recent?.length ? (
             <div className="mt-6 print-avoid-break">
-              <h3 className="text-sm font-bold uppercase tracking-wide text-deep-rose">
+              <h3 className="text-sm font-semibold text-deep-rose">
                 Recent check-ins
               </h3>
               <table className="mt-2 w-full border-collapse text-sm">
                 <thead>
                   <tr className="border-b border-blush-pink text-left">
-                    <th scope="col" className="py-2 pr-3 font-bold text-deep-rose">
+                    <th scope="col" className="py-2 pr-3 font-semibold text-deep-rose">
                       Date
                     </th>
-                    <th scope="col" className="py-2 pr-3 font-bold text-deep-rose">
+                    <th scope="col" className="py-2 pr-3 font-semibold text-deep-rose">
                       Hot flashes
                     </th>
-                    <th scope="col" className="py-2 pr-3 font-bold text-deep-rose">
+                    <th scope="col" className="py-2 pr-3 font-semibold text-deep-rose">
                       Night sweats
                     </th>
-                    <th scope="col" className="py-2 pr-3 font-bold text-deep-rose">
+                    <th scope="col" className="py-2 pr-3 font-semibold text-deep-rose">
                       Sleep
                     </th>
-                    <th scope="col" className="py-2 font-bold text-deep-rose">
+                    <th scope="col" className="py-2 font-semibold text-deep-rose">
                       Joints
                     </th>
                   </tr>
@@ -978,7 +978,7 @@ const SeniorDoctorReport = () => {
 
           {snapshot?.discussionPoints?.length ? (
             <div className="mt-6 print-avoid-break">
-              <h3 className="text-sm font-bold uppercase tracking-wide text-deep-rose">
+              <h3 className="text-sm font-semibold text-deep-rose">
                 Questions you may want to ask
               </h3>
               <ul className="mt-2 list-disc space-y-1.5 pl-5 text-sm leading-relaxed">
@@ -991,7 +991,7 @@ const SeniorDoctorReport = () => {
 
           {symptomNotes.trim() ? (
             <div className="mt-6 print-avoid-break">
-              <h3 className="text-sm font-bold uppercase tracking-wide text-deep-rose">
+              <h3 className="text-sm font-semibold text-deep-rose">
                 Your notes
               </h3>
               <p className="mt-2 whitespace-pre-line text-sm leading-relaxed">{symptomNotes.trim()}</p>

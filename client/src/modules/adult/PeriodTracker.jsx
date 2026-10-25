@@ -124,7 +124,7 @@ const dayClasses = (info, currentMonth, today) => {
     'relative flex min-h-[54px] flex-col items-start gap-1 rounded-xl border p-1.5 text-left transition-all sm:min-h-[78px] sm:p-2.5 focus-visible:z-10';
   if (!currentMonth) return `${base} border-transparent bg-transparent/0 text-muted/30`;
   if (info?.type === 'period') {
-    return `${base} border-deep-rose bg-deep-rose text-white shadow-sm hover:bg-[#a8154e]`;
+    return `${base} border-deep-rose bg-deep-rose text-white shadow-sm hover:bg-[#A3134C]`;
   }
   if (info?.type === 'ovulation') {
     return `${base} border-deep-rose/50 bg-white text-deep-rose ring-2 ring-inset ring-deep-rose/30 hover:bg-soft-petal/40`;
@@ -274,7 +274,7 @@ const PeriodTracker = () => {
     return (
       <div className="space-y-6">
         <div className="h-20 w-full skeleton" />
-        <div className="grid gap-4 xl:grid-cols-[1.55fr_1fr]">
+        <div className="grid gap-4 xl:grid-cols-[1.55fr_1fr] xl:items-start">
           <CardSkeleton rows={7} />
           <CardSkeleton rows={5} />
         </div>
@@ -313,12 +313,12 @@ const PeriodTracker = () => {
         }
       />
 
-      <div className="grid gap-4 xl:grid-cols-[1.55fr_1fr]">
+      <div className="grid gap-4 xl:grid-cols-[1.55fr_1fr] xl:items-start">
         <section className="card overflow-hidden" aria-labelledby="calendar-title">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-blush-pink/40 px-4 py-4 sm:px-6">
             <div>
               <p className="eyebrow">Calendar</p>
-              <h2 id="calendar-title" className="mt-0.5 font-display text-xl font-semibold text-deep-rose">
+              <h2 id="calendar-title" className="mt-0.5 font-display text-xl text-ink">
                 {formatMonthYear(month)}
               </h2>
             </div>
@@ -347,7 +347,7 @@ const PeriodTracker = () => {
               {WEEKDAYS.map((day) => (
                 <div
                   key={day}
-                  className="py-1.5 text-center text-[9px] font-bold uppercase tracking-wider text-muted sm:text-[10px]"
+                  className="py-1.5 text-center text-xs font-semibold text-muted sm:text-[10px]"
                   role="columnheader"
                 >
                   <span className="hidden sm:inline">{day}</span>
@@ -373,7 +373,7 @@ const PeriodTracker = () => {
                   >
                     <span
                       className={cn(
-                        'flex h-6 w-6 items-center justify-center rounded-full text-[11px] font-bold sm:h-7 sm:w-7 sm:text-xs',
+                        'flex h-6 w-6 items-center justify-center rounded-full text-xs font-semibold sm:h-7 sm:w-7 sm:text-xs',
                         isCurrent && 'bg-white text-deep-rose',
                         !isCurrent && info?.type === 'period' && 'text-white'
                       )}
@@ -384,12 +384,12 @@ const PeriodTracker = () => {
                       <>
                         <span
                           className={cn(
-                            'mt-auto hidden text-[8px] font-bold uppercase tracking-wide sm:block',
+                            'mt-auto hidden text-[8px] font-semibold uppercase tracking-wide sm:block',
                             info.type === 'period'
                               ? 'text-white/85'
                               : info.type === 'predicted-period'
                                 ? 'text-pink-glow'
-                                : 'text-deep-rose/70'
+                                : 'text-muted'
                           )}
                         >
                           {info.type === 'period'
@@ -406,7 +406,7 @@ const PeriodTracker = () => {
                             info.type === 'period'
                               ? 'bg-white'
                               : info.type === 'predicted-period'
-                                ? 'bg-pink-glow'
+                                ? 'bg-deep-rose'
                                 : info.type === 'ovulation'
                                   ? 'bg-deep-rose'
                                   : 'bg-rose-pink/50'
@@ -423,17 +423,17 @@ const PeriodTracker = () => {
             <div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 rounded-xl bg-rose-mist/60 px-3 py-2.5">
               {[
                 { color: 'bg-deep-rose', label: 'Logged period' },
-                { color: 'border border-dashed border-pink-glow bg-white', label: 'Expected period' },
+                { color: 'border border-dashed border-deep-rose bg-white', label: 'Expected period' },
                 { color: 'bg-soft-petal ring-1 ring-pink-glow/20', label: 'Fertile window' },
                 { color: 'border-2 border-deep-rose/50 bg-white', label: 'Predicted ovulation' },
               ].map((item) => (
-                <span key={item.label} className="flex items-center gap-1.5 text-[10px] font-medium text-muted">
+                <span key={item.label} className="flex items-center gap-1.5 text-xs font-medium text-muted">
                   <span className={cn('h-2.5 w-2.5 rounded-full', item.color)} />
                   {item.label}
                 </span>
               ))}
             </div>
-            <p className="mt-2.5 flex items-start gap-1.5 px-1 text-[10px] leading-relaxed text-muted">
+            <p className="mt-2.5 flex items-start gap-1.5 px-1 text-xs leading-relaxed text-muted">
               <Info className="mt-0.5 h-3 w-3 shrink-0" aria-hidden="true" />
               Select any day to add or edit a period. Predictions are estimates and should not be used
               as contraception.
@@ -442,53 +442,38 @@ const PeriodTracker = () => {
         </section>
 
         <aside className="space-y-4">
-          <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-deep-rose to-[#971447] p-5 text-white shadow-card">
-            <div className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full border border-white/20" />
-            <div className="relative">
-              <div className="flex items-center justify-between">
-                <span className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-blush-pink">
-                  <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
-                  Next period
-                </span>
-                <Badge className="bg-white/15 text-white" tone="neutral">
-                  {nextDays}
-                </Badge>
-              </div>
-              <p className="mt-3 font-display text-[2rem] font-semibold leading-none">
-                {stats?.hasData ? formatDate(stats.nextPeriodStart, 'd MMM') : '—'}
+          <section className="rounded-2xl border border-soft-petal bg-rose-mist p-5 sm:p-6">
+            <div className="flex items-center justify-between gap-3">
+              <p className="text-xs font-semibold text-deep-rose">
+                Next period · estimate
               </p>
-              <p className="mt-1 text-xs text-white/70">
-                {stats?.hasData
-                  ? formatDate(stats.nextPeriodStart, 'EEEE, yyyy')
-                  : 'Log your most recent period to begin'}
-              </p>
-              <div className="mt-4 flex items-center gap-3 rounded-xl bg-white/10 p-3">
-                <div className="h-9 w-9 rounded-full border-2 border-white/40 p-1">
-                  <div className="h-full w-full rounded-full bg-pink-glow" />
-                </div>
-                <div>
-                  <p className="text-[10px] font-bold uppercase tracking-wide text-white/60">Fertile window</p>
-                  <p className="text-xs font-semibold">
-                    {stats?.hasData
-                      ? `${formatDate(stats.fertileStart, 'd MMM')} – ${formatDate(stats.fertileEnd, 'd MMM')}`
-                      : 'Unlocks with your first log'}
-                  </p>
-                </div>
-              </div>
-              <button
-                type="button"
-                onClick={() => openCreate()}
-                className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-white py-2.5 text-xs font-bold text-deep-rose transition-colors hover:bg-soft-petal"
-              >
-                <Plus className="h-4 w-4" aria-hidden="true" />
-                Log a period
-              </button>
+              {stats?.hasData ? <span className="text-xs font-medium text-muted">{nextDays}</span> : null}
             </div>
+            <p className="mt-3 font-display text-[2.25rem] leading-none text-ink">
+              {stats?.hasData ? formatDate(stats.nextPeriodStart, 'd MMM') : '—'}
+            </p>
+            <p className="mt-1.5 text-sm text-muted">
+              {stats?.hasData
+                ? formatDate(stats.nextPeriodStart, 'EEEE, yyyy')
+                : 'Log your most recent period to begin'}
+            </p>
+            <dl className="mt-5 border-t border-soft-petal pt-4">
+              <dt className="text-xs font-medium text-muted">Fertile window (estimate)</dt>
+              <dd className="mt-0.5 text-sm font-semibold text-ink">
+                {stats?.hasData
+                  ? `${formatDate(stats.fertileStart, 'd MMM')} – ${formatDate(stats.fertileEnd, 'd MMM')}`
+                  : 'Appears after your first log'}
+              </dd>
+            </dl>
+            <button type="button" onClick={() => openCreate()} className="btn-primary mt-5 w-full">
+              <Plus className="h-4 w-4" aria-hidden="true" />
+              Log a period
+            </button>
           </section>
 
           <section className="card p-5" aria-labelledby="cycle-summary-title">
             <div className="flex items-center justify-between gap-2">
-              <h2 id="cycle-summary-title" className="font-display text-lg font-semibold text-deep-rose">
+              <h2 id="cycle-summary-title" className="font-display text-lg text-ink">
                 Your averages
               </h2>
               {stats?.hasData ? <Badge tone="pink">{stats.regularity}</Badge> : null}
@@ -501,15 +486,15 @@ const PeriodTracker = () => {
                 { label: 'Logged cycles', value: stats?.hasData ? stats.cycleCount : 0 },
               ].map((item) => (
                 <div key={item.label} className="rounded-xl bg-rose-mist/80 px-3 py-2.5">
-                  <p className="text-[9px] font-bold uppercase tracking-wide text-muted">{item.label}</p>
-                  <p className="mt-0.5 text-sm font-bold capitalize text-deep-rose">{item.value}</p>
+                  <p className="text-xs font-semibold text-muted">{item.label}</p>
+                  <p className="mt-0.5 text-sm font-semibold capitalize text-deep-rose">{item.value}</p>
                 </div>
               ))}
             </div>
             {stats?.hasData ? (
               <div className="mt-4 flex items-start gap-2 rounded-xl bg-soft-petal/50 p-3">
                 <Sparkles className="mt-0.5 h-3.5 w-3.5 shrink-0 text-deep-rose" aria-hidden="true" />
-                <p className="text-[10px] leading-relaxed text-deep-rose/80">
+                <p className="text-xs leading-relaxed text-muted">
                   {stats.regularity === 'regular'
                     ? 'Your recent cycles are nicely consistent. Keep logging to refine predictions.'
                     : 'A little variation is common. More logged cycles make your predictions more personal.'}
@@ -520,10 +505,10 @@ const PeriodTracker = () => {
 
           <section className="card p-5" aria-labelledby="history-title">
             <div className="flex items-center justify-between gap-2">
-              <h2 id="history-title" className="font-display text-lg font-semibold text-deep-rose">
+              <h2 id="history-title" className="font-display text-lg text-ink">
                 Period history
               </h2>
-              <span className="text-[10px] font-semibold text-muted">{cycles.length} logged</span>
+              <span className="text-xs font-semibold text-muted">{cycles.length} logged</span>
             </div>
             {cycles.length ? (
               <ul className="mt-3 divide-y divide-blush-pink/40">
@@ -538,11 +523,11 @@ const PeriodTracker = () => {
                         <Droplets className="h-3.5 w-3.5 text-deep-rose" aria-hidden="true" />
                       </span>
                       <div className="min-w-0 flex-1">
-                        <p className="text-xs font-bold text-ink">
+                        <p className="text-xs font-semibold text-ink">
                           {formatDate(cycle.startDate, 'd MMM')}
                           {cycle.endDate ? ` – ${formatDate(cycle.endDate, 'd MMM yyyy')}` : `, ${formatDate(cycle.startDate, 'yyyy')}`}
                         </p>
-                        <p className="mt-0.5 text-[10px] capitalize text-muted">
+                        <p className="mt-0.5 text-xs capitalize text-muted">
                           {meta.label} flow{duration ? ` · ${duration} days` : ' · in progress'}
                         </p>
                       </div>
@@ -583,7 +568,7 @@ const PeriodTracker = () => {
 
           <div className="flex items-start gap-2 rounded-xl border border-blush-pink/60 bg-white/70 p-3">
             <Lock className="mt-0.5 h-3.5 w-3.5 shrink-0 text-pink-glow" aria-hidden="true" />
-            <p className="text-[10px] leading-relaxed text-muted">
+            <p className="text-xs leading-relaxed text-muted">
               Your cycle data is visible only to you. You can export or delete it from Privacy &amp; data.
             </p>
           </div>
@@ -664,7 +649,7 @@ const PeriodTracker = () => {
                     className={cn(
                       'rounded-xl border p-2.5 text-left transition-all',
                       selected
-                        ? 'border-pink-glow bg-soft-petal/70 shadow-soft'
+                        ? 'border-deep-rose bg-soft-petal/70 shadow-soft'
                         : 'border-blush-pink/70 bg-white hover:border-pink-glow/50'
                     )}
                   >
@@ -674,13 +659,13 @@ const PeriodTracker = () => {
                           key={dot}
                           className={cn(
                             'h-1.5 w-1.5 rounded-full',
-                            dot <= option.dots ? 'bg-pink-glow' : 'bg-blush-pink/50'
+                            dot <= option.dots ? 'bg-deep-rose' : 'bg-blush-pink/50'
                           )}
                         />
                       ))}
                     </span>
-                    <span className="mt-1.5 block text-[11px] font-bold text-deep-rose">{option.label}</span>
-                    <span className="block text-[9px] text-muted">{option.description}</span>
+                    <span className="mt-1.5 block text-xs font-semibold text-deep-rose">{option.label}</span>
+                    <span className="block text-xs text-muted">{option.description}</span>
                   </button>
                 );
               })}

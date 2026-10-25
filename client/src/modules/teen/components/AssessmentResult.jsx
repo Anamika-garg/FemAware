@@ -13,18 +13,18 @@ export function AssessmentResult({ level, guidance }) {
 
   return (
     <div className="space-y-4">
-      <div role={level === 'urgent' ? 'alert' : 'status'} className={`rounded-3xl border-2 p-6 ${style.container}`}>
-        <span className={`inline-flex rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wide ${style.badge}`}>
+      <div role={level === 'urgent' ? 'alert' : 'status'} className={`rounded-2xl border p-6 sm:p-8 ${style.container}`}>
+        <span className={`inline-flex rounded-md px-2.5 py-1 text-xs font-semibold ${style.badge}`}>
           {LEVEL_LABELS[level]}
         </span>
-        <h2 className="mt-3 flex items-center gap-2 text-2xl font-display font-semibold text-deep-rose">
+        <h2 className="mt-4 flex items-center gap-3 font-display text-[1.75rem] leading-tight">
           <Icon aria-hidden className="size-7 shrink-0" /> {guidance.title}
         </h2>
         <p className="mt-2 leading-relaxed">{guidance.body}</p>
         {guidance.actions?.length > 0 && (
           <>
-            <h3 className="mt-4 font-display font-semibold text-deep-rose">What you can do</h3>
-            <ul className="mt-1 list-inside list-disc space-y-1">
+            <h3 className="mt-5 font-semibold">What you can do</h3>
+            <ul className="mt-2 list-inside list-disc space-y-1.5 leading-relaxed">
               {guidance.actions.map((a) => (
                 <li key={a}>{a}</li>
               ))}
@@ -35,7 +35,7 @@ export function AssessmentResult({ level, guidance }) {
 
       {reasons.length > 0 && (
         <div className="card p-5">
-          <h3 className="font-display font-semibold text-deep-rose">Why we suggested this</h3>
+          <h3 className="font-semibold text-ink">Why we suggested this</h3>
           <ul className="mt-2 list-inside list-disc space-y-1">
             {reasons.map((r) => (
               <li key={r.code}>{r.text}</li>
@@ -44,7 +44,7 @@ export function AssessmentResult({ level, guidance }) {
         </div>
       )}
 
-      <p className="rounded-2xl bg-petal p-4 text-sm font-semibold">
+      <p className="rounded-xl border border-petal bg-mist p-4 text-sm">
         This check is not a diagnosis. It helps you decide on next steps. Only a doctor or nurse can tell you what is causing your
         symptoms.
       </p>

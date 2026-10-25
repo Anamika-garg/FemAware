@@ -7,6 +7,7 @@ import Button from '../components/ui/Button';
 import { useAuth } from '../context/AuthContext';
 import { getErrorMessage } from '../lib/api';
 import { cn } from '../lib/utils';
+import { START_STAGES, loadPreferences } from '../lib/preferences';
 
 const requirementChecks = [
   { label: '8+ characters', test: (value) => value.length >= 8 },
@@ -26,6 +27,8 @@ const Register = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { register } = useAuth();
+  const [saved] = useState(loadPreferences);
+  const savedStage = START_STAGES.find((item) => item.value === saved?.stage);
   const navigate = useNavigate();
 
   const score = useMemo(
@@ -62,12 +65,21 @@ const Register = () => {
     <AuthLayout>
       <div className="animate-fade-up">
         <p className="eyebrow">A space of your own</p>
-        <h1 className="mt-2 font-display text-[2.4rem] font-semibold leading-tight tracking-tight text-deep-rose">
+        <h1 className="mt-3 font-display text-[2.5rem] leading-tight text-ink">
           Start understanding your body.
         </h1>
         <p className="mt-3 text-sm leading-relaxed text-muted">
           Two quiet minutes to set up. No cycle is too irregular, too short, or too complicated.
         </p>
+        {savedStage ? (
+          <p className="mt-5 flex items-start gap-2 rounded-lg bg-rose-mist px-4 py-3 text-sm text-ink">
+            <Check className="mt-0.5 h-4 w-4 shrink-0 text-deep-rose" aria-hidden="true" />
+            <span>
+              We’ll carry over your starting point: <span className="font-semibold">{savedStage.label}</span>
+              {saved.topics.length ? ` · ${saved.topics.length} topic${saved.topics.length === 1 ? '' : 's'}` : ''}.
+            </span>
+          </p>
+        ) : null}
 
         {error ? (
           <div
@@ -152,7 +164,7 @@ const Register = () => {
                       key={index}
                       className={cn(
                         'h-1 flex-1 rounded-full transition-colors',
-                        score > index ? 'bg-pink-glow' : 'bg-blush-pink/50'
+                        score > index ? 'bg-deep-rose' : 'bg-soft-petal'
                       )}
                     />
                   ))}
@@ -164,8 +176,8 @@ const Register = () => {
                       <span
                         key={check.label}
                         className={cn(
-                          'flex items-center gap-1 text-[10px] font-medium',
-                          passed ? 'text-[#2E7D5B]' : 'text-muted'
+                          'flex items-center gap-1 text-xs font-medium',
+                          passed ? 'text-deep-rose' : 'text-muted'
                         )}
                       >
                         <Check className={cn('h-3 w-3', !passed && 'opacity-30')} aria-hidden="true" />
@@ -191,14 +203,14 @@ const Register = () => {
             />
           </Field>
 
-          <label className="flex cursor-pointer items-start gap-3 rounded-xl bg-white/60 p-3">
+          <label className="flex cursor-pointer items-start gap-3 rounded-lg border border-line p-3.5">
             <input
               type="checkbox"
               checked={form.consent}
               onChange={(event) => set('consent', event.target.checked)}
-              className="mt-0.5 h-4 w-4 rounded border-blush-pink accent-pink-glow"
+              className="mt-0.5 h-4 w-4 rounded border-blush-pink accent-deep-rose"
             />
-            <span className="text-[11px] leading-relaxed text-muted">
+            <span className="text-xs leading-relaxed text-muted">
               I understand FemAware offers educational information and self-tracking tools, not a
               medical diagnosis. I will speak with a qualified clinician about medical concerns.
             </span>
@@ -213,7 +225,7 @@ const Register = () => {
           Already have an account?{' '}
           <Link
             to="/login"
-            className="font-bold text-deep-rose underline decoration-blush-pink underline-offset-4 transition-colors hover:text-rose-pink"
+            className="link"
           >
             Sign in
           </Link>

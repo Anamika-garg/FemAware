@@ -33,17 +33,17 @@ export default function Safety() {
                   <span className="grid size-12 place-items-center rounded-2xl bg-petal">
                     <ModuleIcon name={m.icon} className="size-6" />
                   </span>
-                  <h2 className="text-2xl font-display font-semibold text-deep-rose">{m.title}</h2>
+                  <h2 className="text-2xl font-display text-ink">{m.title}</h2>
                 </div>
                 <p className="mt-3 text-muted">{m.summary}</p>
                 <ul className="mt-4 space-y-2">
                   {m.keyPoints.map((k) => (
-                    <li key={k} className="rounded-2xl bg-mist px-4 py-3 font-bold">
+                    <li key={k} className="rounded-2xl bg-mist px-4 py-3 font-semibold">
                       {k}
                     </li>
                   ))}
                 </ul>
-                <Link to={`/learn/${m.slug}`} className="mt-4 inline-flex items-center gap-1 font-bold underline">
+                <Link to={`/learn/${m.slug}`} className="mt-4 inline-flex items-center gap-1 font-semibold underline">
                   Read the full lesson & take the quiz <ArrowRight aria-hidden className="size-4" />
                 </Link>
               </Card>
@@ -51,19 +51,19 @@ export default function Safety() {
           </div>
 
           {data.helplines && (
-            <aside className="space-y-4 self-start rounded-3xl bg-deep p-6 text-white">
-              <h2 className="flex items-center gap-2 text-xl font-display font-semibold text-deep-rose">
-                <Phone aria-hidden className="size-5" /> {data.helplines.title}
+            <aside className="space-y-4 self-start rounded-2xl border-2 border-deep bg-white p-6 text-ink">
+              <h2 className="flex items-center gap-2 text-2xl font-display text-ink">
+                <Phone aria-hidden className="size-5 text-deep" /> {data.helplines.title}
               </h2>
-              <p className="text-petal">{data.helplines.body}</p>
+              <p className="text-muted">{data.helplines.body}</p>
               <ul className="space-y-2">
                 {data.helplines.actions.map((a) => (
-                  <li key={a} className="rounded-2xl bg-white/10 p-3 font-bold">
+                  <li key={a} className="rounded-xl bg-mist p-3 font-semibold">
                     {a}
                   </li>
                 ))}
               </ul>
-              <div className="rounded-2xl bg-white p-4 text-deep">
+              <div className="border-t border-petal pt-4">
                 <SourceList sources={data.helplines.sources} />
               </div>
               <ReviewNotice status={data.helplines.reviewStatus} />

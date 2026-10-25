@@ -50,7 +50,7 @@ export default function TeenCalendar() {
             <Button variant="ghost" size="sm" onClick={() => shiftMonth(-1)} aria-label="Previous month">
               <ChevronLeft aria-hidden />
             </Button>
-            <h2 className="text-xl font-display font-semibold text-deep-rose" aria-live="polite">
+            <h2 className="text-xl font-display text-ink" aria-live="polite">
               {monthLabel}
             </h2>
             <Button variant="ghost" size="sm" onClick={() => shiftMonth(1)} aria-label="Next month">
@@ -59,7 +59,7 @@ export default function TeenCalendar() {
           </div>
           <div role="grid" aria-label={monthLabel} className="grid grid-cols-7 gap-1 text-center">
             {WEEKDAYS.map((d) => (
-              <div key={d} role="columnheader" className="py-1 text-xs font-bold uppercase text-rose">
+              <div key={d} role="columnheader" className="py-1 text-xs font-semibold text-rose">
                 {d}
               </div>
             ))}
@@ -87,7 +87,7 @@ export default function TeenCalendar() {
               );
             })}
           </div>
-          <ul className="mt-4 flex flex-wrap gap-4 text-xs font-bold">
+          <ul className="mt-4 flex flex-wrap gap-4 text-xs font-semibold">
             <li className="flex items-center gap-1.5"><span className="size-3 rounded bg-deep" /> Period</li>
             <li className="flex items-center gap-1.5"><span className="size-3 rounded border-2 border-dashed border-glow" /> Predicted</li>
             <li className="flex items-center gap-1.5"><span className="size-2 rounded-full bg-rose" /> Symptoms logged</li>
@@ -98,7 +98,7 @@ export default function TeenCalendar() {
       </div>
 
       <Card className="mt-6">
-        <h2 className="text-xl font-display font-semibold text-deep-rose">Logged periods</h2>
+        <h2 className="text-xl font-display text-ink">Logged periods</h2>
         {cycles.length === 0 ? (
           <p className="mt-2 text-muted">No periods logged yet. Pick the day your last period started.</p>
         ) : (
@@ -106,7 +106,7 @@ export default function TeenCalendar() {
             {cycles.map((c) => (
               <li key={c.id}>
                 <button type="button" onClick={() => setSelected(apiDay(c.startDate))} className="flex w-full items-center justify-between gap-3 py-3 text-left hover:text-rose">
-                  <span className="flex items-center gap-2 font-bold">
+                  <span className="flex items-center gap-2 font-semibold">
                     <Droplet aria-hidden className="size-4 fill-current" />
                     {formatDay(c.startDate, { day: 'numeric', month: 'short', year: 'numeric' })} – {c.endDate ? formatDay(c.endDate) : 'ongoing'}
                   </span>
@@ -156,33 +156,33 @@ function DayPanel({ day, today, cycles, entries, onChange }) {
 
   return (
     <Card>
-      <h2 className="text-xl font-display font-semibold text-deep-rose">{formatDay(day, { weekday: 'long', day: 'numeric', month: 'long' })}</h2>
+      <h2 className="text-xl font-display text-ink">{formatDay(day, { weekday: 'long', day: 'numeric', month: 'long' })}</h2>
       {isFuture && !entry ? (
         <p className="mt-3 text-muted">You can only log periods for today or earlier.</p>
       ) : (
         <>
           {openEntry && (
             <div className="mt-3 rounded-2xl bg-petal p-4">
-              <p className="font-bold">Your period that started {formatDay(openEntry.startDate)} has no end date.</p>
+              <p className="font-semibold">Your period that started {formatDay(openEntry.startDate)} has no end date.</p>
               <Button size="sm" className="mt-2" disabled={busy} onClick={() => run(() => api.cycles.update(openEntry.id, { endDate: day }))}>
                 End period on this day
               </Button>
             </div>
           )}
           <form onSubmit={save} className="mt-4 space-y-4">
-            <p className="font-bold">{entry ? 'Edit this period' : 'Log a period'}</p>
+            <p className="font-semibold">{entry ? 'Edit this period' : 'Log a period'}</p>
             <div className="grid grid-cols-2 gap-3">
-              <label className="text-sm font-bold">
+              <label className="text-sm font-semibold">
                 Start
                 <input type="date" required max={today} value={form.startDate} onChange={(e) => setForm({ ...form, startDate: e.target.value })} className="mt-1 w-full rounded-xl border-2 border-blush bg-white px-3 py-2" />
               </label>
-              <label className="text-sm font-bold">
+              <label className="text-sm font-semibold">
                 End <span className="font-semibold text-muted/80">(optional)</span>
                 <input type="date" min={form.startDate} max={today} value={form.endDate} onChange={(e) => setForm({ ...form, endDate: e.target.value })} className="mt-1 w-full rounded-xl border-2 border-blush bg-white px-3 py-2" />
               </label>
             </div>
             <fieldset>
-              <legend className="text-sm font-bold">Flow</legend>
+              <legend className="text-sm font-semibold">Flow</legend>
               <div className="mt-1 flex gap-2">
                 {Object.entries(FLOW_LABELS).map(([value, label]) => (
                   <button

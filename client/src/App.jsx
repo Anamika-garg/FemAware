@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect } from 'react';
 import { Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom';
 import AppLayout from './components/AppLayout';
+import PublicLayout from './components/site/PublicLayout';
 import Logo from './components/Logo';
 import Spinner from './components/ui/Spinner';
 import { useAuth } from './context/AuthContext';
@@ -15,6 +16,15 @@ const PrivacySettings = lazy(() => import('./pages/PrivacySettings'));
 const LatePeriodNavigator = lazy(() => import('./pages/LatePeriodNavigator'));
 const PCOSAwareness = lazy(() => import('./pages/PCOSAwareness'));
 const NotFound = lazy(() => import('./pages/NotFound'));
+
+// The public site: no account needed to read, explore or find a starting point.
+const Landing = lazy(() => import('./pages/site/Landing'));
+const Explore = lazy(() => import('./pages/site/Explore'));
+const Library = lazy(() => import('./pages/site/Library'));
+const Article = lazy(() => import('./pages/site/Article'));
+const SymptomGuide = lazy(() => import('./pages/site/SymptomGuide'));
+const About = lazy(() => import('./pages/site/About'));
+const Start = lazy(() => import('./pages/site/Start'));
 
 // The adult women module lives under src/modules/adult. Every page is loaded
 // on demand so the shared shell stays light.
@@ -80,19 +90,19 @@ const StagePage = ({ adult: AdultPage, senior: SeniorPage = AdultPage, teen: Tee
 };
 
 const ScrollToTop = () => {
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'auto' });
-  }, [pathname]);
+    // Anchored links such as /explore#adult scroll to their section instead.
+    if (!hash) window.scrollTo({ top: 0, behavior: 'auto' });
+  }, [pathname, hash]);
   return null;
 };
 
 const FullPageLoader = () => (
-  <div className="grid min-h-screen place-items-center bg-petal-radial">
+  <div className="grid min-h-screen place-items-center bg-canvas">
     <div className="flex flex-col items-center gap-5">
       <Logo />
-      <Spinner className="h-7 w-7" label="Opening your space" />
-      <p className="text-xs font-medium text-muted">Opening your space…</p>
+      <Spinner className="h-6 w-6" label="Loading" />
     </div>
   </div>
 );
@@ -122,19 +132,20 @@ const PublicOnly = () => {
   return <Outlet />;
 };
 
-const RootRedirect = () => {
-  const { user, loading } = useAuth();
-  if (loading) return <FullPageLoader />;
-  if (!user) return <Navigate to="/login" replace />;
-  return <Navigate to={user.onboardingComplete ? '/dashboard' : '/onboarding'} replace />;
-};
-
 const App = () => (
   <>
     <ScrollToTop />
     <Suspense fallback={<FullPageLoader />}>
       <Routes>
-      <Route path="/" element={<RootRedirect />} />
+      <Route element={<PublicLayout />}>
+        <Route path="/" element={<Landing />} />
+        <Route path="/explore" element={<Explore />} />
+        <Route path="/library" element={<Library />} />
+        <Route path="/library/:id" element={<Article />} />
+        <Route path="/symptom-guide" element={<SymptomGuide />} />
+        <Route path="/about" element={<About />} />
+      </Route>
+      <Route path="/start" element={<Start />} />
 
       <Route element={<PublicOnly />}>
         <Route path="/login" element={<Login />} />

@@ -17,6 +17,7 @@ import { useAsync } from '../lib/useAsync';
 import { formatDay } from '../lib/dates';
 import { humanize, SYMPTOM_LABELS } from '../lib/labels';
 import { colors } from '../theme/tokens';
+import { usingSampleData } from './Dashboard';
 import { Button, Card, EmptyState, ErrorMessage, Loading, PageHeader } from '../components/ui';
 
 const axisProps = {
@@ -28,7 +29,7 @@ const axisProps = {
 function ChartTooltip({ active, payload, label, format }) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="rounded-xl border border-blush bg-white px-3 py-2 text-sm font-bold text-deep shadow-soft">
+    <div className="rounded-xl border border-blush bg-white px-3 py-2 text-sm font-semibold text-deep shadow-soft">
       <p className="text-xs text-rose">{label}</p>
       <p>{format(payload[0].value)}</p>
     </div>
@@ -39,13 +40,13 @@ function ChartTooltip({ active, payload, label, format }) {
 function DataTable({ caption, columns, rows }) {
   return (
     <details className="mt-3 text-sm">
-      <summary className="cursor-pointer font-bold">Show as table</summary>
+      <summary className="cursor-pointer font-semibold">Show as table</summary>
       <table className="mt-2 w-full text-left">
         <caption className="sr-only">{caption}</caption>
         <thead>
           <tr className="border-b border-petal">
             {columns.map((c) => (
-              <th key={c} scope="col" className="py-1 font-bold">
+              <th key={c} scope="col" className="py-1 font-semibold">
                 {c}
               </th>
             ))}
@@ -109,6 +110,13 @@ export default function TeenInsights() {
         <SummaryButton />
       </PageHeader>
 
+      {usingSampleData() ? (
+        <p role="status" className="mb-6 rounded-xl border border-deep/30 bg-mist p-4 text-sm">
+          <span className="font-semibold text-deep">Demonstration data.</span> These charts use the sample entries you
+          loaded, not your own records.
+        </p>
+      ) : null}
+
       <dl className="mb-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
         <Tile label="Average cycle" value={cycle.averageCycleLength ? `${cycle.averageCycleLength} days` : '—'} hint={cycle.shortestCycle ? `Range ${cycle.shortestCycle}–${cycle.longestCycle} days` : 'Log 2+ periods'} />
         <Tile label="Average period" value={cycle.averagePeriodLength ? `${cycle.averagePeriodLength} days` : '—'} hint="Typical: up to 7 days" />
@@ -117,7 +125,7 @@ export default function TeenInsights() {
       </dl>
 
       <Card className="mb-6">
-        <h2 className="flex items-center gap-2 text-xl font-display font-semibold text-deep-rose">
+        <h2 className="flex items-center gap-2 text-xl font-display text-ink">
           <AlertTriangle aria-hidden className="size-5" /> Things to talk to a doctor about
         </h2>
         {flags.length === 0 ? (
@@ -141,7 +149,7 @@ export default function TeenInsights() {
 
       <div className="grid gap-6 lg:grid-cols-2">
         <Card className="lg:col-span-2">
-          <h2 className="text-xl font-display font-semibold text-deep-rose">Cycle length (days)</h2>
+          <h2 className="text-xl font-display text-ink">Cycle length (days)</h2>
           <p className="text-sm text-muted">Shaded band: the typical teen range of 21–45 days.</p>
           {cycleData.length === 0 ? (
             <div className="mt-4">
@@ -167,7 +175,7 @@ export default function TeenInsights() {
         </Card>
 
         <Card>
-          <h2 className="text-xl font-display font-semibold text-deep-rose">Most logged symptoms</h2>
+          <h2 className="text-xl font-display text-ink">Most logged symptoms</h2>
           {symptomData.length === 0 ? (
             <div className="mt-4">
               <EmptyState title="No symptoms logged yet" />
@@ -191,7 +199,7 @@ export default function TeenInsights() {
         </Card>
 
         <Card>
-          <h2 className="text-xl font-display font-semibold text-deep-rose">Average severity by month (1–5)</h2>
+          <h2 className="text-xl font-display text-ink">Average severity by month (1–5)</h2>
           {severityData.length === 0 ? (
             <div className="mt-4">
               <EmptyState title="No symptoms logged yet" />
@@ -221,8 +229,8 @@ export default function TeenInsights() {
 function Tile({ label, value, hint }) {
   return (
     <div className="card p-5">
-      <dt className="text-xs font-bold uppercase tracking-wide text-rose">{label}</dt>
-      <dd className="mt-1 text-2xl font-display font-semibold text-deep-rose capitalize">{value}</dd>
+      <dt className="text-xs font-semibold text-rose">{label}</dt>
+      <dd className="mt-1 text-2xl font-display text-ink capitalize">{value}</dd>
       <dd className="text-xs font-semibold text-muted">{hint}</dd>
     </div>
   );

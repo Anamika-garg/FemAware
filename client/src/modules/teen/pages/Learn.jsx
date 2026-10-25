@@ -20,11 +20,11 @@ export default function Learn() {
         <Card className="mb-6">
           <div className="flex flex-wrap items-center gap-6">
             <div>
-              <p className="text-xs font-bold uppercase tracking-wide text-rose">Level</p>
-              <p className="text-3xl font-display font-semibold text-deep-rose">{p.level}</p>
+              <p className="text-xs font-semibold text-rose">Level</p>
+              <p className="text-3xl font-display text-ink">{p.level}</p>
             </div>
             <div className="min-w-48 flex-1">
-              <p className="mb-1 text-sm font-bold">
+              <p className="mb-1 text-sm font-semibold">
                 {p.completedModules.length} of {p.totalModules} lessons complete · {p.xp} XP
               </p>
               <ProgressBar value={p.completedModules.length} max={p.totalModules || 1} label="Lessons completed" />
@@ -37,7 +37,7 @@ export default function Learn() {
                 <li key={a.code} className={`flex items-center gap-3 rounded-2xl p-3 ${earned ? 'bg-deep text-white' : 'bg-mist'}`}>
                   {earned ? <Star aria-hidden className="size-5 fill-current" /> : <Lock aria-hidden className="size-5 text-blush" />}
                   <span>
-                    <span className="block text-sm font-bold">{a.title}</span>
+                    <span className="block text-sm font-semibold">{a.title}</span>
                     <span className={`block text-xs ${earned ? 'text-petal' : 'text-muted'}`}>
                       {a.description}
                       {!earned && <span className="sr-only"> (locked)</span>}
@@ -58,7 +58,7 @@ export default function Learn() {
             const completed = done.get(m.slug);
             return (
               <li key={m.slug}>
-                <Link to={`/learn/${m.slug}`} className="card flex h-full flex-col p-6 transition-transform hover:-translate-y-1">
+                <Link to={`/learn/${m.slug}`} className="card flex h-full flex-col p-6 transition-transform">
                   <div className="flex items-start justify-between">
                     <span className="grid size-12 place-items-center rounded-2xl bg-petal">
                       <ModuleIcon name={m.icon} className="size-6" />
@@ -69,9 +69,9 @@ export default function Learn() {
                       </Badge>
                     )}
                   </div>
-                  <h2 className="mt-4 text-lg font-display font-semibold text-deep-rose">{m.title}</h2>
+                  <h2 className="mt-4 text-lg font-display text-ink">{m.title}</h2>
                   <p className="mt-1 flex-1 text-muted">{m.summary}</p>
-                  <div className="mt-4 flex flex-wrap gap-2 text-xs font-bold">
+                  <div className="mt-4 flex flex-wrap gap-2 text-xs font-semibold">
                     <Badge>
                       <Clock aria-hidden className="size-3.5" /> {m.estimatedMinutes} min
                     </Badge>

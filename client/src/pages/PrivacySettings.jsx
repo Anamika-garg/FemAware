@@ -103,6 +103,12 @@ const DeleteDataDialog = ({ open, mode, range, onClose, onDeleted }) => {
       if (config.requirePhrase) payload.confirmation = confirmation;
 
       await api.delete('/user/data', { data: payload });
+      try {
+        // Any sample entries are gone too, so stop labelling charts as demonstration data.
+        localStorage.removeItem('femaware_teen_sample_data');
+      } catch {
+        // Storage unavailable: nothing to clear.
+      }
       onDeleted(mode);
       onClose();
     } catch (err) {
@@ -182,7 +188,7 @@ const DeleteDataDialog = ({ open, mode, range, onClose, onDeleted }) => {
               type="text"
               value={confirmation}
               onChange={(event) => setConfirmation(event.target.value)}
-              className="input-field tracking-[0.2em]"
+              className="input-field tracking-[0.14em]"
               placeholder="DELETE"
               autoComplete="off"
               required
@@ -371,18 +377,17 @@ const PrivacySettings = () => {
         description="See what we store, take a copy whenever you like, and erase exactly what you choose. No dark patterns, no retention games."
       />
 
-      <section className="relative overflow-hidden rounded-2xl border border-white/70 bg-gradient-to-r from-soft-petal via-blush-pink/60 to-rose-mist p-5 sm:p-6">
-        <div className="pointer-events-none absolute -right-8 -top-20 h-48 w-48 rounded-full bg-white/40 blur-2xl" />
+      <section className="relative overflow-hidden rounded-2xl border border-line bg-rose-mist p-5 sm:p-6">
         <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-start gap-3">
             <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-white/70 text-deep-rose">
               <ShieldCheck className="h-5 w-5" aria-hidden="true" />
             </span>
             <div>
-              <h2 className="font-display text-lg font-semibold text-deep-rose sm:text-xl">
+              <h2 className="font-display text-lg text-ink sm:text-xl">
                 Your health data is never for sale.
               </h2>
-              <p className="mt-1 max-w-2xl text-xs leading-relaxed text-deep-rose/70">
+              <p className="mt-1 max-w-2xl text-xs leading-relaxed text-muted">
                 FemAware uses your logs to power your own dashboard, predictions and reports. We do
                 not use them to sell advertising or train public models.
               </p>
@@ -405,10 +410,10 @@ const PrivacySettings = () => {
                   <FileJson className="h-5 w-5" aria-hidden="true" />
                 </span>
                 <div>
-                  <h2 id="export-title" className="font-display text-xl font-semibold text-deep-rose">
+                  <h2 id="export-title" className="font-display text-xl text-ink">
                     Export your complete history
                   </h2>
-                  <p className="text-[10px] text-muted">Raw, structured JSON · no lock-in</p>
+                  <p className="text-xs text-muted">Raw, structured JSON · no lock-in</p>
                 </div>
               </div>
               <Badge tone="calm">Portable</Badge>
@@ -427,7 +432,7 @@ const PrivacySettings = () => {
                 return (
                   <div key={item.label} className="flex items-center gap-2 rounded-lg bg-rose-mist/70 px-3 py-2">
                     <Icon className="h-3.5 w-3.5 text-deep-rose" aria-hidden="true" />
-                    <span className="text-[10px] font-semibold text-deep-rose">{item.label}</span>
+                    <span className="text-xs font-semibold text-deep-rose">{item.label}</span>
                   </div>
                 );
               })}
@@ -441,7 +446,7 @@ const PrivacySettings = () => {
             >
               Download my data (.json)
             </Button>
-            <p className="mt-2 text-[9px] leading-relaxed text-muted">
+            <p className="mt-2 text-xs leading-relaxed text-muted">
               Stored on this device. Treat the file as private — it contains personal health information.
             </p>
           </section>
@@ -452,10 +457,10 @@ const PrivacySettings = () => {
                 <Database className="h-5 w-5" aria-hidden="true" />
               </span>
               <div>
-                <h2 id="delete-range-title" className="font-display text-xl font-semibold text-deep-rose">
+                <h2 id="delete-range-title" className="font-display text-xl text-ink">
                   Delete a specific date range
                 </h2>
-                <p className="text-[10px] text-muted">Keep the rest of your history intact.</p>
+                <p className="text-xs text-muted">Keep the rest of your history intact.</p>
               </div>
             </div>
 
@@ -495,7 +500,7 @@ const PrivacySettings = () => {
               </p>
             ) : null}
             <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
-              <p className="text-[9px] leading-relaxed text-muted">
+              <p className="text-xs leading-relaxed text-muted">
                 Period entries are matched by start date; symptom logs by their entry date. Saved reports
                 are not affected.
               </p>
@@ -511,10 +516,10 @@ const PrivacySettings = () => {
                 <Lock className="h-5 w-5" aria-hidden="true" />
               </span>
               <div>
-                <h2 id="privacy-practices-title" className="font-display text-xl font-semibold text-deep-rose">
+                <h2 id="privacy-practices-title" className="font-display text-xl text-ink">
                   How your information is handled
                 </h2>
-                <p className="text-[10px] text-muted">Plain-language privacy practices.</p>
+                <p className="text-xs text-muted">Plain-language privacy practices.</p>
               </div>
             </div>
             <ul className="mt-4 space-y-3">
@@ -535,7 +540,7 @@ const PrivacySettings = () => {
             </ul>
             <div className="mt-4 flex items-start gap-2 rounded-xl bg-rose-mist/70 p-3">
               <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-deep-rose" aria-hidden="true" />
-              <p className="text-[10px] leading-relaxed text-muted">
+              <p className="text-xs leading-relaxed text-muted">
                 FemAware is not an emergency service or a medical record. If you need urgent care,
                 contact local emergency services or a clinician directly.
               </p>
@@ -550,10 +555,10 @@ const PrivacySettings = () => {
                 <UserRound className="h-5 w-5" aria-hidden="true" />
               </span>
               <div>
-                <h2 id="profile-title" className="font-display text-xl font-semibold text-deep-rose">
+                <h2 id="profile-title" className="font-display text-xl text-ink">
                   Your profile
                 </h2>
-                <p className="text-[10px] text-muted">Adjust what FemAware knows about you.</p>
+                <p className="text-xs text-muted">Adjust what FemAware knows about you.</p>
               </div>
             </div>
 
@@ -604,7 +609,7 @@ const PrivacySettings = () => {
                     disabled
                     className="input-field pl-10 pr-16"
                   />
-                  <span className="absolute right-3.5 top-1/2 -translate-y-1/2 rounded-full bg-rose-mist px-2 py-0.5 text-[8px] font-bold uppercase tracking-wide text-muted">
+                  <span className="absolute right-3.5 top-1/2 -translate-y-1/2 rounded-full bg-rose-mist px-2 py-0.5 text-[8px] font-semibold uppercase tracking-wide text-muted">
                     Locked
                   </span>
                 </div>
@@ -632,12 +637,12 @@ const PrivacySettings = () => {
                         className={cn(
                           'rounded-lg border px-2.5 py-2 text-left transition-colors',
                           selected
-                            ? 'border-pink-glow bg-soft-petal/70 text-deep-rose'
+                            ? 'border-deep-rose bg-soft-petal/70 text-deep-rose'
                             : 'border-blush-pink/60 bg-white text-muted hover:border-pink-glow'
                         )}
                       >
-                        <span className="block text-[11px] font-bold">{option.label}</span>
-                        <span className="block text-[9px] font-semibold uppercase tracking-wide">{option.ages}</span>
+                        <span className="block text-xs font-semibold">{option.label}</span>
+                        <span className="block text-xs font-semibold">{option.ages}</span>
                       </button>
                     );
                   })}
@@ -658,16 +663,16 @@ const PrivacySettings = () => {
                         onClick={() => toggleStage(stage.value)}
                         aria-pressed={selected}
                         className={cn(
-                          'flex items-center gap-1.5 rounded-lg border px-2.5 py-2 text-left text-[10px] font-semibold transition-colors',
+                          'flex items-center gap-1.5 rounded-lg border px-2.5 py-2 text-left text-xs font-semibold transition-colors',
                           selected
-                            ? 'border-pink-glow bg-soft-petal/70 text-deep-rose'
+                            ? 'border-deep-rose bg-soft-petal/70 text-deep-rose'
                             : 'border-blush-pink/60 bg-white text-muted hover:border-pink-glow'
                         )}
                       >
                         <span
                           className={cn(
                             'grid h-3.5 w-3.5 place-items-center rounded-full border',
-                            selected ? 'border-pink-glow bg-pink-glow text-white' : 'border-blush-pink'
+                            selected ? 'border-deep-rose bg-deep-rose text-white' : 'border-blush-pink'
                           )}
                           aria-hidden="true"
                         >
@@ -693,9 +698,9 @@ const PrivacySettings = () => {
                         onClick={() => toggleGoal(goal.value)}
                         aria-pressed={selected}
                         className={cn(
-                          'rounded-full border px-2 py-1 text-[9px] font-semibold transition-colors',
+                          'rounded-full border px-2 py-1 text-xs font-semibold transition-colors',
                           selected
-                            ? 'border-pink-glow bg-pink-glow text-white'
+                            ? 'border-deep-rose bg-deep-rose text-white'
                             : 'border-blush-pink/70 bg-white text-muted hover:border-pink-glow'
                         )}
                       >
@@ -722,7 +727,7 @@ const PrivacySettings = () => {
                       }
                       className="input-field pr-12"
                     />
-                    <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[9px] font-semibold text-muted">days</span>
+                    <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-xs font-semibold text-muted">days</span>
                   </div>
                 </Field>
                 <Field label="Usual period length" htmlFor="profile-period">
@@ -738,11 +743,11 @@ const PrivacySettings = () => {
                       }
                       className="input-field pr-12"
                     />
-                    <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[9px] font-semibold text-muted">days</span>
+                    <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-xs font-semibold text-muted">days</span>
                   </div>
                 </Field>
               </div>
-              <p className="text-[9px] leading-relaxed text-muted">
+              <p className="text-xs leading-relaxed text-muted">
                 Changing these defaults shapes your predictions. Existing period logs stay exactly as
                 you recorded them.
               </p>
@@ -756,10 +761,10 @@ const PrivacySettings = () => {
           </section>
 
           <section className="rounded-2xl border border-blush-pink/70 bg-white p-5 sm:p-6" aria-labelledby="clear-title">
-            <h2 id="clear-title" className="font-display text-lg font-semibold text-deep-rose">
+            <h2 id="clear-title" className="font-display text-lg text-ink">
               Start fresh
             </h2>
-            <p className="mt-1.5 text-[11px] leading-relaxed text-muted">
+            <p className="mt-1.5 text-xs leading-relaxed text-muted">
               Remove every period, symptom and report while keeping your account and profile. Your
               predictions return to a neutral starting point.
             </p>
@@ -777,11 +782,11 @@ const PrivacySettings = () => {
           <section className="rounded-2xl border border-deep-rose/20 bg-[#FFF7FA] p-5 sm:p-6" aria-labelledby="danger-title">
             <div className="flex items-center gap-2">
               <AlertTriangle className="h-4 w-4 text-deep-rose" aria-hidden="true" />
-              <h2 id="danger-title" className="font-display text-lg font-semibold text-deep-rose">
+              <h2 id="danger-title" className="font-display text-lg text-ink">
                 Delete account
               </h2>
             </div>
-            <p className="mt-1.5 text-[11px] leading-relaxed text-muted">
+            <p className="mt-1.5 text-xs leading-relaxed text-muted">
               Permanently erase your account and all associated health records. This action is
               irreversible and removes your access immediately.
             </p>

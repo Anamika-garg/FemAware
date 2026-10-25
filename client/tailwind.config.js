@@ -4,15 +4,19 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Brand palette. Pink is the only hue; white and near-white carry most surfaces.
         'rose-mist': '#FFF1F6',
         'soft-petal': '#FFD6E7',
         'blush-pink': '#F8BBD0',
         'pink-glow': '#F672A7',
         'rose-pink': '#E0487E',
         'deep-rose': '#C2185B',
-        ink: '#3B2430',
-        muted: '#6E5A64',
-        canvas: '#FFF8FB',
+        // Text tones: warm near-blacks tinted toward the brand rose.
+        ink: '#33202A',
+        muted: '#6B5560',
+        // Page canvas and hairline borders.
+        canvas: '#FFFBFC',
+        line: '#F3D9E3',
         // Short names used by the teen module. Same palette as above.
         mist: '#FFF1F6',
         petal: '#FFD6E7',
@@ -22,36 +26,48 @@ export default {
         deep: '#C2185B',
       },
       fontFamily: {
-        sans: ['"Plus Jakarta Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        display: ['Fraunces', 'ui-serif', 'Georgia', 'serif'],
+        sans: ['"DM Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        display: ['"DM Serif Display"', 'ui-serif', 'Georgia', 'serif'],
+      },
+      fontSize: {
+        // Editorial display sizes with tuned line heights.
+        'display-sm': ['2rem', { lineHeight: '1.15', letterSpacing: '-0.01em' }],
+        'display-md': ['2.5rem', { lineHeight: '1.1', letterSpacing: '-0.015em' }],
+        'display-lg': ['3.25rem', { lineHeight: '1.05', letterSpacing: '-0.02em' }],
+        'display-xl': ['4rem', { lineHeight: '1.02', letterSpacing: '-0.025em' }],
+      },
+      borderRadius: {
+        // A quieter corner scale. Pills remain available as rounded-full.
+        lg: '0.5rem',
+        xl: '0.625rem',
+        '2xl': '0.75rem',
+        '3xl': '1rem',
       },
       boxShadow: {
-        soft: '0 1px 2px rgba(59, 36, 48, 0.04), 0 10px 28px -20px rgba(194, 24, 91, 0.28)',
-        card: '0 18px 45px -28px rgba(194, 24, 91, 0.32)',
-        glow: '0 12px 28px -12px rgba(246, 114, 167, 0.65)',
+        soft: '0 1px 2px rgba(51, 32, 42, 0.05)',
+        card: '0 1px 2px rgba(51, 32, 42, 0.04), 0 16px 40px -28px rgba(51, 32, 42, 0.28)',
+        glow: '0 1px 2px rgba(51, 32, 42, 0.08)',
+        lift: '0 2px 4px rgba(51, 32, 42, 0.04), 0 22px 44px -30px rgba(194, 24, 91, 0.35)',
       },
-      backgroundImage: {
-        'hero-gradient': 'linear-gradient(115deg, #FFF1F6 0%, #FFD6E7 55%, #F672A7 140%)',
-        'brand-gradient': 'linear-gradient(to right, #FFF1F6, #F672A7)',
-        'petal-radial':
-          'radial-gradient(circle at 20% 10%, rgba(248,187,208,0.45), transparent 42%), radial-gradient(circle at 90% 0%, rgba(246,114,167,0.18), transparent 34%)',
+      maxWidth: {
+        prose: '68ch',
       },
       keyframes: {
         'fade-up': {
-          '0%': { opacity: '0', transform: 'translateY(10px)' },
+          '0%': { opacity: '0', transform: 'translateY(6px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
-        'soft-pulse': {
-          '0%, 100%': { opacity: '0.55', transform: 'scale(1)' },
-          '50%': { opacity: '0.9', transform: 'scale(1.03)' },
+        'pop-in': {
+          '0%': { transform: 'scale(0.85)' },
+          '100%': { transform: 'scale(1)' },
         },
         shimmer: {
           '100%': { transform: 'translateX(100%)' },
         },
       },
       animation: {
-        'fade-up': 'fade-up 0.45s ease-out both',
-        'soft-pulse': 'soft-pulse 6s ease-in-out infinite',
+        'fade-up': 'fade-up 0.35s ease-out both',
+        'pop-in': 'pop-in 0.18s ease-out both',
         shimmer: 'shimmer 1.6s infinite',
       },
     },

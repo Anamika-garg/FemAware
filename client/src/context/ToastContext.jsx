@@ -6,9 +6,9 @@ const ToastContext = createContext(null);
 const TOAST_STYLES = {
   success: {
     icon: CheckCircle2,
-    container: 'border-[#B7E4C7] bg-white',
-    iconClass: 'text-[#2E7D5B]',
-    title: 'text-[#1F5C43]',
+    container: 'border-blush-pink bg-white',
+    iconClass: 'text-deep-rose',
+    title: 'text-deep-rose',
   },
   error: {
     icon: AlertCircle,
@@ -64,11 +64,11 @@ export const ToastProvider = ({ children }) => {
             <div
               key={toast.id}
               role="status"
-              className={`pointer-events-auto flex items-start gap-3 rounded-2xl border p-4 shadow-card animate-fade-up ${style.container}`}
+              className={`pointer-events-auto flex items-start gap-3 rounded-xl border p-4 shadow-card animate-fade-up ${style.container}`}
             >
               <Icon className={`mt-0.5 h-5 w-5 shrink-0 ${style.iconClass}`} aria-hidden="true" />
               <div className="min-w-0 flex-1">
-                <p className={`text-sm font-bold ${style.title}`}>{toast.title}</p>
+                <p className={`text-sm font-semibold ${style.title}`}>{toast.title}</p>
                 {toast.message ? (
                   <p className="mt-1 text-xs leading-relaxed text-muted">{toast.message}</p>
                 ) : null}

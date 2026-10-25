@@ -114,7 +114,7 @@ const ResourceLibrary = () => {
           <button
             type="button"
             onClick={() => setSavedOnly((value) => !value)}
-            className={cn('btn-secondary btn-sm', savedOnly && 'border-pink-glow bg-soft-petal')}
+            className={cn('btn-secondary btn-sm', savedOnly && 'border-deep-rose bg-soft-petal')}
             aria-pressed={savedOnly}
           >
             <BookmarkCheck className="h-4 w-4" aria-hidden="true" />
@@ -123,29 +123,28 @@ const ResourceLibrary = () => {
         }
       />
 
-      <section className="relative overflow-hidden rounded-2xl border border-white/70 bg-gradient-to-r from-soft-petal via-blush-pink/70 to-pink-glow/70 p-5 sm:p-6">
-        <div className="pointer-events-none absolute -right-8 -top-16 h-48 w-48 rounded-full bg-white/30 blur-2xl" />
+      <section className="relative overflow-hidden rounded-2xl border border-line bg-rose-mist p-5 sm:p-6">
         <div className="relative grid gap-4 sm:grid-cols-[1fr_auto] sm:items-center">
           <div>
-            <p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-deep-rose">
+            <p className="flex items-center gap-1.5 text-xs font-semibold text-deep-rose">
               <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
               Start here
             </p>
-            <h2 className="mt-2 max-w-2xl font-display text-xl font-semibold leading-snug text-deep-rose sm:text-2xl">
+            <h2 className="mt-2 max-w-2xl font-display text-xl leading-snug text-ink sm:text-2xl">
               Understanding your body should feel clarifying, not frightening.
             </h2>
-            <p className="mt-2 max-w-2xl text-xs leading-relaxed text-deep-rose/70">
+            <p className="mt-2 max-w-2xl text-xs leading-relaxed text-muted">
               Browse by topic or search for what is on your mind. Every article includes context and
               clear guidance on when to speak with a clinician.
             </p>
           </div>
-          <div className="flex items-center gap-2 rounded-2xl bg-white/50 p-3 backdrop-blur-sm">
+          <div className="flex items-center gap-2 rounded-2xl bg-white/50 p-3">
             <span className="grid h-9 w-9 place-items-center rounded-xl bg-white/80 text-deep-rose">
               <BookOpen className="h-4 w-4" aria-hidden="true" />
             </span>
             <div>
-              <p className="text-lg font-bold leading-none text-deep-rose">{RESOURCES.length}</p>
-              <p className="text-[9px] font-bold uppercase tracking-wide text-deep-rose/60">articles</p>
+              <p className="text-lg font-semibold leading-none text-deep-rose">{RESOURCES.length}</p>
+              <p className="text-xs font-semibold text-muted">articles</p>
             </div>
           </div>
         </div>
@@ -186,7 +185,7 @@ const ResourceLibrary = () => {
                 onClick={() => setCategory(item)}
                 aria-pressed={category === item}
                 className={cn(
-                  'flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 text-[10px] font-bold transition-colors',
+                  'flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors',
                   category === item
                     ? 'border-deep-rose bg-deep-rose text-white'
                     : 'border-blush-pink/70 bg-white text-muted hover:border-pink-glow hover:text-deep-rose'
@@ -207,7 +206,7 @@ const ResourceLibrary = () => {
 
           {savedOnly || query || category !== 'All' ? (
             <div className="mt-2 flex flex-wrap items-center justify-between gap-2">
-              <p className="text-[10px] text-muted">
+              <p className="text-xs text-muted">
                 {filtered.length} article{filtered.length === 1 ? '' : 's'} match your filters
               </p>
               <button
@@ -217,7 +216,7 @@ const ResourceLibrary = () => {
                   setQuery('');
                   setCategory('All');
                 }}
-                className="text-[10px] font-bold text-deep-rose hover:text-rose-pink"
+                className="text-xs font-semibold text-deep-rose hover:text-rose-pink"
               >
                 Clear all filters
               </button>
@@ -234,7 +233,7 @@ const ResourceLibrary = () => {
               return (
                 <article
                   key={resource.id}
-                  className="group flex flex-col rounded-2xl border border-blush-pink/60 bg-white p-4 transition-all hover:-translate-y-0.5 hover:border-pink-glow/50 hover:shadow-soft"
+                  className="group flex flex-col rounded-2xl border border-blush-pink/60 bg-white p-4 transition-all hover:border-pink-glow/50"
                 >
                   <div className="flex items-start justify-between gap-2">
                     <span className={cn('badge', styles.badge)}>
@@ -257,29 +256,29 @@ const ResourceLibrary = () => {
                     </button>
                   </div>
 
-                  <h3 className="mt-3 font-display text-[1.05rem] font-semibold leading-snug text-deep-rose">
+                  <h3 className="mt-3 font-display text-[1.05rem] leading-snug text-ink">
                     {resource.title}
                   </h3>
-                  <p className="mt-1.5 flex-1 text-[11px] leading-relaxed text-muted">
+                  <p className="mt-1.5 flex-1 text-xs leading-relaxed text-muted">
                     {resource.summary}
                   </p>
 
                   <div className="mt-3 flex items-center justify-between border-t border-blush-pink/30 pt-3">
-                    <span className="flex items-center gap-1 text-[9px] font-semibold text-muted">
+                    <span className="flex items-center gap-1 text-xs font-semibold text-muted">
                       <Clock className="h-3 w-3" aria-hidden="true" />
                       {resource.readTime} read
                     </span>
                     <button
                       type="button"
                       onClick={() => openArticle(resource)}
-                      className="flex items-center gap-1 text-[10px] font-bold text-deep-rose transition-colors hover:text-rose-pink"
+                      className="flex items-center gap-1 text-xs font-semibold text-deep-rose transition-colors hover:text-rose-pink"
                     >
                       Read
                       <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
                     </button>
                   </div>
                   {justSaved === resource.id ? (
-                    <p className="mt-1 text-[9px] font-semibold text-pink-glow">Saved on this device</p>
+                    <p className="mt-1 text-xs font-semibold text-pink-glow">Saved on this device</p>
                   ) : null}
                 </article>
               );
@@ -311,7 +310,7 @@ const ResourceLibrary = () => {
 
       <div className="flex items-start gap-2 rounded-2xl border border-blush-pink/60 bg-white/70 p-4">
         <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-pink-glow" aria-hidden="true" />
-        <p className="text-[10px] leading-relaxed text-muted">
+        <p className="text-xs leading-relaxed text-muted">
           FemAware articles are educational and cannot account for your full medical history. They
           are not a substitute for personalised advice from a qualified clinician. If you are worried
           about a symptom, book an appointment — you do not need to wait for it to become severe.
@@ -328,7 +327,7 @@ const ResourceLibrary = () => {
           <article>
             <div className="flex items-start justify-between gap-4">
               <div>
-                <h1 className="font-display text-2xl font-semibold leading-tight text-deep-rose sm:text-3xl">
+                <h1 className="font-display text-2xl leading-tight text-ink sm:text-3xl">
                   {activeArticle.title}
                 </h1>
                 <div className="mt-2 flex flex-wrap items-center gap-2">
@@ -338,14 +337,14 @@ const ResourceLibrary = () => {
               </div>
             </div>
 
-            <p className="mt-5 border-l-2 border-pink-glow pl-4 text-sm font-medium leading-relaxed text-deep-rose/80">
+            <p className="mt-5 border-l-2 border-deep-rose pl-4 text-sm font-medium leading-relaxed text-muted">
               {activeArticle.intro}
             </p>
 
             <div className="mt-6 space-y-6">
               {activeArticle.sections.map((section) => (
                 <section key={section.heading}>
-                  <h2 className="font-display text-lg font-semibold text-deep-rose">{section.heading}</h2>
+                  <h2 className="font-display text-lg text-ink">{section.heading}</h2>
                   {section.paragraphs?.map((paragraph) => (
                     <p key={paragraph} className="mt-2 text-sm leading-relaxed text-ink/85">
                       {paragraph}
@@ -355,7 +354,7 @@ const ResourceLibrary = () => {
                     <ul className="mt-3 space-y-2">
                       {section.bullets.map((bullet) => (
                         <li key={bullet} className="flex items-start gap-2 text-sm leading-relaxed text-ink/85">
-                          <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-pink-glow" aria-hidden="true" />
+                          <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-deep-rose" aria-hidden="true" />
                           {bullet}
                         </li>
                       ))}
@@ -366,7 +365,7 @@ const ResourceLibrary = () => {
             </div>
 
             <div className="mt-6 rounded-2xl bg-soft-petal/50 p-4">
-              <p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wide text-deep-rose">
+              <p className="flex items-center gap-1.5 text-xs font-semibold text-deep-rose">
                 <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
                 The takeaway
               </p>
@@ -375,14 +374,14 @@ const ResourceLibrary = () => {
 
             <div className="mt-4 flex flex-wrap gap-1.5">
               {activeArticle.tags.map((tag) => (
-                <span key={tag} className="rounded-full bg-rose-mist px-2 py-1 text-[9px] font-semibold text-muted">
+                <span key={tag} className="rounded-full bg-rose-mist px-2 py-1 text-xs font-semibold text-muted">
                   #{tag}
                 </span>
               ))}
             </div>
 
             <div className="mt-6 flex flex-col gap-2 border-t border-blush-pink/40 pt-4 sm:flex-row sm:items-center sm:justify-between">
-              <p className="max-w-lg text-[9px] leading-relaxed text-muted">
+              <p className="max-w-lg text-xs leading-relaxed text-muted">
                 Educational content only. Speak with a qualified clinician about your personal health.
                 If you have urgent symptoms, seek same-day care.
               </p>
@@ -398,7 +397,7 @@ const ResourceLibrary = () => {
 
             {related.length ? (
               <div className="mt-6 border-t border-blush-pink/40 pt-4">
-                <p className="text-[10px] font-bold uppercase tracking-wide text-muted">Keep reading</p>
+                <p className="text-xs font-semibold text-muted">Keep reading</p>
                 <div className="mt-2 grid gap-2 sm:grid-cols-2">
                   {related.map((item) => (
                     <button
@@ -407,8 +406,8 @@ const ResourceLibrary = () => {
                       onClick={() => openArticle(item)}
                       className="rounded-xl border border-blush-pink/60 p-3 text-left transition-colors hover:border-pink-glow hover:bg-rose-mist/40"
                     >
-                      <p className="text-xs font-bold text-deep-rose">{item.title}</p>
-                      <p className="mt-1 text-[9px] text-muted">{item.readTime} read</p>
+                      <p className="text-xs font-semibold text-deep-rose">{item.title}</p>
+                      <p className="mt-1 text-xs text-muted">{item.readTime} read</p>
                     </button>
                   ))}
                 </div>

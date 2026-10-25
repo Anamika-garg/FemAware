@@ -222,10 +222,10 @@ const PCOSAwareness = () => {
               <ShieldAlert className="h-5 w-5" aria-hidden="true" />
             </span>
             <div>
-              <p className="text-sm font-bold text-deep-rose">
+              <p className="text-sm font-semibold text-deep-rose">
                 FemAware does not diagnose PCOS.
               </p>
-              <p className="mt-0.5 text-[11px] leading-relaxed text-muted">
+              <p className="mt-0.5 text-xs leading-relaxed text-muted">
                 No app can. PCOS is diagnosed by a qualified clinician after a history, examination
                 and, where appropriate, blood tests or an ultrasound — and after other causes are
                 ruled out.
@@ -243,7 +243,7 @@ const PCOSAwareness = () => {
               <span className="grid h-9 w-9 place-items-center rounded-xl bg-soft-petal text-deep-rose">
                 <Info className="h-4 w-4" aria-hidden="true" />
               </span>
-              <h2 id="what-is-title" className="font-display text-xl font-semibold text-deep-rose">
+              <h2 id="what-is-title" className="font-display text-xl text-ink">
                 What PCOS actually is
               </h2>
             </div>
@@ -281,8 +281,8 @@ const PCOSAwareness = () => {
                 return (
                   <div key={item.title} className="rounded-xl bg-rose-mist/70 p-3.5">
                     <Icon className="h-4 w-4 text-deep-rose" aria-hidden="true" />
-                    <p className="mt-2 text-xs font-bold text-deep-rose">{item.title}</p>
-                    <p className="mt-0.5 text-[10px] leading-relaxed text-muted">{item.text}</p>
+                    <p className="mt-2 text-xs font-semibold text-deep-rose">{item.title}</p>
+                    <p className="mt-0.5 text-xs leading-relaxed text-muted">{item.text}</p>
                   </div>
                 );
               })}
@@ -294,7 +294,7 @@ const PCOSAwareness = () => {
               <span className="grid h-9 w-9 place-items-center rounded-xl bg-soft-petal text-deep-rose">
                 <Stethoscope className="h-4 w-4" aria-hidden="true" />
               </span>
-              <h2 id="diagnosis-title" className="font-display text-xl font-semibold text-deep-rose">
+              <h2 id="diagnosis-title" className="font-display text-xl text-ink">
                 How a clinician assesses PCOS
               </h2>
             </div>
@@ -321,17 +321,17 @@ const PCOSAwareness = () => {
                 },
               ].map((item) => (
                 <div key={item.number} className="flex items-start gap-3 rounded-xl border border-blush-pink/50 p-3">
-                  <span className="font-display text-lg font-semibold text-pink-glow">{item.number}</span>
+                  <span className="font-display text-lg text-pink-glow">{item.number}</span>
                   <div>
-                    <p className="text-xs font-bold text-deep-rose">{item.title}</p>
-                    <p className="mt-0.5 text-[10px] leading-relaxed text-muted">{item.text}</p>
+                    <p className="text-xs font-semibold text-deep-rose">{item.title}</p>
+                    <p className="mt-0.5 text-xs leading-relaxed text-muted">{item.text}</p>
                   </div>
                 </div>
               ))}
             </div>
             <div className="mt-4 flex items-start gap-2 rounded-xl bg-soft-petal/40 p-3">
               <FlaskConical className="mt-0.5 h-3.5 w-3.5 shrink-0 text-deep-rose" aria-hidden="true" />
-              <p className="text-[10px] leading-relaxed text-deep-rose/80">
+              <p className="text-xs leading-relaxed text-muted">
                 Clinicians may also check thyroid function, prolactin, blood pressure, glucose and
                 lipids. Ultrasound findings change across the lifespan, so they are interpreted in
                 context — not as a stand-alone diagnosis.
@@ -340,7 +340,7 @@ const PCOSAwareness = () => {
           </section>
 
           <section className="card p-5 sm:p-6" aria-labelledby="myths-title">
-            <h2 id="myths-title" className="font-display text-xl font-semibold text-deep-rose">
+            <h2 id="myths-title" className="font-display text-xl text-ink">
               Three things PCOS is not
             </h2>
             <div className="mt-3 grid gap-2.5 sm:grid-cols-3">
@@ -350,8 +350,8 @@ const PCOSAwareness = () => {
                 { title: 'Not diagnosed by an app', text: 'A checklist can help you prepare, but symptoms overlap with many conditions. A clinician must assess.' },
               ].map((item) => (
                 <div key={item.title} className="rounded-xl bg-rose-mist/70 p-3">
-                  <p className="text-[11px] font-bold text-deep-rose">{item.title}</p>
-                  <p className="mt-1 text-[10px] leading-relaxed text-muted">{item.text}</p>
+                  <p className="text-xs font-semibold text-deep-rose">{item.title}</p>
+                  <p className="mt-1 text-xs leading-relaxed text-muted">{item.text}</p>
                 </div>
               ))}
             </div>
@@ -361,7 +361,7 @@ const PCOSAwareness = () => {
         <aside className="space-y-4">
           <section className="card p-5" aria-labelledby="your-data-title">
             <div className="flex items-center justify-between gap-2">
-              <h2 id="your-data-title" className="font-display text-lg font-semibold text-deep-rose">
+              <h2 id="your-data-title" className="font-display text-lg text-ink">
                 From your own tracking
               </h2>
               <Badge tone="pink">{stats?.hasData ? `${stats.cycleCount} cycles` : 'No data yet'}</Badge>
@@ -387,20 +387,20 @@ const PCOSAwareness = () => {
                     { label: 'Period length', value: stats?.hasData ? `${stats.averagePeriodLength}d` : '—' },
                   ].map((item) => (
                     <div key={item.label} className="rounded-xl bg-rose-mist/80 px-3 py-2.5">
-                      <p className="text-[9px] font-bold uppercase tracking-wide text-muted">{item.label}</p>
-                      <p className="mt-0.5 text-xs font-bold capitalize text-deep-rose">{item.value}</p>
+                      <p className="text-xs font-semibold text-muted">{item.label}</p>
+                      <p className="mt-0.5 text-xs font-semibold capitalize text-deep-rose">{item.value}</p>
                     </div>
                   ))}
                 </div>
 
                 {summary?.topPhysical?.length ? (
                   <div className="mt-3">
-                    <p className="text-[9px] font-bold uppercase tracking-wide text-muted">
+                    <p className="text-xs font-semibold text-muted">
                       Your most logged symptoms
                     </p>
                     <div className="mt-1.5 flex flex-wrap gap-1">
                       {summary.topPhysical.slice(0, 5).map((item) => (
-                        <span key={item.name} className="rounded-full bg-soft-petal px-2 py-0.5 text-[9px] font-semibold text-deep-rose">
+                        <span key={item.name} className="rounded-full bg-soft-petal px-2 py-0.5 text-xs font-semibold text-deep-rose">
                           {item.name} · {item.count}
                         </span>
                       ))}
@@ -408,7 +408,7 @@ const PCOSAwareness = () => {
                   </div>
                 ) : null}
 
-                <p className="mt-3 flex items-start gap-1.5 rounded-lg bg-white p-2.5 text-[9px] leading-relaxed text-muted ring-1 ring-blush-pink/40">
+                <p className="mt-3 flex items-start gap-1.5 rounded-lg bg-white p-2.5 text-xs leading-relaxed text-muted ring-1 ring-blush-pink/40">
                   <Info className="mt-0.5 h-3 w-3 shrink-0" aria-hidden="true" />
                   {stats?.hasData &&
                   (stats.averageCycleLength > 35 || stats.regularity === 'irregular')
@@ -417,7 +417,7 @@ const PCOSAwareness = () => {
                 </p>
               </>
             )}
-            <Link to="/cycle" className="mt-4 flex items-center justify-center gap-1 text-[10px] font-bold text-deep-rose hover:text-rose-pink">
+            <Link to="/cycle" className="mt-4 flex items-center justify-center gap-1 text-xs font-semibold text-deep-rose hover:text-rose-pink">
               Open cycle tracker
               <ArrowRight className="h-3 w-3" aria-hidden="true" />
             </Link>
@@ -426,7 +426,7 @@ const PCOSAwareness = () => {
           <section className="rounded-2xl border border-blush-pink/60 bg-white/75 p-4">
             <div className="flex items-center gap-2">
               <ClipboardList className="h-4 w-4 text-pink-glow" aria-hidden="true" />
-              <p className="text-[10px] font-bold text-deep-rose">If you book an appointment</p>
+              <p className="text-xs font-semibold text-deep-rose">If you book an appointment</p>
             </div>
             <ul className="mt-2 space-y-1.5">
               {[
@@ -435,8 +435,8 @@ const PCOSAwareness = () => {
                 'Note any medicines and family history of PCOS or diabetes.',
                 'Ask which assessments are appropriate for you.',
               ].map((item) => (
-                <li key={item} className="flex items-start gap-1.5 text-[10px] leading-relaxed text-muted">
-                  <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-pink-glow" aria-hidden="true" />
+                <li key={item} className="flex items-start gap-1.5 text-xs leading-relaxed text-muted">
+                  <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-deep-rose" aria-hidden="true" />
                   {item}
                 </li>
               ))}
@@ -448,7 +448,7 @@ const PCOSAwareness = () => {
 
           <div className="flex items-start gap-2 rounded-xl border border-blush-pink/60 bg-white/70 p-3.5">
             <Droplets className="mt-0.5 h-3.5 w-3.5 shrink-0 text-pink-glow" aria-hidden="true" />
-            <p className="text-[10px] leading-relaxed text-muted">
+            <p className="text-xs leading-relaxed text-muted">
               Irregular periods can also be caused by thyroid conditions, high prolactin, perimenopause,
               significant weight change, stress and some medicines. This is why a clinician rules out
               other causes first.
@@ -458,11 +458,11 @@ const PCOSAwareness = () => {
       </div>
 
       <section className="card overflow-hidden" aria-labelledby="reflection-title">
-        <div className="border-b border-blush-pink/40 bg-gradient-to-r from-rose-mist via-soft-petal/50 to-white px-5 py-5 sm:px-6">
+        <div className="border-b border-blush-pink/40 bg-rose-mist px-5 py-5 sm:px-6">
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
               <p className="eyebrow">Pattern reflection</p>
-              <h2 id="reflection-title" className="mt-1 font-display text-2xl font-semibold text-deep-rose">
+              <h2 id="reflection-title" className="mt-1 font-display text-2xl text-ink">
                 Notice what you have been experiencing
               </h2>
               <p className="mt-1 max-w-2xl text-xs leading-relaxed text-muted">
@@ -478,7 +478,7 @@ const PCOSAwareness = () => {
                 <button
                   type="button"
                   onClick={reset}
-                  className="flex items-center gap-1 text-[10px] font-bold text-deep-rose hover:text-rose-pink"
+                  className="flex items-center gap-1 text-xs font-semibold text-deep-rose hover:text-rose-pink"
                 >
                   <RefreshCw className="h-3 w-3" aria-hidden="true" />
                   Reset
@@ -498,8 +498,8 @@ const PCOSAwareness = () => {
                     <span className="grid h-7 w-7 place-items-center rounded-lg bg-soft-petal text-deep-rose">
                       <Icon className="h-3.5 w-3.5" aria-hidden="true" />
                     </span>
-                    <span className="text-xs font-bold text-deep-rose">{group.title}</span>
-                    <span className="ml-auto text-[9px] font-medium text-muted">{group.description}</span>
+                    <span className="text-xs font-semibold text-deep-rose">{group.title}</span>
+                    <span className="ml-auto text-xs font-medium text-muted">{group.description}</span>
                   </legend>
                   <div className="mt-2 grid gap-1.5 sm:grid-cols-2">
                     {group.signs.map((sign) => {
@@ -511,9 +511,9 @@ const PCOSAwareness = () => {
                           onClick={() => toggle(sign.id)}
                           aria-pressed={checked}
                           className={cn(
-                            'flex items-center gap-2 rounded-xl border px-3 py-2.5 text-left text-[11px] font-medium transition-all',
+                            'flex items-center gap-2 rounded-xl border px-3 py-2.5 text-left text-xs font-medium transition-all',
                             checked
-                              ? 'border-pink-glow bg-soft-petal/60 text-deep-rose'
+                              ? 'border-deep-rose bg-soft-petal/60 text-deep-rose'
                               : 'border-blush-pink/60 bg-white text-ink hover:border-pink-glow/60'
                           )}
                         >
@@ -521,7 +521,7 @@ const PCOSAwareness = () => {
                             className={cn(
                               'grid h-4 w-4 shrink-0 place-items-center rounded border',
                               checked
-                                ? 'border-pink-glow bg-pink-glow text-white'
+                                ? 'border-deep-rose bg-deep-rose text-white'
                                 : 'border-blush-pink bg-white'
                             )}
                             aria-hidden="true"
@@ -539,31 +539,31 @@ const PCOSAwareness = () => {
           </div>
 
           <div className="space-y-3">
-            <div className="rounded-2xl border border-pink-glow/30 bg-gradient-to-br from-soft-petal/60 to-white p-5">
+            <div className="rounded-2xl border border-pink-glow/30 bg-rose-mist p-5">
               <div className="flex items-center gap-2">
-                <span className="grid h-9 w-9 place-items-center rounded-xl bg-pink-glow text-white">
+                <span className="grid h-9 w-9 place-items-center rounded-xl bg-deep-rose text-white">
                   <HeartPulse className="h-4 w-4" aria-hidden="true" />
                 </span>
                 <div>
-                  <p className="text-[9px] font-bold uppercase tracking-wide text-muted">Your reflection</p>
-                  <p className="text-sm font-bold text-deep-rose">{interpretation.label}</p>
+                  <p className="text-xs font-semibold text-muted">Your reflection</p>
+                  <p className="text-sm font-semibold text-deep-rose">{interpretation.label}</p>
                 </div>
               </div>
               <div className="mt-4">
                 <div className="h-2 overflow-hidden rounded-full bg-white">
                   <div
-                    className="h-full rounded-full bg-gradient-to-r from-pink-glow to-deep-rose transition-all"
+                    className="h-full rounded-full bg-deep-rose transition-all"
                     style={{ width: `${Math.max(4, (selected.length / ALL_SIGNS.length) * 100)}%` }}
                   />
                 </div>
-                <p className="mt-1.5 text-[9px] text-muted">
+                <p className="mt-1.5 text-xs text-muted">
                   {selected.length} reflection signals selected · not a risk score
                 </p>
               </div>
               <p className="mt-3 text-xs leading-relaxed text-ink/80">{interpretation.message}</p>
               <div className="mt-4 flex items-start gap-2 rounded-xl bg-white/80 p-3">
                 <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-deep-rose" aria-hidden="true" />
-                <p className="text-[9px] leading-relaxed text-deep-rose/80">
+                <p className="text-xs leading-relaxed text-muted">
                   Many people without PCOS will recognise some of these patterns, and some people with
                   PCOS will recognise none. This reflection cannot confirm or exclude PCOS.
                 </p>
@@ -571,8 +571,8 @@ const PCOSAwareness = () => {
             </div>
 
             <div className="rounded-2xl border border-blush-pink/60 bg-white p-4">
-              <p className="text-[10px] font-bold uppercase tracking-wide text-muted">Take this with you</p>
-              <p className="mt-1.5 text-[11px] leading-relaxed text-muted">
+              <p className="text-xs font-semibold text-muted">Take this with you</p>
+              <p className="mt-1.5 text-xs leading-relaxed text-muted">
                 Copy a plain-language note with your tracked cycle averages and the patterns you
                 selected. It is written for your own notes — not a diagnosis.
               </p>
@@ -600,7 +600,7 @@ const PCOSAwareness = () => {
 
       <div className="flex items-start gap-2 rounded-2xl border border-blush-pink/60 bg-white/75 p-4">
         <ShieldAlert className="mt-0.5 h-4 w-4 shrink-0 text-deep-rose" aria-hidden="true" />
-        <p className="text-[10px] leading-relaxed text-muted">
+        <p className="text-xs leading-relaxed text-muted">
           FemAware is an educational tracking tool and does not provide medical diagnosis or
           treatment. If you are concerned about PCOS, irregular periods, acne, hair changes, weight or
           fertility, speak with a gynecologist, endocrinologist or primary care clinician. Seek prompt

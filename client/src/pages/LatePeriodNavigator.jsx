@@ -86,7 +86,7 @@ const OPTION_BUTTON = (selected) =>
   cn(
     'flex items-start gap-2.5 rounded-xl border p-3 text-left transition-all',
     selected
-      ? 'border-pink-glow bg-soft-petal/65 shadow-soft'
+      ? 'border-deep-rose bg-soft-petal/65 shadow-soft'
       : 'border-blush-pink/70 bg-white hover:border-pink-glow/60 hover:bg-rose-mist/50'
   );
 
@@ -261,8 +261,8 @@ const LatePeriodNavigator = () => {
     },
     consult: {
       wrap: 'border-pink-glow/40 bg-soft-petal/30',
-      icon: 'bg-pink-glow text-white',
-      badge: 'bg-pink-glow text-white',
+      icon: 'bg-deep-rose text-white',
+      badge: 'bg-deep-rose text-white',
     },
     monitor: {
       wrap: 'border-blush-pink/70 bg-rose-mist/60',
@@ -290,17 +290,16 @@ const LatePeriodNavigator = () => {
       <div className="grid gap-4 xl:grid-cols-[1.5fr_1fr]">
         <div className="space-y-4">
           <section className="card overflow-hidden" aria-labelledby="navigator-title">
-            <div className="relative overflow-hidden bg-gradient-to-r from-soft-petal via-blush-pink/70 to-rose-mist px-5 py-5 sm:px-7">
-              <div className="pointer-events-none absolute -right-6 -top-12 h-36 w-36 rounded-full border border-white/50" />
+            <div className="relative overflow-hidden bg-rose-mist px-5 py-5 sm:px-7">
               <div className="relative flex items-start gap-3">
                 <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-white/70 text-deep-rose">
                   <HeartHandshake className="h-5 w-5" aria-hidden="true" />
                 </span>
                 <div>
-                  <h2 id="navigator-title" className="font-display text-xl font-semibold text-deep-rose">
+                  <h2 id="navigator-title" className="font-display text-xl text-ink">
                     {showResult ? 'Your personalised guidance' : steps[step].question}
                   </h2>
-                  <p className="mt-1 text-xs leading-relaxed text-deep-rose/70">
+                  <p className="mt-1 text-xs leading-relaxed text-muted">
                     {showResult ? 'Based on the answers you selected.' : steps[step].hint}
                   </p>
                 </div>
@@ -317,7 +316,7 @@ const LatePeriodNavigator = () => {
                       )}
                     />
                   ))}
-                  <span className="ml-2 shrink-0 text-[9px] font-bold text-deep-rose/60">
+                  <span className="ml-2 shrink-0 text-xs font-semibold text-muted">
                     {step + 1}/{steps.length}
                   </span>
                 </div>
@@ -349,19 +348,19 @@ const LatePeriodNavigator = () => {
                         {guidance.badge}
                       </span>
                     </div>
-                    <h3 className="mt-4 font-display text-xl font-semibold text-deep-rose">
+                    <h3 className="mt-4 font-display text-xl text-ink">
                       {guidance.title}
                     </h3>
                     <p className="mt-2 text-sm leading-relaxed text-ink/80">{guidance.summary}</p>
 
                     <div className="mt-4">
-                      <p className="text-[10px] font-bold uppercase tracking-wide text-deep-rose/70">
+                      <p className="text-xs font-semibold text-muted">
                         What to do next
                       </p>
                       <ol className="mt-2 space-y-2">
                         {guidance.steps.map((item, index) => (
                           <li key={item} className="flex items-start gap-2.5 text-xs leading-relaxed text-ink/80">
-                            <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-white text-[9px] font-bold text-deep-rose ring-1 ring-blush-pink">
+                            <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-white text-xs font-semibold text-deep-rose ring-1 ring-blush-pink">
                               {index + 1}
                             </span>
                             {item}
@@ -373,33 +372,33 @@ const LatePeriodNavigator = () => {
 
                   <div className="mt-4 rounded-xl border border-blush-pink/60 bg-white p-4">
                     <div className="flex items-center justify-between gap-2">
-                      <p className="text-[10px] font-bold uppercase tracking-wide text-muted">Your answers</p>
+                      <p className="text-xs font-semibold text-muted">Your answers</p>
                       <button
                         type="button"
                         onClick={restart}
-                        className="flex items-center gap-1 text-[10px] font-bold text-deep-rose hover:text-rose-pink"
+                        className="flex items-center gap-1 text-xs font-semibold text-deep-rose hover:text-rose-pink"
                       >
                         <RotateCcw className="h-3 w-3" aria-hidden="true" />
                         Start over
                       </button>
                     </div>
                     <div className="mt-2 flex flex-wrap gap-1.5">
-                      <span className="rounded-full bg-rose-mist px-2 py-1 text-[9px] font-semibold text-deep-rose">
+                      <span className="rounded-full bg-rose-mist px-2 py-1 text-xs font-semibold text-deep-rose">
                         {LATENESS.find((item) => item.value === answers.lateness)?.label || 'Lateness not set'}
                       </span>
-                      <span className="rounded-full bg-rose-mist px-2 py-1 text-[9px] font-semibold text-deep-rose">
+                      <span className="rounded-full bg-rose-mist px-2 py-1 text-xs font-semibold text-deep-rose">
                         Pregnancy possible: {answers.pregnancy}
                       </span>
-                      <span className="rounded-full bg-rose-mist px-2 py-1 text-[9px] font-semibold text-deep-rose">
+                      <span className="rounded-full bg-rose-mist px-2 py-1 text-xs font-semibold text-deep-rose">
                         Test: {TESTS.find((item) => item.value === answers.test)?.label}
                       </span>
                       {selectedFactors.slice(0, 3).map((factor) => (
-                        <span key={factor} className="rounded-full bg-soft-petal px-2 py-1 text-[9px] font-semibold text-deep-rose">
+                        <span key={factor} className="rounded-full bg-soft-petal px-2 py-1 text-xs font-semibold text-deep-rose">
                           {factor}
                         </span>
                       ))}
                       {selectedSymptoms.slice(0, 4).map((symptom) => (
-                        <span key={symptom} className="rounded-full bg-blush-pink/60 px-2 py-1 text-[9px] font-semibold text-deep-rose">
+                        <span key={symptom} className="rounded-full bg-blush-pink/60 px-2 py-1 text-xs font-semibold text-deep-rose">
                           {symptom}
                         </span>
                       ))}
@@ -432,15 +431,15 @@ const LatePeriodNavigator = () => {
                             className={cn(
                               'mt-0.5 grid h-4 w-4 shrink-0 place-items-center rounded-full border',
                               answers.lateness === option.value
-                                ? 'border-pink-glow bg-pink-glow text-white'
+                                ? 'border-deep-rose bg-deep-rose text-white'
                                 : 'border-blush-pink'
                             )}
                           >
                             {answers.lateness === option.value ? <Check className="h-2.5 w-2.5" /> : null}
                           </span>
                           <span>
-                            <span className="block text-xs font-bold text-deep-rose">{option.label}</span>
-                            <span className="mt-0.5 block text-[10px] leading-relaxed text-muted">
+                            <span className="block text-xs font-semibold text-deep-rose">{option.label}</span>
+                            <span className="mt-0.5 block text-xs leading-relaxed text-muted">
                               {option.helper}
                             </span>
                           </span>
@@ -463,16 +462,16 @@ const LatePeriodNavigator = () => {
                             className={cn(
                               'mt-0.5 grid h-4 w-4 shrink-0 place-items-center rounded-full border',
                               answers.pregnancy === option.value
-                                ? 'border-pink-glow bg-pink-glow text-white'
+                                ? 'border-deep-rose bg-deep-rose text-white'
                                 : 'border-blush-pink'
                             )}
                           >
                             {answers.pregnancy === option.value ? <Check className="h-2.5 w-2.5" /> : null}
                           </span>
-                          <span className="text-xs font-bold text-deep-rose">{option.label}</span>
+                          <span className="text-xs font-semibold text-deep-rose">{option.label}</span>
                         </button>
                       ))}
-                      <p className="rounded-xl bg-rose-mist/70 p-3 text-[10px] leading-relaxed text-muted">
+                      <p className="rounded-xl bg-rose-mist/70 p-3 text-xs leading-relaxed text-muted">
                         If you have had sex without contraception, or your method may have failed
                         (missed pill, broken condom, slipped IUD), pregnancy is possible even if you
                         feel no different.
@@ -495,17 +494,17 @@ const LatePeriodNavigator = () => {
                               className={cn(
                                 'mt-0.5 grid h-4 w-4 shrink-0 place-items-center rounded-full border',
                                 answers.test === option.value
-                                  ? 'border-pink-glow bg-pink-glow text-white'
+                                  ? 'border-deep-rose bg-deep-rose text-white'
                                   : 'border-blush-pink'
                               )}
                             >
                               {answers.test === option.value ? <Check className="h-2.5 w-2.5" /> : null}
                             </span>
-                            <span className="text-xs font-bold text-deep-rose">{option.label}</span>
+                            <span className="text-xs font-semibold text-deep-rose">{option.label}</span>
                           </button>
                         ))}
                       </div>
-                      <p className="mt-3 rounded-xl bg-rose-mist/70 p-3 text-[10px] leading-relaxed text-muted">
+                      <p className="mt-3 rounded-xl bg-rose-mist/70 p-3 text-xs leading-relaxed text-muted">
                         Home tests can be negative if taken very early. A negative test does not rule
                         out pregnancy on day one of a missed period. Wait 2–3 days and test again if
                         unsure.
@@ -556,7 +555,7 @@ const LatePeriodNavigator = () => {
                           );
                         })}
                       </div>
-                      <p className="mt-4 flex items-start gap-2 rounded-xl border border-deep-rose/15 bg-[#FFF7FA] p-3 text-[10px] leading-relaxed text-deep-rose/80">
+                      <p className="mt-4 flex items-start gap-2 rounded-xl border border-deep-rose/15 bg-[#FFF7FA] p-3 text-xs leading-relaxed text-muted">
                         <ShieldAlert className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden="true" />
                         If you have severe pain, fainting, shoulder-tip pain or heavy bleeding, seek
                         same-day medical care rather than waiting for this tool.
@@ -584,7 +583,7 @@ const LatePeriodNavigator = () => {
 
           <div className="flex items-start gap-2 rounded-2xl border border-blush-pink/60 bg-white/75 p-4">
             <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-deep-rose" aria-hidden="true" />
-            <p className="text-[10px] leading-relaxed text-muted">
+            <p className="text-xs leading-relaxed text-muted">
               This navigator cannot tell you why your period is late, rule out pregnancy, or diagnose a
               condition. Its suggestions are general educational guidance. For personal medical
               advice, speak with a qualified clinician.
@@ -596,11 +595,11 @@ const LatePeriodNavigator = () => {
           <section className="card p-5 sm:p-6">
             <div className="flex items-center gap-2">
               <CalendarClock className="h-4 w-4 text-pink-glow" aria-hidden="true" />
-              <h2 className="font-display text-lg font-semibold text-deep-rose">
+              <h2 className="font-display text-lg text-ink">
                 What can delay a period?
               </h2>
             </div>
-            <p className="mt-1.5 text-[11px] leading-relaxed text-muted">
+            <p className="mt-1.5 text-xs leading-relaxed text-muted">
               Ovulation can shift for many reasons. A later ovulation means a later period — even if
               nothing feels unusual.
             </p>
@@ -618,14 +617,14 @@ const LatePeriodNavigator = () => {
                       <Icon className="h-3.5 w-3.5" aria-hidden="true" />
                     </span>
                     <div>
-                      <p className="text-[11px] font-bold text-ink">{item.title}</p>
-                      <p className="mt-0.5 text-[10px] leading-relaxed text-muted">{item.text}</p>
+                      <p className="text-xs font-semibold text-ink">{item.title}</p>
+                      <p className="mt-0.5 text-xs leading-relaxed text-muted">{item.text}</p>
                     </div>
                   </li>
                 );
               })}
             </ul>
-            <Link to="/resources" className="mt-4 inline-flex items-center gap-1 text-[10px] font-bold text-deep-rose hover:text-rose-pink">
+            <Link to="/resources" className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-deep-rose hover:text-rose-pink">
               Read more about cycle changes
               <ArrowRight className="h-3 w-3" aria-hidden="true" />
             </Link>
@@ -634,7 +633,7 @@ const LatePeriodNavigator = () => {
           <section className="rounded-2xl border border-deep-rose/20 bg-[#FFF7FA] p-5">
             <div className="flex items-center gap-2">
               <AlertTriangle className="h-4 w-4 text-deep-rose" aria-hidden="true" />
-              <h2 className="font-display text-lg font-semibold text-deep-rose">
+              <h2 className="font-display text-lg text-ink">
                 Don&apos;t wait for these
               </h2>
             </div>
@@ -645,13 +644,13 @@ const LatePeriodNavigator = () => {
                 'Fever with pelvic pain',
                 'Bleeding that soaks through protection hourly',
               ].map((item) => (
-                <li key={item} className="flex items-start gap-2 text-[11px] leading-relaxed text-deep-rose/80">
+                <li key={item} className="flex items-start gap-2 text-xs leading-relaxed text-muted">
                   <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-deep-rose" aria-hidden="true" />
                   {item}
                 </li>
               ))}
             </ul>
-            <p className="mt-3 text-[9px] leading-relaxed text-muted">
+            <p className="mt-3 text-xs leading-relaxed text-muted">
               These can have causes that need same-day assessment. Contact urgent care or your local
               emergency service.
             </p>
@@ -660,9 +659,9 @@ const LatePeriodNavigator = () => {
           <section className="rounded-2xl border border-blush-pink/60 bg-white/70 p-4">
             <div className="flex items-center gap-2">
               <Info className="h-3.5 w-3.5 text-pink-glow" aria-hidden="true" />
-              <p className="text-[10px] font-bold text-deep-rose">When to see a gynecologist</p>
+              <p className="text-xs font-semibold text-deep-rose">When to see a gynecologist</p>
             </div>
-            <p className="mt-1.5 text-[10px] leading-relaxed text-muted">
+            <p className="mt-1.5 text-xs leading-relaxed text-muted">
               Book a review if your period is more than 2–3 weeks late, you have 3 or more missed
               periods in a year, your cycles are consistently under 21 or over 35 days, or the pattern
               is new for you.
@@ -672,7 +671,7 @@ const LatePeriodNavigator = () => {
             </Link>
           </section>
 
-          <p className="flex items-start gap-1.5 px-1 text-[9px] leading-relaxed text-muted">
+          <p className="flex items-start gap-1.5 px-1 text-xs leading-relaxed text-muted">
             <Lock className="mt-0.5 h-3 w-3 shrink-0" aria-hidden="true" />
             This assessment runs entirely in your browser. Your answers are not saved to your account.
           </p>
