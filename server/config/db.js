@@ -5,10 +5,15 @@ import mongoose from 'mongoose';
  * ephemeral MongoDB instance that is automatically seeded with demo data.
  * Production deployments must provide a persistent MONGODB_URI (e.g. Atlas).
  */
-export const connectDB = async () => {
+const connect = async () => {
   let uri = process.env.MONGODB_URI;
 
   if (process.env.USE_MEMORY_DB === 'true') {
+    if (process.env.VERCEL) {
+      throw new Error(
+        'USE_MEMORY_DB cannot be used on Vercel. Set MONGODB_URI to a persistent database.'
+      );
+    }
     const { MongoMemoryServer } = await import('mongodb-memory-server');
     // Cold starts on Windows can exceed the 10s default.
     const memoryServer = await MongoMemoryServer.create({ instance: { launchTimeout: 60000 } });
@@ -51,4 +56,21 @@ export const connectDB = async () => {
   }
 
   return conn;
+};
+
+let connectionPromise = null;
+
+/**
+ * Connect once per process. Serverless platforms reuse a warm instance, so
+ * caching the promise avoids reconnecting (and re-seeding) on every request.
+ * A failed attempt is cleared so the next request can retry.
+ */
+export const connectDB = () => {
+  if (!connectionPromise) {
+    connectionPromise = connect().catch((error) => {
+      connectionPromise = null;
+      throw error;
+    });
+  }
+  return connectionPromise;
 };

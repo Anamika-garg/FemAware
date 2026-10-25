@@ -10,15 +10,21 @@ import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 import apiRoutes from './routes/index.js';
-import { notFound, errorHandler } from './middleware/error.js';
+import { ApiError, notFound, errorHandler } from './middleware/error.js';
+import { connectDB } from './config/db.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-if (!process.env.JWT_SECRET) {
+const missingJwtSecret = !process.env.JWT_SECRET;
+
+if (missingJwtSecret) {
   if (process.env.NODE_ENV === 'production') {
-    throw new Error('JWT_SECRET must be set in production.');
+    // Do not throw at import time: on a serverless platform that turns every
+    // request into an opaque 500. The middleware below reports the problem.
+    console.error('❌ JWT_SECRET must be set in production.');
+  } else {
+    process.env.JWT_SECRET = 'femaware-local-development-secret';
   }
-  process.env.JWT_SECRET = 'femaware-local-development-secret';
 }
 
 const app = express();
@@ -59,6 +65,18 @@ if (process.env.NODE_ENV !== 'test') {
   app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
 }
 
+// A missing JWT secret in production makes every authenticated route fail, so
+// answer with an actionable message instead of an opaque 500. This runs before
+// the health route so a misconfigured deployment is not reported as healthy.
+if (missingJwtSecret && process.env.NODE_ENV === 'production') {
+  app.use('/api', (req, res) => {
+    res.status(503).json({
+      success: false,
+      message: 'The API is not configured yet: JWT_SECRET is missing.',
+    });
+  });
+}
+
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 500,
@@ -96,6 +114,26 @@ app.get('/api/health', (req, res) => {
     time: new Date().toISOString(),
   });
 });
+
+// Vercel runs the API as a single serverless function, so there is no boot
+// phase where server.js can connect first. Connect lazily before the first API
+// request and let the cached promise reuse the connection on warm invocations.
+if (process.env.VERCEL) {
+  app.use('/api', async (req, res, next) => {
+    try {
+      await connectDB();
+      next();
+    } catch (error) {
+      console.error('❌ Database connection failed:', error.message);
+      next(
+        new ApiError(
+          503,
+          'The service cannot reach its database right now. Please try again shortly.'
+        )
+      );
+    }
+  });
+}
 
 app.use('/api/auth', authLimiter);
 app.use('/api', apiLimiter, apiRoutes);

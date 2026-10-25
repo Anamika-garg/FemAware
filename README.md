@@ -58,7 +58,8 @@ FemAware/
 │     └─ App.jsx       # Routes; each shared route renders the user's life-stage page
 └─ server/
    ├─ app.js           # Express app (middleware + routes)
-   ├─ server.js        # Connects to MongoDB and starts listening
+   ├─ server.js        # Vercel entry: exports the Express app
+   ├─ local.js         # Local entry: connects to MongoDB and listens
    ├─ config/db.js     # Atlas / in-memory connection, content seeding
    ├─ controllers/     # Auth, cycles, symptoms, reports, user data (adult + senior)
    ├─ models/          # User, CycleLog, SymptomLog, HealthReport, ChatThread
@@ -138,6 +139,32 @@ npm test
 npm run build
 npm start            # Express serves the built app at http://localhost:5000
 ```
+
+### Deploy the API to Vercel
+
+Set the Vercel project's **Root Directory** to `server`. Vercel detects the
+Express app (`app.js` / `server.js`) with its zero-configuration runtime, so
+`server/vercel.json` intentionally contains no `builds` or `routes` — the old
+`@vercel/node` entry pointed at a file with no handler and returned
+`FUNCTION_INVOCATION_FAILED` (a bare 500). Its install command also skips the
+test-only in-memory MongoDB binary.
+
+Configure these environment variables in the Vercel project:
+
+| Variable                  | Notes                                                                 |
+| ------------------------- | --------------------------------------------------------------------- |
+| `MONGODB_URI`             | Atlas connection string. `USE_MEMORY_DB` is rejected on Vercel.        |
+| `JWT_SECRET`              | Long random string. Without it the API returns a clear 503 instead of an opaque 500. |
+| `CLIENT_URL`              | Deployed client origin, e.g. `https://your-app.vercel.app`. Comma-separate multiple origins. |
+| `GEMINI_API_KEY`          | Optional; enables live chat replies.                                   |
+| `GEMINI_MODEL`            | Optional; defaults to `gemini-2.5-flash`.                              |
+| `GEMINI_THINKING_BUDGET`  | Optional; defaults to `1024`.                                          |
+
+The API connects to MongoDB lazily on the first request and reuses the
+connection on warm invocations, so cold starts stay short and repeated requests
+do not reconnect. `express.static()` is ignored on Vercel — deploy the client
+separately and point `CLIENT_URL` at it. `GET /api/health` is the quickest way
+to confirm a deployment is up.
 
 ---
 
