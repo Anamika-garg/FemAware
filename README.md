@@ -26,6 +26,11 @@ floating button in the bottom-right of any signed-in page.
 > need medical attention and helps people decide on next steps.
 
 ---
+## Deployed Website 
+
+https://fem-aware.vercel.app
+
+---
 
 ## Tech stack
 
@@ -33,7 +38,7 @@ floating button in the bottom-right of any signed-in page.
 | -------- | ------------------------------------------------------------------ |
 | Frontend | React 18, Vite, React Router, Tailwind CSS 3, Recharts, lucide-react |
 | Backend  | Node.js, Express, Mongoose                                          |
-| Database | MongoDB Atlas (or in-memory for local development)                  |
+| Database | MongoDB Atlas                                                       |
 | Auth     | JWT + bcrypt                                                        |
 | AI       | Google Gemini via `@google/genai` (server-side only)                |
 | Tests    | Vitest, Supertest, Testing Library                                  |
