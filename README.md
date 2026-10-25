@@ -38,7 +38,7 @@ https://fem-aware.vercel.app
 | -------- | ------------------------------------------------------------------ |
 | Frontend | React 18, Vite, React Router, Tailwind CSS 3, Recharts, lucide-react |
 | Backend  | Node.js, Express, Mongoose                                          |
-| Database | MongoDB Atlas (or in-memory for local development)                  |
+| Database | MongoDB Atlas                                                       |
 | Auth     | JWT + bcrypt                                                        |
 | AI       | Google Gemini via `@google/genai` (server-side only)                |
 | Tests    | Vitest, Supertest, Testing Library                                  |
